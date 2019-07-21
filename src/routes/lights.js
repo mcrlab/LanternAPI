@@ -26,8 +26,6 @@ function createRoutes(lightingController) {
           let response = lightingController.updateLightColor(req.params.light, colorObject)
           res.json(response);
         } catch (error){
-          console.log(error);
-          error.status = 400;
           res.status(error.status).json(error);
         }
       });

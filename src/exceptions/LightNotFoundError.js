@@ -1,6 +1,6 @@
 export default class LightNotFoundError {
-  constructor(status = 404, message = 'Light not found'){
-    this.status = status;
+  constructor(message = 'Light not found'){
+    this.status = 404;
     this.message = message;
   }
 }
