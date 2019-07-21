@@ -1,7 +1,7 @@
 {
   "name": "lantern-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple ExpressJS API to controll a set of Lights",
   "main": "index.js",
   "dependencies": {
     "aws-iot-device-sdk": "^2.2.1",
