@@ -12,6 +12,9 @@ RUN npm run-script build
 
 EXPOSE 3001
 
+ARG HOST
+ARG CLIENT
+
 ENV HOST=$HOST
 
 ENV CLIENT=$CLIENT
