@@ -1,12 +1,15 @@
 import express from 'express';
-import {colorValidator} from '../validators/validators';
+import {colorValidator, timeValidator} from '../validators/validators';
 import {toRGBObject} from '../lib/color';
 
 function createRoutes(lightingController) {
     const router = express.Router();
 
     router.get('/', (req, res) => {
-        const response = lightingController.getAllLightsData();
+        const lights = lightingController.getAllLightsData();
+        const response = {
+          "lights": lights
+        };
         res.json(response);
     });
 
@@ -23,7 +26,8 @@ function createRoutes(lightingController) {
         try {
           let color = colorValidator(req.body.color);
           let colorObject = toRGBObject(color);
-          let response = lightingController.updateLightColor(req.params.light, colorObject)
+          let time = timeValidator(req.body.time);
+          let response = lightingController.updateLightColor(req.params.light, colorObject, time);
           res.json(response);
         } catch (error){
           res.status(error.status).json(error);

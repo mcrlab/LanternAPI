@@ -19,13 +19,13 @@ export default class LightingController {
   }
 
 
-  updateLightColor(id, color){
+  updateLightColor(id, color, time){
 
       if(this.lights.contains(id)) {  
           const light = this.lights.set(id, {
             color
           });
-          this.lightBroker.publish(`color/${id}`, JSON.stringify(color));
+          this.lightBroker.publish(`color/${id}`, JSON.stringify({ "color": color, "time": time}));
           return light;
       } else {
           throw new LightNotFountError();

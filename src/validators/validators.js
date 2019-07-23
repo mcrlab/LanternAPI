@@ -6,3 +6,11 @@ export function colorValidator(color) {
     }
     return color;
 }
+
+export function timeValidator(time){
+    if(time >= 0 && time < 10){
+        return time;
+    } else {
+        throw new LightDataError(400, "Animation time is not defined");
+    }
+}
