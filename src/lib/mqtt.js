@@ -1,18 +1,11 @@
-let awsIoT = require("aws-iot-device-sdk");
-
+var mqtt = require('mqtt')
 
 export default class MQTTBroker {
 
   init(callback) {
-    this.client = awsIoT.device({
-        keyPath: "./certs/private.key",
-        certPath: "./certs/cert.pem",
-        caPath: "./certs/root-CA.crt",
-        clientId: process.env.CLIENT,
-        host: process.env.HOST,
-    });
     
-  
+    this.client  = mqtt.connect('mqtt://mqtt')
+
     this.client.on('connect', () => {
       console.log("connected to broker");
       this.client.subscribe('connect');

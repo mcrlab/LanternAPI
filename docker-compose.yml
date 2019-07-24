@@ -8,5 +8,9 @@ services:
     environment:
      HOST: "${HOST}"
      CLIENT: "${CLIENT}"
+  mqtt:
+    image: "eclipse-mosquitto"
+    ports:
+     - "1883:1883"
 
         
