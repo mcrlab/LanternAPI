@@ -22,6 +22,23 @@ export default class MQTTBroker {
       callback(topic, message);
     });
 
+    this.client
+        .on('close', function() {
+          console.log('close');
+        });
+    this.client
+        .on('reconnect', function() {
+          console.log('reconnect');
+        });
+    this.client
+        .on('offline', function() {
+          console.log('offline');
+        });
+    this.client
+        .on('error', function(error) {
+          console.log('error', error);
+        });
+
   }
 
   publish(address, message) {
