@@ -7,16 +7,25 @@ export default class LightingController {
     this.lightBroker = lightBroker;
 
     this.lightBroker.init((topic, message) => {
-      this.handleMessage(message);
+      this.handleMessage(topic, message);
     });
 
   }
 
-  handleMessage(message) {
+  handleMessage(topic, message) {
     try {
-      let data = JSON.parse(message);
-      const id = data.id;
-      this.lights.set(id, data);
+      switch(topic){
+        case "connect":
+          let data = JSON.parse(message);
+          const id = data.id;
+          this.lights.set(id, data);
+          break;
+        case "disconnect":
+          console.log('disconnecting');
+          break;
+        default:
+          return;
+      }
 
     } catch (error) {
       console.log('Bad Light message - ', message);
