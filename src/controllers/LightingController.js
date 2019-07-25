@@ -13,9 +13,14 @@ export default class LightingController {
   }
 
   handleMessage(message) {
-    let data = JSON.parse(message);
-    const id = data.id;
-    this.lights.set(id, data);
+    try {
+      let data = JSON.parse(message);
+      const id = data.id;
+      this.lights.set(id, data);
+
+    } catch (error) {
+      console.log('Bad Light message - ', message);
+    }
   }
 
 
