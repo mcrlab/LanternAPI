@@ -12,13 +12,15 @@
     "mqtt": "^3.0.0"
   },
   "devDependencies": {
+    "babel-jest": "^24.8.0",
+    "jest": "^24.8.0",
     "nodemon": "^1.19.1"
   },
   "scripts": {
     "start": "nodemon src/index.js --exec babel-node --presets babel-preset-env",
     "build": "babel src -d dist --presets babel-preset-env",
     "server": "node dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC"
