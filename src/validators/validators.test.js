@@ -7,6 +7,16 @@ describe("timeValidator", ()=> {
         expect(timeValidator(1)).toBe(1);
     });
 
+    test('it should return the time if less than or equal to 10000', ()=> {
+        expect(timeValidator(10000)).toBe(10000);
+        expect(timeValidator(9999)).toBe(9999);
+    });
+
+    test('it should return 0 if time is undefined', ()=> {
+        let data = {};
+        expect(timeValidator(data.NOT_SET)).toBe(0);
+    });
+
     test("it should throw an error if the time is less than 0", () => {
         const t = () => {
         timeValidator(-1);
@@ -14,9 +24,9 @@ describe("timeValidator", ()=> {
         expect(t).toThrow(LightDataError);
     });
 
-    test("it should throw an error if the time is greater than 10", () => {
+    test("it should throw an error if the time is greater than 10000", () => {
         const t = () => {
-            timeValidator(11);
+            timeValidator(10001);
         };
         expect(t).toThrow(LightDataError);
     })

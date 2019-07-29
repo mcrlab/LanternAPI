@@ -8,9 +8,21 @@ export function colorValidator(color) {
 }
 
 export function timeValidator(time){
-    if(time >= 0 && time < 10){
+    if(time === undefined){
+        return 0
+    } else if(time >= 0 && time <= 10000){
         return time;
     } else {
-        throw new LightDataError(400, "Animation time is not defined");
+        throw new LightDataError(400, "Animation is not between 0 and 10000");
+    }
+}
+
+export function delayValidator(delay){
+    if(delay === undefined){
+        return 0
+    } else if(delay >= 0 && delay <= 10000){
+        return delay;
+    } else {
+        throw new LightDataError(400, "Delay is not between 0 and 10000");
     }
 }

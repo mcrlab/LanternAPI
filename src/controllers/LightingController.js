@@ -33,17 +33,25 @@ export default class LightingController {
   }
 
 
-  updateLightColor(id, color, time){
+  updateLightColor(id, color, time, delay){
 
       if(this.lights.contains(id)) {  
           const light = this.lights.set(id, {
             color
           });
-          this.lightBroker.publish(`color/${id}`, JSON.stringify({ "color": color, "time": time}));
+          this.lightBroker.publish(`color/${id}`, JSON.stringify({ "color": color, "time": time, "delay": delay}));
           return light;
       } else {
           throw new LightNotFountError();
       }
+  }
+
+  updateAllLightColor(color, time, delay){
+    let lightData = [];
+    this.lights.all().forEach((light) => {
+      lightData.push(this.updateLightColor(light.id, color, time, delay));
+    });
+    return lightData;
   }
 
   getAllLightsData() {

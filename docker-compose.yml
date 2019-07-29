@@ -4,10 +4,7 @@ services:
   web:
     build: .
     ports:
-     - "8080:3001"
-    environment:
-     HOST: "${HOST}"
-     CLIENT: "${CLIENT}"
+     - "80:3001"
   mqtt:
     image: "eclipse-mosquitto"
     ports:
