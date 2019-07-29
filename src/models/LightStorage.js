@@ -33,4 +33,8 @@ export default class LightStorage {
         this.lights.set(id, newData);
         return new Light(id, newData);
     }
+    
+    remove(id){
+        return this.lights.delete(id)
+    }
 }

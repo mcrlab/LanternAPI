@@ -9,7 +9,20 @@ export default class LightingController {
     this.lightBroker.init((topic, message) => {
       this.handleMessage(topic, message);
     });
+    this.lightRemoval = setInterval(()=>{
+      this.cleanLights()
+    }, 5000);
+  }
 
+  cleanLights(){
+    const now = new Date().getTime();
+    console.log('cleaning');
+    this.lights.all().forEach((light)=> {
+      if((light.lastSeen + 10000) < now){
+        this.lights.remove(light.id);
+        console.log(`removing light ${light.id}`);
+      }
+    });
   }
 
   handleMessage(topic, message) {
@@ -18,6 +31,8 @@ export default class LightingController {
         case "connect":
           let data = JSON.parse(message);
           const id = data.id;
+          data.lastSeen = new Date().toString();
+          console.log(data);
           this.lights.set(id, data);
           break;
         case "disconnect":
@@ -28,6 +43,7 @@ export default class LightingController {
       }
 
     } catch (error) {
+      console.log(error)
       console.log('Bad Light message - ', message);
     }
   }

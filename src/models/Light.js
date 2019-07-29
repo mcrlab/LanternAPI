@@ -2,7 +2,7 @@ import {RGBObjectToHex } from '../lib/color';
 
 export default class Light {
     constructor(id, data){
-        this.id = data.id;
+        this.id = id;
         this.data = data;
         console.log(this.data);
     }

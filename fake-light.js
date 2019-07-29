@@ -14,6 +14,10 @@ client.on('connect', () => {
     console.log("connected to broker");
     client.subscribe('color/light');
     client.publish('connect', JSON.stringify(state));
+    setInterval(()=> {
+        console.log('ping');
+        client.publish('connect', JSON.stringify(state));
+    }, 5000);
 });
 
 client.on('message', (topic, message) => {
