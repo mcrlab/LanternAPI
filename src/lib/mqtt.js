@@ -4,7 +4,7 @@ export default class MQTTBroker {
 
   init(callback) {
     
-    this.client  = mqtt.connect('mqtt://mqtt')
+    this.client  = mqtt.connect(`mqtt://${process.env.mqtt}`)
 
     this.client.on('connect', () => {
       console.log("connected to broker");
