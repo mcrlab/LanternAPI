@@ -3,9 +3,14 @@ var mqtt = require('mqtt')
 export default class MQTTBroker {
 
   init(callback) {
-    
-    this.client  = mqtt.connect(`mqtt://${process.env.mqtt}`)
+    var mqtt_url = url.parse(process.env.CLOUDMQTT_URL || 'mqtt://localhost:1883');
+    var auth = (mqtt_url.auth || ':').split(':');
 
+    this.client = mqtt.createClient(mqtt_url.port, mqtt_url.hostname, {
+      username: auth[0],
+      password: auth[1]
+    });
+    
     this.client.on('connect', () => {
       console.log("connected to broker");
       this.client.subscribe('connect');
