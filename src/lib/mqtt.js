@@ -1,4 +1,4 @@
-var mqtt = require('mqtt')
+var mqtt = require('mqtt'), url = require('url')
 
 export default class MQTTBroker {
 
