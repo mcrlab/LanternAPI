@@ -4,7 +4,7 @@ export default class MQTTBroker {
 
   init(callback) {
 
-    this.client  = mqtt.connect(process.env.CLOUDMQTT_URL || 'mqtt://localhost:1883')
+    this.client  = mqtt.connect(process.env.CLOUDMQTT_URL || 'mqtt://mqtt:1883')
 
     this.client.on('connect', () => {
       console.log("connected to broker");
