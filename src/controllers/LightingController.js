@@ -36,7 +36,7 @@ export default class LightingController {
 
   async updateLightColor(id, color, time, delay){
     
-      let light = await this.lightStorage.id(id)
+      let light = await this.lightStorage.get(id)
       if(!light){
         throw new LightNotFoundError();
       }
@@ -56,7 +56,7 @@ export default class LightingController {
   }
 
   async getLightDataById(id) {
-    const light = await this.lightStorage.id(id);
+    const light = await this.lightStorage.get(id);
     if(light){
       return light.toJSON();
     } else {

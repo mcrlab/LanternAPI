@@ -2,33 +2,33 @@ import Light from './Light';
 
 export default class LightStorage {
     constructor(){
-        this.lights = new Map()
+        this.lights = {};
     }
 
-    id(id){
-        const data = this.lights.get(id);
-        return data;
+    get(id){
+        const data = this.lights['id'];
+        if(data){
+            return new Light(id, data);
+        } else {
+            return undefined
+        }
     }
 
     all(){
+
         let all = [];
-        this.lights.forEach((data) => {
-            all.push(new Light(data.id, data));
+        Object.keys(this.lights).forEach((key, index)=>{
+            all.push(new Light(key, this.lights[key]));
         });
         return all;
     }
 
     set(id, update){
-        const data = this.lights.get(id);
+        const data = this.lights[id];
         let newData =  Object.assign({}, data, update);
         newData.lastUpdated = new Date();
-        this.lights.set(id, newData);
+        this.lights[id] =  newData;
         return new Light(id, newData);
     }
-    
-    remove(id){
-        return new Promise((resolve, reject)=> {
-            resolve(this.lights.delete(id));
-        })
-    }
+
 }
