@@ -1,9 +1,9 @@
 import LightNotFoundError from '../exceptions/LightNotFoundError';
-import LightStorage from '../models/LightStorage';
+
 
 export default class LightingController {
-  constructor(lightBroker) {
-    this.lights = new LightStorage();
+  constructor(lightBroker, lightStorage) {
+    this.lightStorage = lightStorage;
     this.lightBroker = lightBroker;
 
     this.lightBroker.init((topic, message) => {
@@ -11,21 +11,14 @@ export default class LightingController {
     });
   }
 
-  handleMessage(topic, message) {
+  async handleMessage(topic, message) {
     try {
       switch(topic){
         case "connect":
           let data = JSON.parse(message);
           const id = data.id;
           data.lastSeen = new Date().toString();
-  
-          this.lights.set(id, data)
-            .then(()=>{
-              console.log('light updated');
-            })
-            .catch((e)=>{
-              console.log('error', e);
-            });
+          await this.lightStorage.set(id, data)
           break;
         case "disconnect":
           console.log('disconnecting');
@@ -41,59 +34,33 @@ export default class LightingController {
   }
 
 
-  updateLightColor(id, color, time, delay){
+  async updateLightColor(id, color, time, delay){
     
-    return new Promise((resolve, reject)=>{
-      this.lights.id(id)
-      .then((light)=>{
-        return this.lights.set(light.id, {"current_color":color})
-      })
-      .then((light)=>{
-        this.lightBroker.publish(`color/${id}`, JSON.stringify({ "color": color, "time": time, "delay": delay}));
-        resolve(light.toJSON());
-      })
-      .catch((e)=>{
-        reject(new LightNotFoundError());
-      });
+      let light = await this.lightStorage.id(id)
+      if(!light){
+        throw new LightNotFoundError();
+      }
+      let updatedLight = await this.lightStorage.set(id, {"current_color":color})
+      this.lightBroker.publish(`color/${id}`, JSON.stringify({ "color": color, "time": time, "delay": delay}));
+      return updatedLight.toJSON();
+  }
 
-  });
-}
 
-  updateAllLightColor(color, time, delay){
-
-    let lightData = [];
-    this.lights.all().forEach((light) => {
-      lightData.push(this.updateLightColor(light.id, color, time, delay));
+  async getAllLightsData() {
+    const lights = await this.lightStorage.all()
+    const lightData = [];
+    lights.forEach((light) => {
+      lightData.push(light.toJSON());
     });
     return lightData;
   }
 
-  getAllLightsData() {
-    return new Promise((resolve, reject)=> {
-      this.lights.all()
-        .then((lights)=> {
-          const lightData = [];
-          lights.forEach((light) => {
-            console.log('light', light);
-            lightData.push(light.toJSON());
-          });
-          resolve(lightData);
-        })
-        .catch((e)=> {
-          reject(e);
-        })
-    });
-  }
-
-  getLightDataById(id) {
-    return new Promise((resolve, reject)=> {
-      this.lights.id(id)
-        .then((light)=> {
-          resolve(light.toJSON());
-        })
-        .catch((error)=>{
-          reject(new LightNotFoundError());
-        })
-    });
+  async getLightDataById(id) {
+    const light = await this.lightStorage.id(id);
+    if(light){
+      return light.toJSON();
+    } else {
+      throw new LightNotFoundError()
+    }
   }
 }
