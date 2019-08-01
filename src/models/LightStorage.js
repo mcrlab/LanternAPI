@@ -11,35 +11,47 @@ export default class LightStorage {
     }
 
     async get(id){
-        const json = await this.getAsync(redisKey);
-        const lights = JSON.parse(json);
-        const data = lights[id];
-        if(data){
-            return new Light(id, data);
-        } else {
-            return undefined
+        try {
+            const json = await this.getAsync(redisKey);
+            const lights = JSON.parse(json);
+            const data = lights[id];
+            if(data){
+                return new Light(id, data);
+            } else {
+                return undefined
+            }
+        } catch(e){
+            console.log(e);
+            return undefined;
         }
     }
 
     async all(){
-        const json = await this.getAsync(redisKey);
-        const lights = JSON.parse(json);
         let all = [];
-        Object.keys(lights).forEach((key, index)=>{
-            all.push(new Light(key, lights[key]));
-        });
-        return all;
+        try {
+            const json = await this.getAsync(redisKey);
+            const lights = JSON.parse(json);
+            Object.keys(lights).forEach((key, index)=>{
+                all.push(new Light(key, lights[key]));
+            });
+        } catch(e){
+            console.log(e);
+        } finally {
+            return all;
+        }
     }
 
     async set(id, update){
 
-        let lights;
-        const cache = await this.getAsync(redisKey);
+        let lights = {}
 
-        if(!cache){
-            lights = {}
-        } else {
-            lights = JSON.parse(cache)
+        try {
+            const cache = await this.getAsync(redisKey);
+            if(cache){
+                lights = JSON.parse(cache)
+            }
+        } catch(e){
+            console.log(e);
         }
 
         const data = lights[id];
