@@ -5,36 +5,41 @@ export default class LightStorage {
         this.lights = new Map()
     }
 
-    contains(id){
-        return this.lights.has(id);
-    }
-
     id(id){
-        const data = this.lights.get(id);
-        if(data){
-            return new Light(data.id, data);     
-        } else {
-            return false;
-        }
+        return new Promise((resolve, reject)=> {
+            const data = this.lights.get(id);
+            if(data){
+                resolve(new Light(data.id, data));     
+            } else {
+                reject("No light found");
+            }
+        });
     }
 
     all(){
-        let all = [];
-        this.lights.forEach((data) => {
-            all.push(new Light(data.id, data));
-          });
-        return all;
+        return new Promise((resolve, reject)=> {
+            let all = [];
+            this.lights.forEach((data) => {
+                all.push(new Light(data.id, data));
+            });
+            resolve(all);
+        });
     }
 
     set(id, update){
-        const data = this.lights.get(id);
-        let newData =  Object.assign({}, data, update);
-        newData.lastUpdated = new Date();
-        this.lights.set(id, newData);
-        return new Light(id, newData);
+        console.log('update', id, update);
+        return new Promise((resolve, reject)=> {
+            const data = this.lights.get(id);
+            let newData =  Object.assign({}, data, update);
+            newData.lastUpdated = new Date();
+            this.lights.set(id, newData);
+            resolve(new Light(id, newData));
+        });
     }
     
     remove(id){
-        return this.lights.delete(id)
+        return new Promise((resolve, reject)=> {
+            resolve(this.lights.delete(id));
+        })
     }
 }

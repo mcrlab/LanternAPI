@@ -1,4 +1,4 @@
-import LightNotFountError from '../exceptions/LightNotFoundError';
+import LightNotFoundError from '../exceptions/LightNotFoundError';
 import LightStorage from '../models/LightStorage';
 
 export default class LightingController {
@@ -9,20 +9,6 @@ export default class LightingController {
     this.lightBroker.init((topic, message) => {
       this.handleMessage(topic, message);
     });
-    this.lightRemoval = setInterval(()=>{
-      this.cleanLights()
-    }, 5000);
-  }
-
-  cleanLights(){
-    const now = new Date().getTime();
-    console.log('cleaning');
-    this.lights.all().forEach((light)=> {
-      if((light.lastSeen + 10000) < now){
-        this.lights.remove(light.id);
-        console.log(`removing light ${light.id}`);
-      }
-    });
   }
 
   handleMessage(topic, message) {
@@ -32,8 +18,14 @@ export default class LightingController {
           let data = JSON.parse(message);
           const id = data.id;
           data.lastSeen = new Date().toString();
-          console.log(data);
-          this.lights.set(id, data);
+  
+          this.lights.set(id, data)
+            .then(()=>{
+              console.log('light updated');
+            })
+            .catch((e)=>{
+              console.log('error', e);
+            });
           break;
         case "disconnect":
           console.log('disconnecting');
@@ -50,19 +42,25 @@ export default class LightingController {
 
 
   updateLightColor(id, color, time, delay){
+    
+    return new Promise((resolve, reject)=>{
+      this.lights.id(id)
+      .then((light)=>{
+        return this.lights.set(light.id, {"current_color":color})
+      })
+      .then((light)=>{
+        this.lightBroker.publish(`color/${id}`, JSON.stringify({ "color": color, "time": time, "delay": delay}));
+        resolve(light.toJSON());
+      })
+      .catch((e)=>{
+        reject(new LightNotFoundError());
+      });
 
-      if(this.lights.contains(id)) {  
-          const light = this.lights.set(id, {
-            color
-          });
-          this.lightBroker.publish(`color/${id}`, JSON.stringify({ "color": color, "time": time, "delay": delay}));
-          return light;
-      } else {
-          throw new LightNotFountError();
-      }
-  }
+  });
+}
 
   updateAllLightColor(color, time, delay){
+
     let lightData = [];
     this.lights.all().forEach((light) => {
       lightData.push(this.updateLightColor(light.id, color, time, delay));
@@ -71,19 +69,31 @@ export default class LightingController {
   }
 
   getAllLightsData() {
-    const lights = [];
-    this.lights.all().forEach((light) => {
-      lights.push(light.toJSON());
+    return new Promise((resolve, reject)=> {
+      this.lights.all()
+        .then((lights)=> {
+          const lightData = [];
+          lights.forEach((light) => {
+            console.log('light', light);
+            lightData.push(light.toJSON());
+          });
+          resolve(lightData);
+        })
+        .catch((e)=> {
+          reject(e);
+        })
     });
-    return lights;
   }
 
   getLightDataById(id) {
-    if(this.lights.contains(id)) {
-      const light = this.lights.id(id);
-      return light.toJSON();
-    } else {
-      throw new LightNotFountError();
-    }
+    return new Promise((resolve, reject)=> {
+      this.lights.id(id)
+        .then((light)=> {
+          resolve(light.toJSON());
+        })
+        .catch((error)=>{
+          reject(new LightNotFoundError());
+        })
+    });
   }
 }

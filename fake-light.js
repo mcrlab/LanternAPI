@@ -1,7 +1,7 @@
 var mqtt = require('mqtt')
 let state = {
     "id": "light",
-    "color": {
+    "current_color": {
         "r":0,
         "g":0,
         "b":0
@@ -17,11 +17,15 @@ client.on('connect', () => {
     setInterval(()=> {
         console.log('ping');
         client.publish('connect', JSON.stringify(state));
-    }, 5000);
+    }, 30000);
 });
 
 client.on('message', (topic, message) => {
-    console.log(topic, message);
+    const data = JSON.parse(message.toString());
+    state = Object.assign({}, state,{
+        current_color: data.color
+    });
+    console.log(state);
 });
 
 client
