@@ -23,7 +23,7 @@ function createRoutes(lightingController) {
       };
     });
 
-    router.post('/:light', async (req, res) => {
+    router.put('/:light', async (req, res) => {
       try {
         let color = colorValidator(req.body.color);
         let colorObject = toRGBObject(color);

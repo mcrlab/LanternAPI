@@ -1,7 +1,9 @@
 import express from 'express';
 import bodyparser from 'body-parser';
 import lightRoutes from '../routes/lights';
-
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+ 
 function logErrors (err, req, res, next) {
     console.error(err.stack)
     next(err)
@@ -22,6 +24,7 @@ function errorHandler (err, req, res, next) {
 const createApplication = (lightController) => {
   const app = express();
   app.use(express.static('public'))
+  app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   app.use(bodyparser.json());
   app.use('/lights/', lightRoutes(lightController));
   app.use(logErrors)
