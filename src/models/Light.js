@@ -4,9 +4,7 @@ export default class Light {
     constructor(id, data){
         this.id = id;
         this.data = data;
-        console.log(this.data);
     }
-
 
     toJSON(){
         let data = {

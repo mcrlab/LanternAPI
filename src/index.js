@@ -1,7 +1,7 @@
 import LightingController from './controllers/LightingController';
 import MQTTBroker from './lib/mqtt';
 import createApplication from './lib/application';
-import LightStorage from './models/LightStorage';
+import LightStorage from './lib/LightStorage';
 
 const lightController = new LightingController(new MQTTBroker(), new LightStorage());
 

@@ -36,7 +36,6 @@ export default class MQTTBroker {
   }
 
   publish(address, message) {
-    console.log(address, message);
     this.client.publish(address, message);
   }
 

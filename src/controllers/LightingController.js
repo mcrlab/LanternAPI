@@ -29,7 +29,7 @@ export default class LightingController {
 
     } catch (error) {
       console.log(error)
-      console.log('Bad Light message - ', message);
+      console.log('Bad Light message - ', message.toString());
     }
   }
 
@@ -41,7 +41,7 @@ export default class LightingController {
         throw new LightNotFoundError();
       }
       let updatedLight = await this.lightStorage.set(id, {"current_color":color})
-      this.lightBroker.publish(`color/${id}`, JSON.stringify({ "color": color, "time": time, "delay": delay}));
+      this.lightBroker.publish(`color/${id}`, JSON.stringify({ color, time, delay}));
       return updatedLight.toJSON();
   }
 
@@ -54,6 +54,7 @@ export default class LightingController {
     });
     return lightData;
   }
+
 
   async getLightDataById(id) {
     const light = await this.lightStorage.get(id);
