@@ -40,6 +40,7 @@ export default class LightingController {
       if(!light){
         throw new LightNotFoundError();
       }
+
       let updatedLight = await this.lightStorage.set(id, {"current_color":color})
       this.lightBroker.publish(`color/${id}`, JSON.stringify({ color, time, delay}));
       return updatedLight.toJSON();
