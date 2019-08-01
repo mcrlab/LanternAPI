@@ -1,6 +1,6 @@
 var mqtt = require('mqtt')
 let state = {
-    "id": "light",
+    "id": Math.random(),
     "current_color": {
         "r":0,
         "g":0,

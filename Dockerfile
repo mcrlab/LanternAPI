@@ -10,6 +10,8 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 3001
+RUN npm run-script build
 
-CMD [ "npm", "run", "dev"]
+EXPOSE 3001
+ 
+CMD [ "node", "dist/index.js"]
