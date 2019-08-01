@@ -16,15 +16,13 @@ function clientErrorHandler (err, req, res, next) {
 }
 
 function errorHandler (err, req, res, next) {
-    res.status(500)
-    res.send({ error: 'Something failed!' })
+    res.status(500).send({ error: 'Your request was malformed' })
 }
 
 const createApplication = (lightController) => {
   const app = express();
-
+  app.use(express.static('public'))
   app.use(bodyparser.json());
-
   app.use('/lights/', lightRoutes(lightController));
   app.use(logErrors)
   app.use(clientErrorHandler)
