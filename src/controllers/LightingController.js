@@ -10,6 +10,10 @@ export default class LightingController {
       this.handleMessage(topic, message);
     });
   }
+  
+  registerCallback(cb){
+    this.cb = cb;
+  }
 
   async handleMessage(topic, message) {
     try {
@@ -18,7 +22,10 @@ export default class LightingController {
           let data = JSON.parse(message);
           const id = data.id;
           data.lastSeen = new Date().toString();
-          await this.lightStorage.set(id, data)
+          let updatedLight = await this.lightStorage.set(id, data);
+          if(this.cb){
+            this.cb( updatedLight.toJSON() );
+          }
           break;
         case "disconnect":
           console.log('disconnecting');
@@ -43,6 +50,9 @@ export default class LightingController {
 
       let updatedLight = await this.lightStorage.set(id, {"current_color":color})
       this.lightBroker.publish(`color/${id}`, JSON.stringify({ color, time, delay}));
+      if(this.cb){
+        this.cb(updatedLight.toJSON())
+      }
       return updatedLight.toJSON();
   }
 
