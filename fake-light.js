@@ -12,7 +12,7 @@ const client  = mqtt.connect('mqtt://localhost:1883', { will: { topic: 'disconne
 
 client.on('connect', () => {
     console.log("connected to broker");
-    client.subscribe('color/light');
+    client.subscribe(`color/${state.id}`);
     client.publish('connect', JSON.stringify(state));
     setInterval(()=> {
         console.log('ping');
