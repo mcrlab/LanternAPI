@@ -13,6 +13,32 @@ function createRoutes(lightingController) {
         return res.json(response);    
        
     });
+
+
+    router.put('/', async (req, res) => {
+      try {
+        let lights = req.body.lights;
+        let response = {
+          lights: []
+        };
+        
+        for(let i = 0; i < lights.length; i++){
+          let id = lights[i].id;
+          let color = colorValidator(lights[i].color);
+          let colorObject = toRGBObject(color);
+          let time = timeValidator(lights[i].time);
+          let delay = delayValidator(lights[i].delay);
+          
+          let light = await lightingController.updateLightColor(id, colorObject, time, delay);
+          response.lights.push(light);
+        }
+        
+        return res.json(response);   
+      } catch(error){
+        console.log(error);
+        res.status(error.status|| 400).json(error);
+      };
+    })
     
     router.get('/:light', async (req, res) => {
       try {
@@ -31,6 +57,21 @@ function createRoutes(lightingController) {
         let delay = delayValidator(req.body.delay);
         
         let light = await lightingController.updateLightColor(req.params.light, colorObject, time, delay)
+
+        return res.json(light);
+
+      } catch(error){
+          res.status(error.status|| 400).json(error);
+      };
+    });
+
+    router.put('/position/:light', async (req, res) => {
+      try {
+        let x = req.body.x;
+        let y = req.body.y;
+        
+        
+        let light = await lightingController.updateLightPosition(req.params.light, x, y)
 
         return res.json(light);
 

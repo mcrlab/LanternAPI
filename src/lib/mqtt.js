@@ -9,7 +9,6 @@ export default class MQTTBroker {
     this.client.on('connect', () => {
       console.log("connected to broker");
       this.client.subscribe('connect');
-      this.client.subscribe('disconnect');
     });
 
     this.client.on('message', (topic, message) => {
