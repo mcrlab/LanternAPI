@@ -1,49 +1,63 @@
 var mqtt = require('mqtt')
-let state = {
-    "id": "LIGHT_ID",
-    "current_color": {
-        "r":0,
-        "g":0,
-        "b":0
+
+class Light {
+    constructor(id){
+        this.state = {
+            "id": id,
+            "current_color": {
+                "r":0,
+                "g":0,
+                "b":0
+            }
+        };
+        this.client = mqtt.connect('mqtt://localhost:1883');
+        this.client.on('connect', () => {
+            console.log("connected to broker");
+            this.client.subscribe(`color/${this.state.id}`);
+            this.client.publish('connect', JSON.stringify(this.state));
+            setInterval(()=> {
+                console.log('ping');
+                this.client.publish('connect', JSON.stringify(this.state));
+            }, 30000);
+        });
+        
+        this.client.on('message', (topic, message) => {
+            const data = JSON.parse(message.toString());
+            this.state = Object.assign({}, this.state,{
+                current_color: data.color
+            });
+            console.log(this.state);
+        });
+        
+        this.client
+            .on('close', function() {
+                console.log('close');
+            });
+        this.client
+            .on('reconnect', function() {
+                console.log('reconnect');
+            });
+        this.client
+            .on('offline', function() {
+                console.log('offline');
+            });
+        this.client
+            .on('error', function(error) {
+                console.log('error', error);
+            });
     }
-};
+}
 
-const client  = mqtt.connect('mqtt://localhost:1883', { will: { topic: 'disconnect', payload: 'me' } })
+for(let i = 0; i < 1; i++){
+    new Light(`LIGHT_ID_${i}`);
 
-client.on('connect', () => {
-    console.log("connected to broker");
-    client.subscribe(`color/${state.id}`);
-    client.publish('connect', JSON.stringify(state));
-    setInterval(()=> {
-        console.log('ping');
-        client.publish('connect', JSON.stringify(state));
-    }, 30000);
-});
+}
 
-client.on('message', (topic, message) => {
-    const data = JSON.parse(message.toString());
-    state = Object.assign({}, state,{
-        current_color: data.color
-    });
-    console.log(state);
-});
 
-client
-    .on('close', function() {
-        console.log('close');
-    });
-client
-    .on('reconnect', function() {
-        console.log('reconnect');
-    });
-client
-    .on('offline', function() {
-        console.log('offline');
-    });
-client
-    .on('error', function(error) {
-        console.log('error', error);
-    });
+
+
+
+
 
  
 
