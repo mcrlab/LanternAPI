@@ -22,8 +22,8 @@ export default class Light {
             time: this.data.time,
             delay: this.data.delay,
             position: {
-                x: this.data.x || 0,
-                y: this.data.y || 0
+                x: this.data.x || 0.5,
+                y: this.data.y || 0.5
             }
         };
         return data;
@@ -34,8 +34,8 @@ export default class Light {
             id: this.id,
             color: RGBObjectToHex(this.data.current_color),
             position: {
-                x: this.data.x || 0,
-                y: this.data.y || 0
+                x: this.data.x || 0.5,
+                y: this.data.y || 0.5
             },
             lastUpdated: this.data.lastUpdated
 
