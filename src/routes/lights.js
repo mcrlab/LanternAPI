@@ -1,5 +1,5 @@
 import express from 'express';
-import {colorValidator, timeValidator, delayValidator} from '../validators/validators';
+import {colorValidator, timeValidator, delayValidator, positionValidator} from '../validators/validators';
 import {toRGBObject} from '../lib/color';
 
 function createRoutes(lightingController) {
@@ -67,11 +67,13 @@ function createRoutes(lightingController) {
 
     router.put('/position/:light', async (req, res) => {
       try {
-        let x = req.body.x;
-        let y = req.body.y;
-        
-        
-        let light = await lightingController.updateLightPosition(req.params.light, x, y)
+        let x = positionValidator(req.body.x);
+        let y = positionValidator(req.body.y);
+        if(req.body.color){
+          let color = colorValidator(req.body.color);
+          let colorObject = toRGBObject(color);        
+        }
+        let light = await lightingController.updateLightPosition(req.params.light, x, y, colorObject)
 
         return res.json(light);
 
