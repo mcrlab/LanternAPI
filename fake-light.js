@@ -48,7 +48,7 @@ class Light {
     }
 }
 
-for(let i = 0; i < 1; i++){
+for(let i = 0; i < 5; i++){
     new Light(`LIGHT_ID_${i}`);
 
 }

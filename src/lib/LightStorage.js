@@ -10,31 +10,56 @@ export default class LightStorage {
         this.getAsync = promisify(this.client.get).bind(this.client);
         this.setAsync = promisify(this.client.set).bind(this.client);
         this.getKeys = promisify(this.client.keys).bind(this.client);
+        this.lights = new Map();
     }
-
-    async fetchAllData(){
-        let lights = {}
-        try {
-            
-            console.log(cache);
-            return {};
-
-            if(cache){
-                lights = JSON.parse(cache)
+    
+    async get(id){
+        return new Promise((resolve, reject)=> {
+            const data = this.lights.get(id);
+            if(data){
+                resolve(new Light(data.id, data));     
+            } else {
+                reject("No light found");
             }
-        } catch(e){
-            console.log(e);
-
-        } finally {
-            return lights;
-        }
-
+        });
     }
+
+    async all(){
+        return new Promise((resolve, reject)=> {
+            let all = [];
+            this.lights.forEach((data) => {
+                all.push(new Light(data.id, data));
+            });
+            resolve(all);
+        });
+    }
+
+    async set(id, update){
+        console.log('update', id, update);
+        return new Promise((resolve, reject)=> {
+            const data = this.lights.get(id);
+            let newData =  Object.assign({}, data, update);
+            newData.lastUpdated = new Date();
+            this.lights.set(id, newData);
+            resolve(new Light(id, newData));
+        });
+    }
+    
+    async remove(id){
+        return new Promise((resolve, reject)=> {
+            resolve(this.lights.delete(id));
+        })
+    }
+/*
     async get(id){
         try {
-            const data = await this.getAsync(id);
-            if(data){
-                return new Light(id, JSON.parse(data));
+            const data = await this.all();
+            let lightData = data.find((element)=> {
+                return element.id == id
+            });
+
+            if(lightData){
+                return new Light(id, lightData);
             } else {
                 return undefined
             }
@@ -43,17 +68,14 @@ export default class LightStorage {
             return undefined;
         }
     }
-
+    
     async all(){
-        let all = [];
+        let all = new Map();
         try {
-            const keys = await this.getKeys('*');
-            console.log(keys);
-            for(let i = 0; i < keys.length; i++){
-                let light = await this.get(keys[i]);
-                all.push(light)
+            const data = await this.getAsync('LIGHTS');
+            if(data){
+                all = new Map(JSON.parse(data));
             }
-            console.log(all);
         } catch(e){
             console.log(e);
         } finally {
@@ -62,22 +84,15 @@ export default class LightStorage {
     }
 
     async set(id, update){
-        let data = await this.getAsync(id);
-        if(!data){
-            data = {}
-        } else {
-            data = JSON.parse(data);
-        }
-        
+        let data = await this.all();    
+
         let newData =  Object.assign({}, data, update);
         newData.lastUpdated = new Date();
          console.log("Saving",newData);
         this.client.set(id,
-            JSON.stringify(newData),
-            'EX', 
-            30
+            JSON.stringify(newData)
         );
         return new Light(id, newData);
     }
-
+*/
 }

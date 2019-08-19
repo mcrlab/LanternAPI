@@ -69,15 +69,17 @@ function createRoutes(lightingController) {
       try {
         let x = positionValidator(req.body.x);
         let y = positionValidator(req.body.y);
+        let colorObject;
         if(req.body.color){
           let color = colorValidator(req.body.color);
-          let colorObject = toRGBObject(color);        
+          colorObject = toRGBObject(color);        
         }
         let light = await lightingController.updateLightPosition(req.params.light, x, y, colorObject)
 
         return res.json(light);
 
       } catch(error){
+          console.log(error);
           res.status(error.status|| 400).json(error);
       };
     });
