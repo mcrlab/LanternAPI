@@ -1,6 +1,0 @@
-export mqtt="localhost"
-export REGION="eu-west-2"
-export NAME="lanternapi"
-export CLOUDMQTT_URL="mqtt://localhost:1883"
-export REDIS_URL="redis://localhost:
-

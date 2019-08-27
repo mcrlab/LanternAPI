@@ -6,6 +6,7 @@
   "dependencies": {
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
+    "aws-sdk": "^2.518.0",
     "express": "^4.17.1",
     "helmet": "^3.20.0",
     "mqtt": "^3.0.0",

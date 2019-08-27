@@ -54,6 +54,21 @@ export default class LightingController {
       }
       return updatedLight.toJSON();
   }
+  
+  async updateLight(id, update){
+    let light = await this.lightStorage.get(id);
+    if(!light){
+      throw new LightNotFoundError();
+    }
+    let updatedLight = await this.lightStorage.set(id, update);
+    if(update.color){
+      this.lightBroker.publish(`color/${id}`, JSON.stringify(updatedLight.toMQTT()));
+    }
+    if(this.cb){
+      this.cb(updatedLight.toInstruction())
+    }
+    return updatedLight.toJSON();
+  }
 
   async updateLightPosition(id, x, y, color){
     let light = await this.lightStorage.get(id)

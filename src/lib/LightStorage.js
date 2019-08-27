@@ -1,15 +1,7 @@
 import Light from '../models/Light';
-const redis = require('redis');
-const {promisify} = require('util');
-
-const redisKey = "user:lights:"
 
 export default class LightStorage {
     constructor(){
-        this.client = redis.createClient(process.env.REDIS_URL || "redis://redis:6379");
-        this.getAsync = promisify(this.client.get).bind(this.client);
-        this.setAsync = promisify(this.client.set).bind(this.client);
-        this.getKeys = promisify(this.client.keys).bind(this.client);
         this.lights = new Map();
     }
     
