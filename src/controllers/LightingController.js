@@ -21,7 +21,12 @@ export default class LightingController {
         case "connect":
           let data = JSON.parse(message);
           const id = data.id;
-          data.lastSeen = new Date().toString();
+          data.lastSeen = new Date().toJSON();
+          let light = await this.lightStorage.get(id);
+
+          if(light){
+            data = Object.assign(light.data, data);
+          }
           let updatedLight = await this.lightStorage.set(id, data);
           if(this.cb){
             this.cb( updatedLight.toJSON() );
@@ -40,14 +45,14 @@ export default class LightingController {
     }
   }
 
-  async updateLightColor(id, color, time, delay){
+  async updateLightColor(id, colorObject, time, delay){
     
       let light = await this.lightStorage.get(id)
       if(!light){
         throw new LightNotFoundError();
       }
-
-      let updatedLight = await this.lightStorage.set(id, { "current_color":color, time, delay })
+      let update = Object.assign(light.data, { "current_color":colorObject, time, delay });
+      let updatedLight = await this.lightStorage.set(id, update)
       this.lightBroker.publish(`color/${id}`, JSON.stringify(updatedLight.toMQTT()));
       if(this.cb){
         this.cb(updatedLight.toInstruction())
@@ -75,8 +80,9 @@ export default class LightingController {
       if(!light){
         throw new LightNotFoundError();
       }
-
-      let updatedLight = await this.lightStorage.set(id, {"x":x, "y":y, "current_color": color});
+      let update = Object.assign(light.data, {"x":x, "y":y, "current_color": color});
+      
+      let updatedLight = await this.lightStorage.set(id, update);
       this.lightBroker.publish(`color/${id}`, JSON.stringify(updatedLight.toMQTT()));
       
       if(this.cb){

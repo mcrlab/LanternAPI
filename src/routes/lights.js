@@ -55,6 +55,12 @@ function createRoutes(lightingController) {
         let colorObject = toRGBObject(color);
         let time = timeValidator(req.body.time);
         let delay = delayValidator(req.body.delay);
+        let x = positionValidator(req.body.x);
+        let y = positionValidator(req.body.y);
+
+        let update = {
+
+        }
         
         let light = await lightingController.updateLightColor(req.params.light, colorObject, time, delay)
 

@@ -5,6 +5,13 @@ services:
     build: .
     ports:
      - "80:3001"
+    depends_on:
+      - "dynamodb"
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      DYNAMODB: "http://dynamodb:8000"
+    command: [ "node", "dist/index.js"]
   mqtt:
     image: "eclipse-mosquitto"
     ports:
