@@ -52,12 +52,12 @@ function server(){
       }
     ));
 
-    lightController.registerCallback((data)=>{
+    lightController.registerCallback((instruction, data)=>{
       wss.clients.forEach(function each(client) {
         if (client.readyState === WebSocket.OPEN) {
           client.send(JSON.stringify(
             {
-              "instruction": "UPDATE",
+              "instruction": instruction,
               "data": data
             }
           ));

@@ -23,13 +23,16 @@ export default class LightingController {
           const id = data.id;
           data.lastSeen = new Date().toJSON();
           let light = await this.lightStorage.get(id);
-
+          let instruction = ""; 
           if(light){
             data = Object.assign(light.data, data);
+            instruction = "UPDATE_LIGHT";
+          } else {
+            instruction = "ADD_LIGHT;"
           }
           let updatedLight = await this.lightStorage.set(id, data);
           if(this.cb){
-            this.cb( updatedLight.toJSON() );
+            this.cb(instruction, updatedLight.toJSON() );
           }
           break;
         case "disconnect":
@@ -55,7 +58,7 @@ export default class LightingController {
       let updatedLight = await this.lightStorage.set(id, update)
       this.lightBroker.publish(`color/${id}`, JSON.stringify(updatedLight.toMQTT()));
       if(this.cb){
-        this.cb(updatedLight.toInstruction())
+        this.cb("UPDATE_LIGHT", updatedLight.toInstruction())
       }
       return updatedLight.toJSON();
   }
@@ -70,7 +73,7 @@ export default class LightingController {
       this.lightBroker.publish(`color/${id}`, JSON.stringify(updatedLight.toMQTT()));
     }
     if(this.cb){
-      this.cb(updatedLight.toInstruction())
+      this.cb("UPDATE_LIGHT", updatedLight.toInstruction())
     }
     return updatedLight.toJSON();
   }
@@ -86,7 +89,7 @@ export default class LightingController {
       this.lightBroker.publish(`color/${id}`, JSON.stringify(updatedLight.toMQTT()));
       
       if(this.cb){
-        this.cb(updatedLight.toInstruction())
+        this.cb("UPDATE_LIGHT", updatedLight.toInstruction())
       }
       return updatedLight.toJSON();
   }
