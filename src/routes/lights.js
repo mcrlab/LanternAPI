@@ -71,6 +71,7 @@ function createRoutes(lightingController) {
       };
     });
 
+
     router.put('/position/:light', async (req, res) => {
       try {
         let x = positionValidator(req.body.x);

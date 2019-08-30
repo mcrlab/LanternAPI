@@ -11,6 +11,7 @@ services:
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
       DYNAMODB: "http://dynamodb:8000"
+      MQTT_URL: "mqtt://mqtt:1883"
     command: [ "node", "dist/index.js"]
   mqtt:
     image: "eclipse-mosquitto"

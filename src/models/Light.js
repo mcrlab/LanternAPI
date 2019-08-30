@@ -5,6 +5,10 @@ export default class Light {
         this.id = id;
         this.data = data;
     }
+    
+    update(data){
+        this.data = Object.assign({},this.data, data);
+    }
 
     toMQTT(){
         let data = {

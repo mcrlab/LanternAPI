@@ -15,6 +15,10 @@ export default class LightingController {
     this.cb = cb;
   }
 
+  cleanLights(){
+
+  }
+  
   async handleMessage(topic, message) {
     try {
       switch(topic){
@@ -25,7 +29,7 @@ export default class LightingController {
           let light = await this.lightStorage.get(id);
           let instruction = ""; 
           if(light){
-            data = Object.assign(light.data, data);
+            data = Object.assign({}, light.data, data);
             instruction = "UPDATE_LIGHT";
           } else {
             instruction = "ADD_LIGHT;"
@@ -63,26 +67,17 @@ export default class LightingController {
       return updatedLight.toJSON();
   }
   
-  async updateLight(id, update){
-    let light = await this.lightStorage.get(id);
-    if(!light){
-      throw new LightNotFoundError();
-    }
-    let updatedLight = await this.lightStorage.set(id, update);
-    if(update.color){
-      this.lightBroker.publish(`color/${id}`, JSON.stringify(updatedLight.toMQTT()));
-    }
-    if(this.cb){
-      this.cb("UPDATE_LIGHT", updatedLight.toInstruction())
-    }
-    return updatedLight.toJSON();
-  }
-
   async updateLightPosition(id, x, y, color){
     let light = await this.lightStorage.get(id)
       if(!light){
         throw new LightNotFoundError();
       }
+      console.log("COLOR:", color);
+      if(!color){
+        console.log(light, light.data);
+        color = light.data.current_color;
+      }
+      console.log("COLOR:", color);
       let update = Object.assign(light.data, {"x":x, "y":y, "current_color": color});
       
       let updatedLight = await this.lightStorage.set(id, update);
