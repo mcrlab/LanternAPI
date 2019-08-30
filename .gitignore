@@ -3,3 +3,5 @@ certs/
 node_modules/
 .DS_Store
 .env
+mosquitto/data/
+mosquitto/log/
