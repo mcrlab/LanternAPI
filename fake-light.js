@@ -10,7 +10,10 @@ class Light {
                 "b":0
             }
         };
-        this.client = mqtt.connect('mqtt://localhost:1883');
+        this.client = mqtt.connect('mqtt://localhost:1883', {
+            "username":"mosquitto",
+            "password":"mosquitto"
+        });
         this.client.on('connect', () => {
             console.log("connected to broker");
             this.client.subscribe(`color/${this.state.id}`);

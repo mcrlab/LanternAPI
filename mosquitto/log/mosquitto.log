@@ -1,0 +1,176 @@
+1567197994: mosquitto version 1.5.6 starting
+1567197994: Config loaded from /mosquitto/config/mosquitto.conf.
+1567197994: Opening ipv4 listen socket on port 1883.
+1567197994: Opening ipv6 listen socket on port 1883.
+1567197995: New connection from 172.23.0.1 on port 1883.
+1567197995: New client connected from 172.23.0.1 as b7d04bc1-ac97-4952-bcd1-77551d67ba2b1567178190248 (c1, k10, u'mosquitto').
+1567197998: New connection from 172.23.0.4 on port 1883.
+1567197998: New client connected from 172.23.0.4 as mqttjs_5a4646a9 (c1, k60, u'mosquitto').
+1567198055: New connection from 172.23.0.1 on port 1883.
+1567198055: New connection from 172.23.0.1 on port 1883.
+1567198055: New connection from 172.23.0.1 on port 1883.
+1567198055: New connection from 172.23.0.1 on port 1883.
+1567198055: Socket error on client <unknown>, disconnecting.
+1567198055: Socket error on client <unknown>, disconnecting.
+1567198055: New connection from 172.23.0.1 on port 1883.
+1567198055: Socket error on client <unknown>, disconnecting.
+1567198055: Socket error on client <unknown>, disconnecting.
+1567198055: New connection from 172.23.0.1 on port 1883.
+1567198055: New connection from 172.23.0.1 on port 1883.
+1567198055: New connection from 172.23.0.1 on port 1883.
+1567198055: Socket error on client <unknown>, disconnecting.
+1567198055: New connection from 172.23.0.1 on port 1883.
+1567198055: New connection from 172.23.0.1 on port 1883.
+1567198055: Socket error on client <unknown>, disconnecting.
+1567198055: Socket error on client <unknown>, disconnecting.
+1567198055: Socket error on client <unknown>, disconnecting.
+1567198055: Socket error on client <unknown>, disconnecting.
+1567198055: Socket error on client <unknown>, disconnecting.
+1567198056: New connection from 172.23.0.1 on port 1883.
+1567198056: Socket error on client <unknown>, disconnecting.
+1567198056: New connection from 172.23.0.1 on port 1883.
+1567198056: Socket error on client <unknown>, disconnecting.
+1567198056: New connection from 172.23.0.1 on port 1883.
+1567198056: Socket error on client <unknown>, disconnecting.
+1567198056: New connection from 172.23.0.1 on port 1883.
+1567198056: New connection from 172.23.0.1 on port 1883.
+1567198056: Socket error on client <unknown>, disconnecting.
+1567198056: Socket error on client <unknown>, disconnecting.
+1567198056: New connection from 172.23.0.1 on port 1883.
+1567198056: New connection from 172.23.0.1 on port 1883.
+1567198056: Socket error on client <unknown>, disconnecting.
+1567198056: New connection from 172.23.0.1 on port 1883.
+1567198056: Socket error on client <unknown>, disconnecting.
+1567198056: New connection from 172.23.0.1 on port 1883.
+1567198056: Socket error on client <unknown>, disconnecting.
+1567198056: New connection from 172.23.0.1 on port 1883.
+1567198056: Socket error on client <unknown>, disconnecting.
+1567198056: Socket error on client <unknown>, disconnecting.
+1567198057: New connection from 172.23.0.1 on port 1883.
+1567198057: Socket error on client <unknown>, disconnecting.
+1567198057: New connection from 172.23.0.1 on port 1883.
+1567198057: Socket error on client <unknown>, disconnecting.
+1567198057: New connection from 172.23.0.1 on port 1883.
+1567198057: Socket error on client <unknown>, disconnecting.
+1567198057: New connection from 172.23.0.1 on port 1883.
+1567198057: Socket error on client <unknown>, disconnecting.
+1567198057: New connection from 172.23.0.1 on port 1883.
+1567198057: Socket error on client <unknown>, disconnecting.
+1567198057: New connection from 172.23.0.1 on port 1883.
+1567198057: Socket error on client <unknown>, disconnecting.
+1567198057: New connection from 172.23.0.1 on port 1883.
+1567198057: Socket error on client <unknown>, disconnecting.
+1567198057: New connection from 172.23.0.1 on port 1883.
+1567198057: Socket error on client <unknown>, disconnecting.
+1567198057: New connection from 172.23.0.1 on port 1883.
+1567198057: Socket error on client <unknown>, disconnecting.
+1567198057: New connection from 172.23.0.1 on port 1883.
+1567198057: Socket error on client <unknown>, disconnecting.
+1567198058: New connection from 172.23.0.1 on port 1883.
+1567198058: New connection from 172.23.0.1 on port 1883.
+1567198058: Socket error on client <unknown>, disconnecting.
+1567198058: Socket error on client <unknown>, disconnecting.
+1567198058: New connection from 172.23.0.1 on port 1883.
+1567198058: Socket error on client <unknown>, disconnecting.
+1567198058: New connection from 172.23.0.1 on port 1883.
+1567198058: New connection from 172.23.0.1 on port 1883.
+1567198058: Socket error on client <unknown>, disconnecting.
+1567198058: Socket error on client <unknown>, disconnecting.
+1567198058: New connection from 172.23.0.1 on port 1883.
+1567198058: Socket error on client <unknown>, disconnecting.
+1567198058: New connection from 172.23.0.1 on port 1883.
+1567198058: New connection from 172.23.0.1 on port 1883.
+1567198058: Socket error on client <unknown>, disconnecting.
+1567198058: Socket error on client <unknown>, disconnecting.
+1567198058: New connection from 172.23.0.1 on port 1883.
+1567198058: Socket error on client <unknown>, disconnecting.
+1567198058: New connection from 172.23.0.1 on port 1883.
+1567198058: Socket error on client <unknown>, disconnecting.
+1567198208: New connection from 172.23.0.1 on port 1883.
+1567198208: New connection from 172.23.0.1 on port 1883.
+1567198208: New connection from 172.23.0.1 on port 1883.
+1567198208: New connection from 172.23.0.1 on port 1883.
+1567198208: New connection from 172.23.0.1 on port 1883.
+1567198208: New connection from 172.23.0.1 on port 1883.
+1567198208: New connection from 172.23.0.1 on port 1883.
+1567198208: New connection from 172.23.0.1 on port 1883.
+1567198208: Socket error on client <unknown>, disconnecting.
+1567198208: Socket error on client <unknown>, disconnecting.
+1567198208: Socket error on client <unknown>, disconnecting.
+1567198208: Socket error on client <unknown>, disconnecting.
+1567198208: Socket error on client <unknown>, disconnecting.
+1567198208: New connection from 172.23.0.1 on port 1883.
+1567198208: Socket error on client <unknown>, disconnecting.
+1567198208: New connection from 172.23.0.1 on port 1883.
+1567198208: Socket error on client <unknown>, disconnecting.
+1567198208: Socket error on client <unknown>, disconnecting.
+1567198208: Socket error on client <unknown>, disconnecting.
+1567198208: Socket error on client <unknown>, disconnecting.
+1567198209: New connection from 172.23.0.1 on port 1883.
+1567198209: New connection from 172.23.0.1 on port 1883.
+1567198209: Socket error on client <unknown>, disconnecting.
+1567198209: New connection from 172.23.0.1 on port 1883.
+1567198209: New connection from 172.23.0.1 on port 1883.
+1567198209: Socket error on client <unknown>, disconnecting.
+1567198209: New connection from 172.23.0.1 on port 1883.
+1567198209: Socket error on client <unknown>, disconnecting.
+1567198209: Socket error on client <unknown>, disconnecting.
+1567198209: Socket error on client <unknown>, disconnecting.
+1567198209: New connection from 172.23.0.1 on port 1883.
+1567198209: New connection from 172.23.0.1 on port 1883.
+1567198209: Socket error on client <unknown>, disconnecting.
+1567198209: New connection from 172.23.0.1 on port 1883.
+1567198209: Socket error on client <unknown>, disconnecting.
+1567198209: Socket error on client <unknown>, disconnecting.
+1567198209: New connection from 172.23.0.1 on port 1883.
+1567198209: New connection from 172.23.0.1 on port 1883.
+1567198209: Socket error on client <unknown>, disconnecting.
+1567198209: Socket error on client <unknown>, disconnecting.
+1567198210: New connection from 172.23.0.1 on port 1883.
+1567198210: New connection from 172.23.0.1 on port 1883.
+1567198210: New connection from 172.23.0.1 on port 1883.
+1567198210: Socket error on client <unknown>, disconnecting.
+1567198210: Socket error on client <unknown>, disconnecting.
+1567198210: New connection from 172.23.0.1 on port 1883.
+1567198210: Socket error on client <unknown>, disconnecting.
+1567198210: Socket error on client <unknown>, disconnecting.
+1567198210: New connection from 172.23.0.1 on port 1883.
+1567198210: Socket error on client <unknown>, disconnecting.
+1567198210: New connection from 172.23.0.1 on port 1883.
+1567198210: New connection from 172.23.0.1 on port 1883.
+1567198210: New connection from 172.23.0.1 on port 1883.
+1567198210: Socket error on client <unknown>, disconnecting.
+1567198210: Socket error on client <unknown>, disconnecting.
+1567198210: Socket error on client <unknown>, disconnecting.
+1567198210: New connection from 172.23.0.1 on port 1883.
+1567198210: New connection from 172.23.0.1 on port 1883.
+1567198210: Socket error on client <unknown>, disconnecting.
+1567198210: Socket error on client <unknown>, disconnecting.
+1567198241: New connection from 172.23.0.1 on port 1883.
+1567198241: New connection from 172.23.0.1 on port 1883.
+1567198241: New connection from 172.23.0.1 on port 1883.
+1567198241: New connection from 172.23.0.1 on port 1883.
+1567198241: New connection from 172.23.0.1 on port 1883.
+1567198241: New connection from 172.23.0.1 on port 1883.
+1567198241: New connection from 172.23.0.1 on port 1883.
+1567198241: New connection from 172.23.0.1 on port 1883.
+1567198241: New connection from 172.23.0.1 on port 1883.
+1567198241: New client connected from 172.23.0.1 as mqttjs_6a6489b9 (c1, k60, u'mosquitto').
+1567198241: New client connected from 172.23.0.1 as mqttjs_73466e3f (c1, k60, u'mosquitto').
+1567198241: New connection from 172.23.0.1 on port 1883.
+1567198241: New client connected from 172.23.0.1 as mqttjs_ec8c8349 (c1, k60, u'mosquitto').
+1567198241: New client connected from 172.23.0.1 as mqttjs_4022b21e (c1, k60, u'mosquitto').
+1567198241: New client connected from 172.23.0.1 as mqttjs_67ed369b (c1, k60, u'mosquitto').
+1567198241: New client connected from 172.23.0.1 as mqttjs_561d8561 (c1, k60, u'mosquitto').
+1567198241: New client connected from 172.23.0.1 as mqttjs_c5098b7b (c1, k60, u'mosquitto').
+1567198241: New client connected from 172.23.0.1 as mqttjs_eb518e79 (c1, k60, u'mosquitto').
+1567198241: New client connected from 172.23.0.1 as mqttjs_44ecd74e (c1, k60, u'mosquitto').
+1567198241: New client connected from 172.23.0.1 as mqttjs_110c9220 (c1, k60, u'mosquitto').
+1567198260: Socket error on client mqttjs_c5098b7b, disconnecting.
+1567198552: mosquitto version 1.5.6 starting
+1567198552: Config loaded from /mosquitto/config/mosquitto.conf.
+1567198552: Opening ipv4 listen socket on port 1883.
+1567198552: Opening ipv6 listen socket on port 1883.
+1567198553: New connection from 172.23.0.1 on port 1883.
+1567198553: New client connected from 172.23.0.1 as b7d04bc1-ac97-4952-bcd1-77551d67ba2b1567178190248 (c1, k10, u'mosquitto').
+1567198556: New connection from 172.23.0.4 on port 1883.
