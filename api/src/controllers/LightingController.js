@@ -14,10 +14,6 @@ export default class LightingController {
   registerCallback(cb){
     this.cb = cb;
   }
-
-  cleanLights(){
-
-  }
   
   async handleMessage(topic, message) {
     try {
@@ -27,20 +23,13 @@ export default class LightingController {
           const id = data.id;
           data.lastSeen = new Date().toJSON();
           let light = await this.lightStorage.get(id);
-          let instruction = ""; 
           if(light){
             data = Object.assign({}, light.data, data);
-            instruction = "UPDATE_LIGHT";
-          } else {
-            instruction = "ADD_LIGHT;"
           }
           let updatedLight = await this.lightStorage.set(id, data);
-          if(this.cb){
-            this.cb(instruction, updatedLight.toJSON() );
+          if(this.cb && !light){
+            this.cb("ADD_LIGHT", updatedLight.toJSON() );
           }
-          break;
-        case "disconnect":
-          console.log('disconnecting');
           break;
         default:
           return;
