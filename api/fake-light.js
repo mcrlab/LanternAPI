@@ -11,8 +11,8 @@ class Light {
             }
         };
         this.client = mqtt.connect('mqtt://localhost:1883', {
-            "username":"mosquitto",
-            "password":"mosquitto"
+            "username":process.env.MOSQUITTO_USER,
+            "password":process.env.MOSQUITTO_PASSWORD
         });
         this.client.on('connect', () => {
             console.log("connected to broker");
