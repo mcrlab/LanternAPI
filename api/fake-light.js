@@ -2,6 +2,7 @@ var mqtt = require('mqtt')
 
 class Light {
     constructor(id){
+        console.log(`Creating new light ${id}`);
         this.state = {
             "id": id,
             "current_color": {
@@ -11,7 +12,7 @@ class Light {
             }
         };
         this.client = mqtt.connect('mqtt://localhost:1883', {
-            "username":process.env.MOSQUITTO_USER,
+            "username":process.env.MOSQUITTO_USERNAME,
             "password":process.env.MOSQUITTO_PASSWORD
         });
         this.client.on('connect', () => {

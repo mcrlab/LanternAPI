@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyparser from 'body-parser';
+import cors from 'cors';
 
 const helmet = require('helmet')
 import lightRoutes from '../routes/lights';
@@ -25,12 +26,8 @@ const createApplication = (lightController) => {
   const app = express();
   app.use(helmet());
   //app.use(express.static('public'));
+  app.use(cors());
   app.use(bodyparser.json());
-  app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    next();
-  });
   app.use('/', lightRoutes(lightController));
   app.use(logErrors)
   app.use(clientErrorHandler)

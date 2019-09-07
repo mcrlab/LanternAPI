@@ -34,3 +34,16 @@ services:
       - ./mosquitto/config:/mosquitto/config:ro
     ports:
       - 1883:1883
+  twitter:
+    build:
+      context: twitter
+      dockerfile: Dockerfile
+    depends_on:
+      - "web"
+    restart: always
+    environment:
+      - ckey=${ckey}
+      - csecret=${csecret}
+      - atoken=${atoken}
+      - asecret=${asecret}
+      - url=http://web:3001
