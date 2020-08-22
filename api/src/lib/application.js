@@ -25,7 +25,6 @@ function errorHandler (err, req, res, next) {
 const createApplication = (lightController) => {
   const app = express();
   app.use(helmet());
-  //app.use(express.static('public'));
   app.use(cors());
   app.use(bodyparser.json());
   app.use('/', lightRoutes(lightController));
