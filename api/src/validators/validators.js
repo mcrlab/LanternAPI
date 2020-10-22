@@ -15,8 +15,8 @@ export function colorValidator(color) {
 
 export function timeValidator(time){
     if(time === undefined){
-        return 0
-    } else if(time >= 0 && time <= 10000){
+        return 10
+    } else if(time >= 10 && time <= 10000){
         return time;
     } else {
         throw new LightDataError(400, "Animation is not between 0 and 10000");
@@ -32,3 +32,10 @@ export function delayValidator(delay){
         throw new LightDataError(400, "Delay is not between 0 and 10000");
     }
 }
+
+export function easingValidator(easing){
+    if(false){
+        throw new LightDataError(400, "Easing function isn't valid");
+    } 
+    return easing;
+}  

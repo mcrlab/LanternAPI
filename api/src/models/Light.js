@@ -13,8 +13,10 @@ export default class Light {
     toMQTT(){
         let data = {
             color: this.data.current_color,
+            easing: this.data.easing || "SineEaseInOut",
             time: this.data.time,
-            delay: this.data.delay
+            delay: this.data.delay,
+            method: this.data.method || "fill"
         };
         return data;
     }
@@ -41,6 +43,8 @@ export default class Light {
                 x: this.data.x || 0.5,
                 y: this.data.y || 0.5
             },
+            easing: this.data.easing,
+            method: this.data.method,
             lastUpdated: this.data.lastSeen
 
         };

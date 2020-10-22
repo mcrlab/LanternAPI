@@ -3,24 +3,19 @@ var mqtt = require('mqtt')
 class Light {
     constructor(id){
         console.log(`Creating new light ${id}`);
-        this.state = {
-            "id": id,
-            "current_color": {
-                "r":0,
-                "g":0,
-                "b":0
-            }
-        };
+        this.state = {  "id": id, "current_color": { "r":0, "g":0, "b":0 } };
+
+        console.log(process.env.MOSQUITTO_USERNAME, process.env.MOSQUITTO_PASSWORD);
         this.client = mqtt.connect('mqtt://localhost:1883', {
-            "username":process.env.MOSQUITTO_USERNAME,
-            "password":process.env.MOSQUITTO_PASSWORD
+            "username":process.env.MOSQUITTO_USERNAME || "lantern",
+            "password":process.env.MOSQUITTO_PASSWORD || "ilovelamp"
         });
         this.client.on('connect', () => {
             console.log("connected to broker");
             this.client.subscribe(`color/${this.state.id}`);
             this.client.publish('connect', JSON.stringify(this.state));
             setInterval(()=> {
-                console.log('ping');
+                console.log('ping', JSON.stringify(this.state));
                 this.client.publish('connect', JSON.stringify(this.state));
             }, 30000);
         });
@@ -52,7 +47,7 @@ class Light {
     }
 }
 
-for(let i = 0; i < 10; i++){
+for(let i = 0; i < 1; i++){
     new Light(`LIGHT_ID_${i}`);
 
 }

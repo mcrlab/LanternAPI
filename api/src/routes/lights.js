@@ -28,8 +28,10 @@ function createRoutes(lightingController) {
           let colorObject = toRGBObject(color);
           let time = timeValidator(lights[i].time);
           let delay = delayValidator(lights[i].delay);
+          let easing = req.body.easing || "LinearInterpolation";
+          let method = req.body.method || "fill"
           
-          let light = await lightingController.updateLightColor(id, colorObject, time, delay);
+          let light = await lightingController.updateLightColor(id, colorObject, time, delay, easing, method);
           response.lights.push(light);
         }
         
@@ -55,14 +57,11 @@ function createRoutes(lightingController) {
         let colorObject = toRGBObject(color);
         let time = timeValidator(req.body.time);
         let delay = delayValidator(req.body.delay);
-        let x = positionValidator(req.body.x);
-        let y = positionValidator(req.body.y);
+        let easing = req.body.easing || "LinearInterpolation";
+        let method = req.body.method || "fill"
 
-        let update = {
-
-        }
         
-        let light = await lightingController.updateLightColor(req.params.light, colorObject, time, delay)
+        let light = await lightingController.updateLightColor(req.params.light, colorObject, time, delay, easing, method)
 
         return res.json(light);
 

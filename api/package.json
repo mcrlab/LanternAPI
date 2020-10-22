@@ -6,7 +6,6 @@
   "dependencies": {
     "@babel/cli": "7.10.5",
     "@babel/core": "7.11.4",
-    "aws-sdk": "2.738.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "helmet": "3.23.3",

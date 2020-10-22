@@ -7,20 +7,11 @@ services:
       dockerfile: Dockerfile
     ports:
      - "80:3001"
-    depends_on:
-      - "dynamodb"
     environment:
-      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-      DYNAMODB: "http://dynamodb:8000"
       MQTT_URL: "mqtt://mqtt:1883"
       MOSQUITTO_USERNAME: ${MOSQUITTO_USERNAME}
       MOSQUITTO_PASSWORD: ${MOSQUITTO_PASSWORD}
     command: [ "node", "dist/index.js"]
-  dynamodb:
-    image: "amazon/dynamodb-local:latest"
-    ports:
-     - "8000:8000"
   mqtt:
     build:
       context: mosquitto
@@ -34,16 +25,3 @@ services:
       - ./mosquitto/config:/mosquitto/config:ro
     ports:
       - 1883:1883
-  twitter:
-    build:
-      context: twitter
-      dockerfile: Dockerfile
-    depends_on:
-      - "web"
-    restart: always
-    environment:
-      - ckey=${ckey}
-      - csecret=${csecret}
-      - atoken=${atoken}
-      - asecret=${asecret}
-      - url=http://web:3001

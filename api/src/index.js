@@ -4,37 +4,6 @@ import createApplication from './lib/application';
 import LightStorage from './lib/LightStorage';
 import http from 'http'
 import WebSocket from 'ws';
-var AWS = require("aws-sdk");
-
-AWS.config.update({
-  region: "us-west-2",
-  endpoint: process.env.DYNAMODB
-});
-
-
-async function createDB(){
-  try {
-      var dynamodb = new AWS.DynamoDB();
-      var params = {
-        TableName : "Lights",
-        KeySchema: [       
-            { AttributeName: "id", KeyType: "HASH"}
-        ],
-        AttributeDefinitions: [         
-            { AttributeName: "id", AttributeType: "S" }
-        ],
-        ProvisionedThroughput: {       
-            ReadCapacityUnits: 10, 
-            WriteCapacityUnits: 10
-        }
-    };
-
-    let response = await dynamodb.createTable(params).promise();
-    console.log(response);    
-  } catch(e){
-    console.log("no db setup",e);
-  }
-}
 
 function server(){
   const lightController = new LightingController(new MQTTBroker(), new LightStorage());
@@ -71,8 +40,7 @@ function server(){
     console.log('received:');
   });
 }
-async function startApp(){
-  await createDB();
+function startApp(){
   server();
 }
 

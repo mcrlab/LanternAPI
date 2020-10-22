@@ -3,9 +3,9 @@ var mqtt = require('mqtt')
 export default class MQTTBroker {
 
   init(callback) {
-    this.client  = mqtt.connect(process.env.MQTT_URL || 'mqtt://mqtt:1883',{
-      'username':process.env.MOSQUITTO_USERNAME,
-      'password': process.env.MOSQUITTO_PASSWORD
+    this.client  = mqtt.connect(process.env.MQTT_URL || 'mqtt://localhost:1883',{
+      'username':process.env.MOSQUITTO_USERNAME || 'lantern',
+      'password': process.env.MOSQUITTO_PASSWORD || 'ilovelamp'
     });
 
     this.client.on('connect', () => {

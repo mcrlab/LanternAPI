@@ -41,13 +41,14 @@ export default class LightingController {
     }
   }
 
-  async updateLightColor(id, colorObject, time, delay){
+  async updateLightColor(id, colorObject, time, delay, easing, method){
     
       let light = await this.lightStorage.get(id)
       if(!light){
         throw new LightNotFoundError();
       }
-      let update = Object.assign(light.data, { "current_color":colorObject, time, delay });
+      let update = Object.assign(light.data, { "current_color":colorObject, time, delay, easing, method });
+      console.log(update);
       let updatedLight = await this.lightStorage.set(id, update)
       this.lightBroker.publish(`color/${id}`, JSON.stringify(updatedLight.toMQTT()));
       if(this.cb){
