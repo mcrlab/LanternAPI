@@ -1,12 +1,14 @@
-var mqtt = require('mqtt')
+var mqtt = require('mqtt');
+var url = require('url');
 
 export default class MQTTBroker {
 
   init(callback) {
-    this.client  = mqtt.connect(process.env.MQTT_URL || 'mqtt://localhost:1883',{
-      'username':process.env.MOSQUITTO_USERNAME || 'lantern',
-      'password': process.env.MOSQUITTO_PASSWORD || 'ilovelamp'
-    });
+  //  var mqtt_url = url.parse(process.env.CLOUDMQTT_URL || 'mqtt://mqtt:1883');
+    var url = process.env.CLOUDMQTT_URL || 'mqtt://mqtt:1883';
+//    var auth = (mqtt_url.auth || ':').split(':');
+
+    this.client  = mqtt.connect(url);
 
     this.client.on('connect', () => {
       console.log("connected to broker");

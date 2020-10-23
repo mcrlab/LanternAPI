@@ -8,9 +8,7 @@ services:
     ports:
      - "80:3001"
     environment:
-      MQTT_URL: ${MOSQUITTO_URL}
-      MOSQUITTO_USERNAME: ${MOSQUITTO_USERNAME}
-      MOSQUITTO_PASSWORD: ${MOSQUITTO_PASSWORD}
+      CLOUDMQTT_URL: ${CLOUDMQTT_URL}
     command: [ "node", "dist/index.js"]
   mqtt:
     build:
