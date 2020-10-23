@@ -41,8 +41,30 @@ function createRoutes(lightingController) {
         console.log(error);
         res.status(error.status|| 400).json(error);
       };
-    })
-    
+    });
+
+    router.put('/all', async (req, res) => {
+      try {
+        let color = colorValidator(req.body.color);
+        let colorObject = toRGBObject(color);
+        let time = timeValidator(req.body.time);
+        let delay = delayValidator(req.body.delay);
+        let easing = req.body.easing || "LinearInterpolation";
+        let method = req.body.method || "fill"
+
+        let lightData = await lightingController.getAllLightsData();
+        
+        for(let i = 0; i < lightData.length; i++){
+          let light = await lightingController.updateLightColor(lightData[i].id, colorObject, time, delay, easing, method);
+        }
+        
+        return res.json({"message":"success"});
+
+      } catch(error){
+          res.status(error.status|| 400).json(error);
+      };
+    });
+
     router.get('/:light', async (req, res) => {
       try {
         let light = await lightingController.getLightDataById(req.params.light)
