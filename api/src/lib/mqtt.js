@@ -4,9 +4,7 @@ var url = require('url');
 export default class MQTTBroker {
 
   init(callback) {
-  //  var mqtt_url = url.parse(process.env.CLOUDMQTT_URL || 'mqtt://mqtt:1883');
     var url = process.env.CLOUDMQTT_URL || 'mqtt://mqtt:1883';
-//    var auth = (mqtt_url.auth || ':').split(':');
 
     this.client  = mqtt.connect(url);
 
