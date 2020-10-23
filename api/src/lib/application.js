@@ -26,6 +26,7 @@ const createApplication = (lightController) => {
   const app = express();
   app.use(helmet());
   app.use(cors());
+  app.options('*', cors())
   app.use(bodyparser.json());
   app.use('/', lightRoutes(lightController));
   app.use(logErrors)

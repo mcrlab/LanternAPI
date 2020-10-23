@@ -2,6 +2,7 @@ import express from 'express';
 import {colorValidator, timeValidator, delayValidator, positionValidator} from '../validators/validators';
 import {toRGBObject} from '../lib/color';
 
+
 function createRoutes(lightingController) {
     const router = express.Router();
 
