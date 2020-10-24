@@ -45,6 +45,7 @@ export default class Light {
             },
             easing: this.data.easing,
             method: this.data.method,
+            version: this.data.version,
             lastUpdated: this.data.lastSeen
 
         };

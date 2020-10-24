@@ -28,7 +28,7 @@ const createApplication = (lightController) => {
   app.use(cors());
   app.options('*', cors())
   app.use(bodyparser.json());
-  app.use('/', lightRoutes(lightController));
+  app.use('/lights/', lightRoutes(lightController));
   app.use(logErrors)
   app.use(clientErrorHandler)
   app.use(errorHandler)
