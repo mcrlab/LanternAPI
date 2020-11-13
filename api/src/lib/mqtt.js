@@ -14,7 +14,6 @@ export default class MQTTBroker {
     });
 
     this.client.on('message', (topic, message) => {
-      console.log({topic, message});
       callback(topic, message);
     });
 

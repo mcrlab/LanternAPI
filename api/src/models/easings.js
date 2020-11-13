@@ -1,4 +1,4 @@
-export default easings = [
+const easings = [
     "LinearInterpolation",
     "QuadraticEaseIn",
     "QuadraticEaseOut",
@@ -30,4 +30,5 @@ export default easings = [
     "BounceEaseIn",
     "BounceEaseOut",
     "BounceEaseInOut"
-]
+];
+export default easings;

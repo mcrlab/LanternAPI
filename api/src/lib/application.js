@@ -5,6 +5,7 @@ import cors from 'cors';
 
 const helmet = require('helmet')
 import lightRoutes from '../routes/lights';
+import easings from '../models/easings';
 
 function logErrors (err, req, res, next) {
     console.error(err.stack)
@@ -31,6 +32,9 @@ const createApplication = (lightController) => {
   app.options('*', cors())
   app.use(bodyparser.json());
   app.use('/lights/', lightRoutes(lightController));
+  app.get("/easing", (req, res)=> {
+    return res.json(easings);
+  });
   app.use(logErrors)
   app.use(clientErrorHandler)
   app.use(errorHandler)

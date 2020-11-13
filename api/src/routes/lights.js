@@ -9,7 +9,8 @@ let user = {}
 user[username] = password
 
 const auth = basicAuth({users: user})
-function createRoutes(lightingController) {
+
+function createLightRoutes(lightingController) {
     const router = express.Router();
 
     router.get('/', async (req, res) => {
@@ -119,7 +120,19 @@ function createRoutes(lightingController) {
       };
     });
 
+    router.put('/update/:light', auth, async (req, res) => {
+      try {
+        let light = await lightingController.updateLight(req.params.light)
+
+        return res.json(light);
+
+      } catch(error){
+          console.log(error);
+          res.status(error.status|| 400).json(error);
+      };
+    });
+
     return router;
 }
 
-export default createRoutes;
+export default createLightRoutes;

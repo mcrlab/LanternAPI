@@ -43,9 +43,7 @@ export default class Light {
                 x: this.data.x || 0.5,
                 y: this.data.y || 0.5
             },
-            version: this.data.version,
             lastUpdated: this.data.lastSeen
-
         };
         return data;
     }
