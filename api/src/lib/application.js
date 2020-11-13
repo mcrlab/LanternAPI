@@ -2,9 +2,10 @@ import express from 'express';
 import bodyparser from 'body-parser';
 import cors from 'cors';
 
+
 const helmet = require('helmet')
 import lightRoutes from '../routes/lights';
- 
+
 function logErrors (err, req, res, next) {
     console.error(err.stack)
     next(err)
@@ -24,6 +25,7 @@ function errorHandler (err, req, res, next) {
 
 const createApplication = (lightController) => {
   const app = express();
+
   app.use(helmet());
   app.use(cors());
   app.options('*', cors())

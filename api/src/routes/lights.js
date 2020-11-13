@@ -2,7 +2,13 @@ import express from 'express';
 import {colorValidator, timeValidator, delayValidator, positionValidator} from '../validators/validators';
 import {toRGBObject} from '../lib/color';
 
+const basicAuth = require('express-basic-auth')
+const username = process.env.username || "lantern";
+const password = process.env.password || "password";
+let user = {}
+user[username] = password
 
+const auth = basicAuth({users: user})
 function createRoutes(lightingController) {
     const router = express.Router();
 
@@ -16,7 +22,7 @@ function createRoutes(lightingController) {
     });
 
 
-    router.put('/', async (req, res) => {
+    router.put('/', auth, async (req, res) => {
       try {
         let lights = req.body.lights;
         let response = {
@@ -43,7 +49,7 @@ function createRoutes(lightingController) {
       };
     });
 
-    router.put('/all', async (req, res) => {
+    router.put('/all', auth, async (req, res) => {
       try {
         let color = colorValidator(req.body.color);
         let colorObject = toRGBObject(color);
@@ -74,7 +80,7 @@ function createRoutes(lightingController) {
       };
     });
 
-    router.put('/:light', async (req, res) => {
+    router.put('/:light', auth, async (req, res) => {
       try {
         let color = colorValidator(req.body.color);
         let colorObject = toRGBObject(color);
@@ -94,7 +100,7 @@ function createRoutes(lightingController) {
     });
 
 
-    router.put('/position/:light', async (req, res) => {
+    router.put('/position/:light', auth, async (req, res) => {
       try {
         let x = positionValidator(req.body.x);
         let y = positionValidator(req.body.y);
