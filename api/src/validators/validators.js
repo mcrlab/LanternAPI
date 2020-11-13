@@ -14,9 +14,10 @@ export function colorValidator(color) {
 }
 
 export function timeValidator(time){
-    if(time === undefined){
+    time = parseInt(time);
+    if(isNaN(time)){
         return 10
-    } else if(time >= 10 && time <= 10000){
+    } else if(time >= 0 && time <= 10000){
         return time;
     } else {
         throw new LightDataError(400, "Animation is not between 0 and 10000");
