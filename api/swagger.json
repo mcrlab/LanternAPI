@@ -1,0 +1,29 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Project Lantern",
+        "description": "An API to control lights",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "projectlantern.herokuapp.com",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "Lights",
+            "description": "API for lights in the system"
+        }
+    ],
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ]
+}

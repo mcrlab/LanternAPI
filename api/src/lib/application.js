@@ -1,7 +1,8 @@
 import express from 'express';
 import bodyparser from 'body-parser';
 import cors from 'cors';
-
+const swaggerUi = require('swagger-ui-express');
+let swaggerDocument = require('../../swagger.json');
 
 const helmet = require('helmet')
 import lightRoutes from '../routes/lights';
@@ -35,6 +36,7 @@ const createApplication = (lightController) => {
   app.get("/easing", (req, res)=> {
     return res.json(easings);
   });
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   app.use(logErrors)
   app.use(clientErrorHandler)
   app.use(errorHandler)
