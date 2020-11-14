@@ -43,6 +43,8 @@ export default class Light {
                 x: this.data.x || 0.5,
                 y: this.data.y || 0.5
             },
+            pixels: this.data.pixels || 0,
+            version: this.data.version,
             lastUpdated: this.data.lastSeen
         };
         return data;
