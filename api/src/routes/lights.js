@@ -101,7 +101,7 @@ function createLightRoutes(lightingController) {
     });
 
 
-    router.put('/position/:light', auth, async (req, res) => {
+    router.put('/:light/position', auth, async (req, res) => {
       try {
         let x = positionValidator(req.body.x);
         let y = positionValidator(req.body.y);
@@ -120,9 +120,9 @@ function createLightRoutes(lightingController) {
       };
     });
 
-    router.put('/update/:light', auth, async (req, res) => {
+    router.put('/:light/update', auth, async (req, res) => {
       try {
-        let light = await lightingController.updateLight(req.params.light)
+        let light = await lightingController.updateLightFirmware(req.params.light)
 
         return res.json(light);
 
@@ -131,6 +131,21 @@ function createLightRoutes(lightingController) {
           res.status(error.status|| 400).json(error);
       };
     });
+
+
+    router.put('/:light/config', auth, async (req, res) => {
+      try {
+        let data = JSON.stringify(req.body);
+        let light = await lightingController.updateLightConfig(req.params.light, data)
+
+        return res.json(light);
+
+      } catch(error){
+          console.log(error);
+          res.status(error.status|| 400).json(error);
+      };
+    });
+
 
     return router;
 }

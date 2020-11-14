@@ -79,12 +79,21 @@ export default class LightingController {
       return updatedLight.toJSON();
   }
 
-  async updateLight(id) {
+  async updateLightFirmware(id) {
     let light = await this.lightStorage.get(id);
     if(!light){
       throw new LightNotFoundError();
     }
     this.lightBroker.publish(`update/${id}`, JSON.stringify({}));
+    return light.toJSON();
+  }
+
+  async updateLightConfig(id, data) {
+    let light = await this.lightStorage.get(id);
+    if(!light){
+      throw new LightNotFoundError();
+    }
+    this.lightBroker.publish(`config/${id}`, data);
     return light.toJSON();
   }
 
