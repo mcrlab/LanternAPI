@@ -25,49 +25,34 @@ function createLightRoutes(lightingController) {
 
     router.put('/', auth, async (req, res) => {
       try {
-        let lights = req.body.lights;
-        let response = {
-          lights: []
-        };
-        
-        for(let i = 0; i < lights.length; i++){
-          let id = lights[i].id;
-          let color = colorValidator(lights[i].color);
-          let colorObject = toRGBObject(color);
-          let time = timeValidator(lights[i].time);
-          let delay = delayValidator(lights[i].delay);
-          let easing = req.body.easing || "LinearInterpolation";
-          let method = req.body.method || "fill"
-          
-          let light = await lightingController.updateLightColor(id, colorObject, time, delay, easing, method);
-          response.lights.push(light);
-        }
-        
-        return res.json(response);   
-      } catch(error){
-        console.log(error);
-        res.status(error.status|| 400).json(error);
-      };
-    });
-
-    router.put('/all', auth, async (req, res) => {
-      try {
         let color = colorValidator(req.body.color);
         let colorObject = toRGBObject(color);
         let time = timeValidator(req.body.time);
         let delay = delayValidator(req.body.delay);
         let easing = req.body.easing || "LinearInterpolation";
         let method = req.body.method || "fill"
+        let position = req.body.position;
 
         let lightData = await lightingController.getAllLightsData();
-        
+
         for(let i = 0; i < lightData.length; i++){
-          let light = await lightingController.updateLightColor(lightData[i].id, colorObject, time, delay, easing, method);
+          let calculatedDelay = 0;
+          if(position){
+
+            let distanceX = lightData[i].position.x - position.x;
+            let distanceY = lightData[i].position.y - position.y;
+            let distance = Math.sqrt((distanceX * distanceX) + (distanceY * distanceY));
+            calculatedDelay = delay * distance;
+          } else {
+            calculatedDelay = delay;
+          }
+          let light = await lightingController.updateLightColor(lightData[i].id, colorObject, time, calculatedDelay, easing, method);
         }
         
         return res.json({"message":"success"});
 
       } catch(error){
+          console.log(error);
           res.status(error.status|| 400).json(error);
       };
     });
