@@ -4,7 +4,7 @@
   "description": "A simple ExpressJS API to controll a set of Lights",
   "main": "index.js",
   "dependencies": {
-    "@babel/cli": "7.10.5",
+    "@babel/cli": "7.14.8",
     "@babel/core": "7.11.4",
     "cors": "^2.8.5",
     "express": "^4.17.1",
