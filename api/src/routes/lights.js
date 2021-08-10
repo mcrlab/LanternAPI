@@ -15,10 +15,7 @@ function createLightRoutes(lightingController) {
 
     router.get('/', async (req, res) => {
         let lightData = await lightingController.getAllLightsData()        
-        const response = {
-          "lights": lightData
-        };
-        return res.json(response);    
+        return res.json(lightData);    
        
     });
 
