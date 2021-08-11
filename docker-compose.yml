@@ -23,3 +23,8 @@ services:
       - ./mosquitto/config:/mosquitto/config:ro
     ports:
       - 1883:1883
+  lanterniot:
+    image: lanterniot
+    build:
+      context: LanternIoT
+      dockerfile: Dockerfile
