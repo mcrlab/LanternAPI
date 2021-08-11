@@ -1,0 +1,3 @@
+[submodule "LanternIoT"]
+	path = LanternIoT
+	url = git@github.com:mcrlab/LanternIoT.git
