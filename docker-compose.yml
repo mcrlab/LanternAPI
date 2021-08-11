@@ -11,6 +11,7 @@ services:
       CLOUDMQTT_URL: ${CLOUDMQTT_URL}
     command: [ "node", "dist/index.js"]
   mqtt:
+    hostname: mqtt
     build:
       context: mosquitto
       dockerfile: Dockerfile
