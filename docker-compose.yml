@@ -29,3 +29,5 @@ services:
     build:
       context: LanternIoT
       dockerfile: Dockerfile
+    environment:
+      - NUMBER_OF_LAMPS=${NUMBER_OF_LAMPS}
