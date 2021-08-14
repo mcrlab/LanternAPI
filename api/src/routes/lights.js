@@ -20,7 +20,7 @@ function createLightRoutes(lightingController) {
     });
 
 
-    router.put('/', auth, async (req, res) => {
+    router.post('/', async (req, res) => {
       try {
         let color = colorValidator(req.body.color);
         let colorObject = toRGBObject(color);
@@ -63,7 +63,7 @@ function createLightRoutes(lightingController) {
       };
     });
 
-    router.put('/:light', auth, async (req, res) => {
+    router.post('/:light', async (req, res) => {
       try {
         let color = colorValidator(req.body.color);
         let colorObject = toRGBObject(color);
@@ -83,7 +83,7 @@ function createLightRoutes(lightingController) {
     });
 
 
-    router.put('/:light/position', auth, async (req, res) => {
+    router.post('/:light/position', async (req, res) => {
       try {
         let x = positionValidator(req.body.x);
         let y = positionValidator(req.body.y);
@@ -102,7 +102,7 @@ function createLightRoutes(lightingController) {
       };
     });
 
-    router.put('/:light/update', auth, async (req, res) => {
+    router.post('/:light/update', async (req, res) => {
       try {
         let light = await lightingController.updateLightFirmware(req.params.light)
 
@@ -115,7 +115,7 @@ function createLightRoutes(lightingController) {
     });
 
 
-    router.put('/:light/config', auth, async (req, res) => {
+    router.post('/:light/config', async (req, res) => {
       try {
         let data = JSON.stringify(req.body);
         let light = await lightingController.updateLightConfig(req.params.light, data)

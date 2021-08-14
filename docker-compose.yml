@@ -3,13 +3,23 @@ version: '3'
 services:
   web:
     build:
+      context: web
+      dockerfile: Dockerfile
+  api:
+    build:
       context: api
       dockerfile: Dockerfile
-    ports:
-     - "80:3001"
     environment:
       CLOUDMQTT_URL: ${CLOUDMQTT_URL}
     command: [ "node", "dist/index.js"]
+    ports:
+      - "3001:3001"
+  revproxy:
+    build:
+      context: proxy
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
   mqtt:
     hostname: mqtt
     build:
