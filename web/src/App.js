@@ -101,6 +101,14 @@ class App extends React.Component {
             break;
       }
     };
+    
+    client.onclose = (event) => {
+      console.log('CLOSED');
+    }
+    client.onerror = (event) => {
+      console.log("ERROR");
+    }
+
     requestAnimationFrame(this.tick);
   }
   setDragMode(event) {

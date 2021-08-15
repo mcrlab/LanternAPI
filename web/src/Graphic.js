@@ -55,8 +55,8 @@ export default class Graphic extends React.Component {
 
     handleOnTouchStart(event){
 
-
       const now = new Date().getTime();
+      event.preventDefault();
 
       if(now < this.state.debounce + 100){
         return;
@@ -126,6 +126,7 @@ export default class Graphic extends React.Component {
     }
 
     handleOnTouchMove(event){
+      event.preventDefault();
       this.touchMove(event.touches[0].clientX, event.touches[0].clientY);
       
     }
@@ -159,10 +160,12 @@ export default class Graphic extends React.Component {
     }
 
     handleOnMouseMove(event){
+      event.preventDefault();
       this.touchMove(event.clientX, event.clientY);
     }
 
     handleOnMouseDown(event){
+      event.preventDefault();
       this.touchStart(event.clientX, event.clientY);
     }
     paint() {

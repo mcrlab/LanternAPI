@@ -2,7 +2,7 @@ import React from 'react';
 import Switch from '@material-ui/core/Switch';
 import { withStyles } from '@material-ui/styles';
 import { List, ListItem, ListItemText, Divider, ListItemSecondaryAction } from '@material-ui/core';
-
+import LightList from './ListList';
 const styles = theme =>({
   
   list: {
@@ -24,7 +24,6 @@ class ToolBar extends React.Component {
      <div className={classes.list}>
 
        <List>
-         <Divider/>
          <ListItem>
          <ListItemText primary="Drag Mode" />
          <ListItemSecondaryAction>
@@ -46,6 +45,7 @@ class ToolBar extends React.Component {
           </ListItemSecondaryAction>
          </ListItem>
        </List>
+       <LightList />
       </div>
     );
   }

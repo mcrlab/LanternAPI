@@ -7,7 +7,7 @@ import ToolBar from './ToolBar';
 const useStyles = makeStyles({
 
   list: {
-    width: 250,
+    width: "400px",
   },
   fullList: {
     width: 'auto',
@@ -22,7 +22,7 @@ const useStyles = makeStyles({
 export default function TemporaryDrawer(props) {
   const classes = useStyles();
   const [state, setState] = React.useState({
-    left: false,
+    open: false,
   });
 
   const toggleDrawer = (open) => (event) => {
@@ -30,7 +30,7 @@ export default function TemporaryDrawer(props) {
       return;
     }
 
-    setState({ ...state, 'left': open });
+    setState({ ...state, 'open': open });
   };
 
   return (
@@ -38,7 +38,7 @@ export default function TemporaryDrawer(props) {
         <div className={classes.menu}>
             <IconButton onClick={toggleDrawer(true)} color="primary"><MenuIcon /></IconButton>
         </div>
-        <Drawer anchor={'left'} open={state['left']} onClose={toggleDrawer(false)}>
+        <Drawer anchor={'left'} open={state['open']} onClose={toggleDrawer(false)}>
             <ToolBar dragMode={props.dragMode} setDragMode={props.setDragMode} showNames={props.showNames} setShowNames={props.setShowNames} handleOpen={props.handleSettings} />
         </Drawer>
     </div>

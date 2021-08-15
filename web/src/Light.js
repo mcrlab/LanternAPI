@@ -83,6 +83,8 @@ export default class Light {
 
     setPosition(update){
         this.currentColor = update.color;
+        this.position.x = update.x;
+        this.position.y = update.y;
         fetch(`/lights/${this.id}/position`,{
             method : "POST",
             headers: {
@@ -93,6 +95,43 @@ export default class Light {
           .then(response=> {
             response.json()
           });
+    }
+
+    updateFirmware(){
+      fetch(`lights/${this.id}/update`,{
+        medhod: "POST",
+        headers: {
+          "content-type": "application/json"
+        }
+      })
+      .then(response=>{
+        response.json();
+      })
+      .then(json => {
+        console.log(json);
+      });
+    }
+
+    config(){
+      return;
+
+      let config = {
+
+      };
+
+      fetch(`lights/${this.id}/update`,{
+        medhod: "POST",
+        headers: {
+          "content-type": "application/json"
+        },
+        body: JSON.stringify(config)
+      })
+      .then(response=>{
+        response.json();
+      })
+      .then(json => {
+        console.log(json);
+      });      
     }
 
     paint(ctx, showNames){
