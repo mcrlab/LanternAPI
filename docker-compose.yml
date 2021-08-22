@@ -9,15 +9,23 @@ services:
     build:
       context: api
       dockerfile: Dockerfile
+    depends_on:
+        - postgres
+        - mqtt
+        - lanterniot
     environment:
       CLOUDMQTT_URL: ${CLOUDMQTT_URL}
-    command: [ "node", "dist/index.js"]
+      DATABASE_URL: "postgres://user:pass@postgres:5432/db"
+    command: "npm run production"
     ports:
       - "3001:3001"
   revproxy:
     build:
       context: proxy
       dockerfile: Dockerfile
+    depends_on: 
+      - api
+      - web
     ports:
       - "80:80"
   mqtt:
@@ -41,3 +49,12 @@ services:
       dockerfile: Dockerfile
     environment:
       - NUMBER_OF_LAMPS=${NUMBER_OF_LAMPS}
+  postgres:
+    image: postgres:10.4
+    ports:
+      - "35432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: db
+  

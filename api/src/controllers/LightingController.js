@@ -36,7 +36,7 @@ export default class LightingController {
       }
 
     } catch (error) {
-      console.log(error)
+      console.log('Error', error)
       console.log('Bad Light message - ', message.toString());
     }
   }
@@ -48,7 +48,6 @@ export default class LightingController {
         throw new LightNotFoundError();
       }
       let update = Object.assign(light.data, { "current_color":colorObject, time, delay, easing, method });
-      console.log(update);
       let updatedLight = await this.lightStorage.set(id, update)
       this.lightBroker.publish(`color/${id}`, JSON.stringify(updatedLight.toMQTT()));
       if(this.cb){
@@ -114,7 +113,6 @@ export default class LightingController {
     });
     return lightData;
   }
-
 
   async getLightDataById(id) {
     const light = await this.lightStorage.get(id);

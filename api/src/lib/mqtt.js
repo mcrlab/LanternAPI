@@ -7,12 +7,12 @@ export default class MQTTBroker {
     var url = process.env.CLOUDMQTT_URL || 'mqtt://lantern:ilovelamp@localhost:1883';
 
     this.client  = mqtt.connect(url);
-
+  
     this.client.on('connect', () => {
-      console.log("connected to broker");
+      console.log("Connected to broker");
       this.client.subscribe('connect');
     });
-
+ 
     this.client.on('message', (topic, message) => {
       callback(topic, message);
     });

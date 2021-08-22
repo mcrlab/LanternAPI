@@ -10,7 +10,10 @@
     "express": "^4.17.1",
     "express-basic-auth": "1.2.0",
     "helmet": "3.23.3",
+    "migrate": "^1.7.0",
     "mqtt": "4.2.8",
+    "pg": "^8.7.1",
+    "sql-template-strings": "^2.2.2",
     "swagger-ui-express": "4.1.4",
     "ws": "8.0.0"
   },
@@ -27,7 +30,10 @@
     "dev": "nodemon src/index.js --exec babel-node ",
     "build": "babel src -d dist",
     "start": "node dist/index.js",
-    "test": "jest"
+    "test": "jest",
+    "production": "npm run migrate up && node dist/index.js",
+    "migrate": "node ./bin/migrate.js",
+    "migrate:create": "migrate create --migrations-dir='./src/migrations'"
   },
   "author": "",
   "license": "ISC"

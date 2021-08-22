@@ -1,12 +1,25 @@
 import Light from '../models/Light';
+const Lights = require('../persistence/lights');
+
+const db = require('../persistence/db');
+const sql = require('sql-template-strings');
+import { RGBObjectToHex } from './color';
 
 export default class LightStorage {
     constructor(){
         this.lights = new Map();
-        this.cleanup = setInterval(()=>{this.clear()}, 5000);
+        this.cleanup = setInterval(()=>{this.clear()}, 30000);
     }
     
     async get(id){
+        let light = await Lights.find(id)
+        if(light){
+            console.log(light);
+        }
+        //     return new Light(id, rows[0])
+        // } else {
+        //     return null
+        // }
 
         const lightData = await Promise.resolve(this.lights.get(id));
         if(lightData){
@@ -17,6 +30,11 @@ export default class LightStorage {
     }
 
     async all(){
+       const rows  = await Lights.all()
+
+       console.log(rows);
+
+
        let lights = []
         let result = await Promise.resolve(this.lights);
         result.forEach(function(data, key) {
@@ -26,6 +44,14 @@ export default class LightStorage {
     }
 
     async set(id, update){
+        let light = await Lights.find(id)
+
+        if (!light) {
+            light = await Lights.create(id, RGBObjectToHex(update.current_color), update.pixels, update.version);
+        } else {
+            light = await Lights.update(id, RGBObjectToHex(update.current_color), update.pixels, update.version);
+        }
+        console.log(light)
         this.lights.set(id, update);
         return new Light(id, update);
         
