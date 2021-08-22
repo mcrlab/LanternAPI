@@ -1,5 +1,6 @@
 import React from "react";
 import { Divider, List, ListItem, ListItemText } from "@material-ui/core";
+import LightListItem from "./LightListItem";
 export default class LightList extends React.Component {
     constructor(props){
         super(props);
@@ -25,8 +26,8 @@ export default class LightList extends React.Component {
     render(){
         let lights = [];
 
-        this.state.lights.map(light => {
-            lights.push((<ListItem> <ListItemText primary={light.id} /></ListItem>))
+        this.props.lights.map(light => {
+            lights.push((<LightListItem light={light}/>))
         })
 
         return (

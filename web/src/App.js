@@ -142,7 +142,7 @@ class App extends React.Component {
     return (
       <div className="App">
           <Graphic dragMode={this.state.dragMode} showNames={this.state.showNames} color={this.state.color} lights={this.state.lights} width={this.state.width} height={this.state.height} />
-          <TemporaryDrawer dragMode={this.state.dragMode} showNames={this.state.showNames} setShowNames={this.setShowNames} setDragMode={this.setDragMode} />
+          <TemporaryDrawer dragMode={this.state.dragMode} showNames={this.state.showNames} lights={this.state.lights} setShowNames={this.setShowNames} setDragMode={this.setDragMode} />
           {picker}
         </div>
     );

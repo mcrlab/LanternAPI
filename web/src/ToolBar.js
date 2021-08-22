@@ -45,7 +45,7 @@ class ToolBar extends React.Component {
           </ListItemSecondaryAction>
          </ListItem>
        </List>
-       <LightList />
+       <LightList lights={this.props.lights}/>
       </div>
     );
   }
