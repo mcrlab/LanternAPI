@@ -5,12 +5,11 @@ module.exports = {
   async create(id, current_color, pixels, version) {
     try {
       const {rows} = await db.query(sql`
-      INSERT INTO lights (id, current_color, pixels, version)
-      VALUES (${id}, ${current_color}, ${pixels}, ${version})
+      INSERT INTO lights (id, current_color, pixels, version, x, y)
+      VALUES (${id}, ${current_color}, ${pixels}, ${version}, 0.5, 0.5)
       RETURNING *;
       `);
       const [light] = rows;
-      console.log(rows);
       return light;
     } catch (error) {
       if (error.constraint === 'id') {
@@ -21,10 +20,10 @@ module.exports = {
     }
   },
   
-  async update(id, current_color, pixels, version) {
+  async update(id, current_color, pixels, version, x, y) {
     const { rows } = await db.query(sql`
       UPDATE lights 
-      SET (id, current_color, pixels, version) = (${id}, ${current_color}, ${pixels}, ${version})
+      SET (id, current_color, pixels, version, x, y) = (${id}, ${current_color}, ${pixels}, ${version}, ${x}, ${y})
       WHERE id = ${id}
       RETURNING *;
     `);

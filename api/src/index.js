@@ -1,12 +1,11 @@
 import LightingController from './controllers/LightingController';
 import MQTTBroker from './lib/mqtt';
 import createApplication from './lib/application';
-import LightStorage from './lib/LightStorage';
 import http from 'http'
 import WebSocket from 'ws';
 
 function server(){
-  const lightController = new LightingController(new MQTTBroker(), new LightStorage());
+  const lightController = new LightingController(new MQTTBroker());
 
   const app    = createApplication(lightController);
   const server = http.createServer(app);

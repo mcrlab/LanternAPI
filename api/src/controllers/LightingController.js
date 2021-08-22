@@ -1,9 +1,11 @@
 import LightNotFoundError from '../exceptions/LightNotFoundError';
-
+const Lights = require('../persistence/lights');
+import { RGBObjectToHex } from '../lib/color';
+import LightInstruction from '../models/LightInstruction';
+import LightMQTT from '../models/LightMQTT';
 
 export default class LightingController {
-  constructor(lightBroker, lightStorage) {
-    this.lightStorage = lightStorage;
+  constructor(lightBroker) {
     this.lightBroker = lightBroker;
 
     this.lightBroker.init((topic, message) => {
@@ -19,17 +21,19 @@ export default class LightingController {
     try {
       switch(topic){
         case "connect":
-          let data = JSON.parse(message);
-          const id = data.id;
-          data.lastSeen = new Date().toJSON();
-          let light = await this.lightStorage.get(id);
+          const messageData = JSON.parse(message);
+          const id = messageData.id;
+          let light = await Lights.find(id);
+
           if(light){
-            data = Object.assign({}, light.data, data);
+            let updatedLight = await Lights.update(id, RGBObjectToHex(messageData.current_color), messageData.pixels, messageData.version, light.x, light.y);
+          } else {
+            let light = Lights.create(id, "000000", messageData.pixels, messageData.version)
+            if(this.cb){
+              this.cb("ADD_LIGHT", light );
+            }
           }
-          let updatedLight = await this.lightStorage.set(id, data);
-          if(this.cb && !light){
-            this.cb("ADD_LIGHT", updatedLight.toJSON() );
-          }
+
           break;
         default:
           return;
@@ -43,39 +47,38 @@ export default class LightingController {
 
   async updateLightColor(id, colorObject, time, delay, easing, method){
     
-      let light = await this.lightStorage.get(id)
+      let light = await Lights.find(id)
       if(!light){
         throw new LightNotFoundError();
       }
-      let update = Object.assign(light.data, { "current_color":colorObject, time, delay, easing, method });
-      let updatedLight = await this.lightStorage.set(id, update)
-      this.lightBroker.publish(`color/${id}`, JSON.stringify(updatedLight.toMQTT()));
+      let color = RGBObjectToHex(colorObject);
+      console.log(light);
+      let updatedLight = await Lights.update(id, color, light.pixels, light.version, light.x, light.y)
+      this.lightBroker.publish(`color/${id}`, LightMQTT(light, easing, time, delay, method));
       if(this.cb){
-        this.cb("UPDATE_LIGHT", updatedLight.toInstruction())
+        this.cb("UPDATE_LIGHT", LightInstruction(light, time, delay))
       }
-      return updatedLight.toJSON();
+      return updatedLight;
   }
   
   async updateLightPosition(id, x, y, color){
-    let light = await this.lightStorage.get(id)
+    let light = await Lights.find(id)
       if(!light){
         throw new LightNotFoundError();
       }
-      console.log("COLOR:", color);
+
       if(!color){
-        console.log(light, light.data);
-        color = light.data.current_color;
+        color = light.current_color;
       }
-      console.log("COLOR:", color);
-      let update = Object.assign(light.data, {"x":x, "y":y, "current_color": color});
       
-      let updatedLight = await this.lightStorage.set(id, update);
-      this.lightBroker.publish(`color/${id}`, JSON.stringify(updatedLight.toMQTT()));
+      let updatedLight = await Lights.update(id, color, light.pixels, light.version, x, y);
+
+      this.lightBroker.publish(`color/${id}`, LightMQTT(light, 500, 500));
       
       if(this.cb){
-        this.cb("UPDATE_LIGHT", updatedLight.toInstruction())
+        this.cb("UPDATE_LIGHT", updatedLight)
       }
-      return updatedLight.toJSON();
+      return updatedLight;
   }
 
   async updateLightFirmware(id) {
@@ -84,40 +87,27 @@ export default class LightingController {
       throw new LightNotFoundError();
     }
     this.lightBroker.publish(`update/${id}`, JSON.stringify({}));
-    return light.toJSON();
+    return light;
   }
 
-  async updateLightConfig(id, data) {
+  async updateLightConfig(id, config) {
     let light = await this.lightStorage.get(id);
     if(!light){
       throw new LightNotFoundError();
     }
-    this.lightBroker.publish(`config/${id}`, data);
-    return light.toJSON();
+    this.lightBroker.publish(`config/${id}`, config);
+    return light;
   }
 
   async getAllLightsData() {
-    const lights = await this.lightStorage.all()
-    const lightData = [];
-    lights.forEach((light) => {
-      lightData.push(light.toJSON());
-    });
-    return lightData;
-  }
-
-  async getAllLightInstructions() {
-    const lights = await this.lightStorage.all()
-    const lightData = [];
-    lights.forEach((light) => {
-      lightData.push(light.toInstruction());
-    });
-    return lightData;
+    const lights = await Lights.all();
+    return lights;
   }
 
   async getLightDataById(id) {
-    const light = await this.lightStorage.get(id);
+    const light = await Lights.find(id);
     if(light){
-      return light.toJSON();
+      return light;
     } else {
       throw new LightNotFoundError()
     }
