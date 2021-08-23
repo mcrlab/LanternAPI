@@ -30,6 +30,16 @@ module.exports = {
     return rows[0];
   },
 
+  async delete(id){
+    const { rows } = await  db.query(sql`
+      DELETE FROM lights
+      WHERE id = ${id}
+      LIMIT 1
+      RETURNING *
+    `);
+    return rows;
+  },
+
   async find(id) {
     const {rows} = await db.query(sql`
     SELECT * FROM lights WHERE id=${id} LIMIT 1;

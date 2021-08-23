@@ -1,10 +1,12 @@
 
+import { HexToRGBObject } from './color';
+
 const LightMQTT = (light, easing, time, delay, method) => {
     let data = {
-        color: light.current_color,
+        color: HexToRGBObject(light.current_color),
         easing: easing || "SineEaseInOut",
-        time: time,
-        delay: delay,
+        time: time || 0,
+        delay: delay || 0,
         method: method || "fill"
     };
     return JSON.stringify(data);

@@ -4,7 +4,7 @@ var url = require('url');
 export default class MQTTBroker {
 
   init(callback) {
-    var url = process.env.CLOUDMQTT_URL || 'mqtt://lantern:ilovelamp@localhost:1883';
+    var url = process.env.CLOUDMQTT_URL;
 
     this.client  = mqtt.connect(url);
   
@@ -37,6 +37,7 @@ export default class MQTTBroker {
   }
 
   publish(address, message) {
+    console.log(address, message);
     this.client.publish(address, message);
   }
 

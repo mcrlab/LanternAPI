@@ -1,8 +1,9 @@
 import LightNotFoundError from '../exceptions/LightNotFoundError';
 const Lights = require('../persistence/lights');
 import { RGBObjectToHex } from '../lib/color';
-import LightInstruction from '../models/LightInstruction';
-import LightMQTT from '../models/LightMQTT';
+import LightInstruction from '../lib/LightInstruction';
+import LightMQTT from '../lib/LightMQTT';
+import LightJSON from '../lib/LightJSON';
 
 export default class LightingController {
   constructor(lightBroker) {
@@ -28,7 +29,8 @@ export default class LightingController {
           if(light){
             let updatedLight = await Lights.update(id, RGBObjectToHex(messageData.current_color), messageData.pixels, messageData.version, light.x, light.y);
           } else {
-            let light = Lights.create(id, "000000", messageData.pixels, messageData.version)
+            let light = await Lights.create(id, "000000", messageData.pixels, messageData.version);
+            this.lightBroker.publish(`color/${id}`, LightMQTT(light, null, 500, 10));
             if(this.cb){
               this.cb("ADD_LIGHT", light );
             }
@@ -41,7 +43,6 @@ export default class LightingController {
 
     } catch (error) {
       console.log('Error', error)
-      console.log('Bad Light message - ', message.toString());
     }
   }
 
@@ -52,13 +53,12 @@ export default class LightingController {
         throw new LightNotFoundError();
       }
       let color = RGBObjectToHex(colorObject);
-      console.log(light);
       let updatedLight = await Lights.update(id, color, light.pixels, light.version, light.x, light.y)
-      this.lightBroker.publish(`color/${id}`, LightMQTT(light, easing, time, delay, method));
+      this.lightBroker.publish(`color/${id}`, LightMQTT(updatedLight, easing, time, delay, method));
       if(this.cb){
-        this.cb("UPDATE_LIGHT", LightInstruction(light, time, delay))
+        this.cb("UPDATE_LIGHT", LightInstruction(updatedLight, time, delay))
       }
-      return updatedLight;
+      return LightJSON(updatedLight);
   }
   
   async updateLightPosition(id, x, y, color){
@@ -73,41 +73,62 @@ export default class LightingController {
       
       let updatedLight = await Lights.update(id, color, light.pixels, light.version, x, y);
 
-      this.lightBroker.publish(`color/${id}`, LightMQTT(light, 500, 500));
+      this.lightBroker.publish(`color/${id}`, LightMQTT(updatedLight, null, 500, 500, null));
       
       if(this.cb){
-        this.cb("UPDATE_LIGHT", updatedLight)
+        this.cb("UPDATE_LIGHT", LightInstruction(updatedLight))
       }
-      return updatedLight;
+      return LightJSON(updatedLight);
   }
 
   async updateLightFirmware(id) {
-    let light = await this.lightStorage.get(id);
+    let light = await Lights.find(id);
     if(!light){
       throw new LightNotFoundError();
     }
     this.lightBroker.publish(`update/${id}`, JSON.stringify({}));
-    return light;
+    return LightJSON(light);
   }
 
   async updateLightConfig(id, config) {
-    let light = await this.lightStorage.get(id);
+    let light = await Lights.find(id);
     if(!light){
       throw new LightNotFoundError();
     }
     this.lightBroker.publish(`config/${id}`, config);
-    return light;
+    return LightJSON(light);
+  }
+  
+  async sleepLight(id, time){
+    let light = await Lights.find(id);
+    if(!light){
+      throw new LightNotFoundError();
+    }
+    this.lightBroker.publish(`sleep/${id}`, JSON.stringify(time));
+    return LightJSON(light);
+  }
+
+  async deleteLight(id){
+      let light = await Lights.delete(id);
+      if(!light){
+        throw new LightNotFoundError();
+      }
+      return LightJSON(light);
   }
 
   async getAllLightsData() {
     const lights = await Lights.all();
-    return lights;
+
+    let data = lights.map((light)=>{
+      return LightJSON(light);
+    })
+    return data;
   }
 
   async getLightDataById(id) {
     const light = await Lights.find(id);
     if(light){
-      return light;
+      return LightJSON(light);
     } else {
       throw new LightNotFoundError()
     }

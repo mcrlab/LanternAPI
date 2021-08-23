@@ -1,5 +1,5 @@
 
-export function toRGBObject(hexInput){
+export function HexToRGBObject(hexInput){
     let red = hexInput.substring(0,2);
     let green = hexInput.substring(2,4);
     let blue = hexInput.substring(4,6);

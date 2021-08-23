@@ -1,6 +1,6 @@
 import express from 'express';
 import {colorValidator, timeValidator, delayValidator, positionValidator} from '../validators/validators';
-import {toRGBObject} from '../lib/color';
+import {HexToRGBObject} from '../lib/color';
 
 const basicAuth = require('express-basic-auth')
 const username = process.env.username || "lantern";
@@ -22,15 +22,15 @@ function createLightRoutes(lightingController) {
 
     router.post('/', async (req, res) => {
       try {
-        let color = colorValidator(req.body.color);
-        let colorObject = toRGBObject(color);
-        let time = timeValidator(req.body.time);
-        let delay = delayValidator(req.body.delay);
-        let easing = req.body.easing || "LinearInterpolation";
-        let method = req.body.method || "fill"
-        let position = req.body.position;
+        let color       = colorValidator(req.body.color);
+        let colorObject = HexToRGBObject(color);
+        let time        = timeValidator(req.body.time);
+        let delay       = delayValidator(req.body.delay);
+        let easing      = req.body.easing || "LinearInterpolation";
+        let method      = req.body.method || "fill"
+        let position    = req.body.position;
 
-        let lightData = await lightingController.getAllLightsData();
+        let lightData   = await lightingController.getAllLightsData();
 
         for(let i = 0; i < lightData.length; i++){
           let calculatedDelay = 0;
@@ -43,10 +43,11 @@ function createLightRoutes(lightingController) {
           } else {
             calculatedDelay = delay;
           }
-          let light = await lightingController.updateLightColor(lightData[i].id, colorObject, time, calculatedDelay, easing, method);
+          await lightingController.updateLightColor(lightData[i].id, colorObject, time, calculatedDelay, easing, method);
         }
         
-        return res.json({"message":"success"});
+        lightData = await lightingController.getAllLightsData()  
+        return res.json(lightData);
 
       } catch(error){
           console.log(error);
@@ -54,45 +55,44 @@ function createLightRoutes(lightingController) {
       };
     });
 
-    router.get('/:light', async (req, res) => {
+    router.get('/:lightID', async (req, res) => {
       try {
-        let light = await lightingController.getLightDataById(req.params.light)
+        let light = await lightingController.getLightDataById(req.params.lightID)
         return res.json(light);
       } catch(error){
           res.status(error.status||400).json(error||"Generic error");
       };
     });
 
-    router.post('/:light', async (req, res) => {
+    router.post('/:lightID', async (req, res) => {
       try {
-        let color = colorValidator(req.body.color);
-        let colorObject = toRGBObject(color);
-        let time = timeValidator(req.body.time);
-        let delay = delayValidator(req.body.delay);
-        let easing = req.body.easing || "LinearInterpolation";
-        let method = req.body.method || "fill"
-
+        let color =       colorValidator(req.body.color);
+        let colorObject = HexToRGBObject(color);
+        let time =        timeValidator(req.body.time);
+        let delay =       delayValidator(req.body.delay);
+        let easing =      req.body.easing || "LinearInterpolation";
+        let method =      req.body.method || "fill"
         
-        let light = await lightingController.updateLightColor(req.params.light, colorObject, time, delay, easing, method)
+        let light = await lightingController.updateLightColor(req.params.lightID, colorObject, time, delay, easing, method)
 
         return res.json(light);
 
       } catch(error){
+          console.log(error);
           res.status(error.status|| 400).json(error);
       };
     });
 
 
-    router.post('/:light/position', async (req, res) => {
+    router.post('/:lightID/position', async (req, res) => {
       try {
         let x = positionValidator(req.body.x);
         let y = positionValidator(req.body.y);
-        let colorObject;
+        let color;
         if(req.body.color){
-          let color = colorValidator(req.body.color);
-          colorObject = toRGBObject(color);        
+          color = colorValidator(req.body.color);     
         }
-        let light = await lightingController.updateLightPosition(req.params.light, x, y, colorObject)
+        let light = await lightingController.updateLightPosition(req.params.lightID, x, y, color);
 
         return res.json(light);
 
@@ -102,9 +102,9 @@ function createLightRoutes(lightingController) {
       };
     });
 
-    router.post('/:light/update', async (req, res) => {
+    router.post('/:lightID/update', async (req, res) => {
       try {
-        let light = await lightingController.updateLightFirmware(req.params.light)
+        let light = await lightingController.updateLightFirmware(req.params.lightID)
 
         return res.json(light);
 
@@ -115,12 +115,23 @@ function createLightRoutes(lightingController) {
     });
 
 
-    router.post('/:light/config', async (req, res) => {
+    router.post('/:lightID/config', async (req, res) => {
       try {
         let data = JSON.stringify(req.body);
-        let light = await lightingController.updateLightConfig(req.params.light, data)
+        let light = await lightingController.updateLightConfig(req.params.lightID, data)
 
         return res.json(light);
+
+      } catch(error){
+          console.log(error);
+          res.status(error.status|| 400).json(error);
+      };
+    });
+
+    router.post('/:lightID/delete', auth, async (req, res) => {
+      try {
+        let light = await lightingController.delete(req.params.lightID)
+        return res.json({"status": "success"});
 
       } catch(error){
           console.log(error);

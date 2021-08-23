@@ -7,7 +7,7 @@ let swaggerDocument = require('../../swagger.json');
 
 const helmet = require('helmet')
 import lightRoutes from '../routes/lights';
-import easings from '../models/easings';
+import easings from './easings';
 
 function logErrors (err, req, res, next) {
     console.error(err.stack)

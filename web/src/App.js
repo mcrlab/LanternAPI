@@ -7,7 +7,7 @@ import TemporaryDrawer from './TemporaryDrawer';
 import { CirclePicker } from 'react-color';
 import { withStyles } from '@material-ui/styles';
 
-const client = new W3CWebSocket(`ws://${window.location.hostname}/lights`);
+
 
 const styles = theme =>({
   
@@ -19,8 +19,6 @@ const styles = theme =>({
   }
 
 });
-
-
 
 class App extends React.Component {
   constructor(props){
@@ -38,6 +36,9 @@ class App extends React.Component {
     this.setColor = this.setColor.bind(this);
     this.setDragMode = this.setDragMode.bind(this);
     this.setShowNames = this.setShowNames.bind(this);
+    this.connect = this.connect.bind(this);
+    this.interval = null;
+    
   }
   
   tick() {
@@ -52,16 +53,17 @@ class App extends React.Component {
     this.setState({ width: update_width, height: update_height });
   }
 
+  connect(){
+    if(this.interval){
+      clearTimeout(this.interval);
+    }
+    this.client = new W3CWebSocket(`ws://${window.location.hostname}/lights`);
 
-  componentDidMount() {
-    this.updateDimensions();
-    window.addEventListener("resize", this.updateDimensions.bind(this));
-
-    client.onopen = () => {
+    this.client.onopen = () => {
       console.log('WebSocket Client Connected');
     };
 
-    client.onmessage = (message) => {
+    this.client.onmessage = (message) => {
       const dataFromServer = JSON.parse(message.data);
       let lights = this.state.lights;
       switch(dataFromServer.instruction){
@@ -79,6 +81,7 @@ class App extends React.Component {
             
             let updated = lights.map((item, index) => {
               if (item.id ===dataFromServer.data.id) {
+                console.log(dataFromServer.data);
                 item.update(dataFromServer.data.color, dataFromServer.data.position, dataFromServer.data.time, dataFromServer.data.delay);
               }
               return item
@@ -102,15 +105,27 @@ class App extends React.Component {
       }
     };
     
-    client.onclose = (event) => {
+    this.client.onclose = (event) => {
       console.log('CLOSED');
-    }
-    client.onerror = (event) => {
-      console.log("ERROR");
+      this.interval = setInterval(()=>{
+        console.log("reconnecting");
+        this.connect();
+      }, 1000);
     }
 
+    this.client.onerror = (event) => {
+      console.log("ERROR");
+    }
+  }
+
+  componentDidMount() {
+    this.updateDimensions();
+    window.addEventListener("resize", this.updateDimensions.bind(this));
+
+    this.connect();
     requestAnimationFrame(this.tick);
   }
+
   setDragMode(event) {
     this.setState({ 
       dragMode: !this.state.dragMode
