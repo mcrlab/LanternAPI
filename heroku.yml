@@ -2,4 +2,4 @@ build:
   docker:
     web: api/Dockerfile
 run:
-  web: "node dist/index.js"
+  web: "npm run production"
