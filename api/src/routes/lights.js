@@ -84,7 +84,7 @@ function createLightRoutes(lightingController) {
     });
 
 
-    router.post('/:lightID/position', async (req, res) => {
+    router.post('/:lightID/position', auth, async (req, res) => {
       try {
         let x = positionValidator(req.body.x);
         let y = positionValidator(req.body.y);
@@ -102,7 +102,7 @@ function createLightRoutes(lightingController) {
       };
     });
 
-    router.post('/:lightID/update', async (req, res) => {
+    router.post('/:lightID/update', auth, async (req, res) => {
       try {
         let light = await lightingController.updateLightFirmware(req.params.lightID)
 
@@ -114,8 +114,32 @@ function createLightRoutes(lightingController) {
       };
     });
 
+    router.post('/:lightID/sleep', auth, async (req, res) => {
+      try {
+        let light = await lightingController.sleepLight(req.params.lightID, req.params.seconds);
 
-    router.post('/:lightID/config', async (req, res) => {
+        return res.json(light);
+
+      } catch(error){
+          console.log(error);
+          res.status(error.status|| 400).json(error);
+      };
+    });
+
+    router.post('/:lightID/restart', auth, async (req, res) => {
+      try {
+        let light = await lightingController.restartLight(req.params.lightID);
+
+        return res.json(light);
+
+      } catch(error){
+          console.log(error);
+          res.status(error.status|| 400).json(error);
+      };
+    });
+
+
+    router.post('/:lightID/config', auth, async (req, res) => {
       try {
         let data = JSON.stringify(req.body);
         let light = await lightingController.updateLightConfig(req.params.lightID, data)

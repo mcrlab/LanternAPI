@@ -134,6 +134,14 @@ export default class Light {
       });      
     }
 
+    sleep(){
+      return;
+    }
+
+    restart(){
+      return;
+    }
+
     paint(ctx, showNames){
         const now = new Date().getTime();
 

@@ -25,11 +25,9 @@ class App extends React.Component {
     super(props);
     this.state = {
         lights: [],
-        rotation: 0,
         dragMode: false,
         showNames: false,
         color: 'b80000',
-        optionsScreen: false,
         colors: ['#B80000', '#DB3E00', '#FCCB00', '#008B02', '#006B76', '#1273DE', '#004DCF', '#5300EB']
     };
     this.tick = this.tick.bind(this);
@@ -38,7 +36,8 @@ class App extends React.Component {
     this.setShowNames = this.setShowNames.bind(this);
     this.connect = this.connect.bind(this);
     this.interval = null;
-    
+
+
   }
   
   tick() {
@@ -79,9 +78,8 @@ class App extends React.Component {
           break;
         case 'UPDATE_LIGHT':
             
-            let updated = lights.map((item, index) => {
+            let updated = lights.map((item) => {
               if (item.id ===dataFromServer.data.id) {
-                console.log(dataFromServer.data);
                 item.update(dataFromServer.data.color, dataFromServer.data.position, dataFromServer.data.time, dataFromServer.data.delay);
               }
               return item
@@ -93,7 +91,6 @@ class App extends React.Component {
 
             break;
           case 'ADD_LIGHT':
-
               let newLight = new Light(dataFromServer.data.id, dataFromServer.data.color, dataFromServer.data.position);
               lights.push(newLight);
               this.setState({
@@ -144,9 +141,6 @@ class App extends React.Component {
   componentWillUnmount() {
     window.removeEventListener("resize", this.updateDimensions.bind(this));
   }
-  handleSettings(optionsScreen){
-    this.setState({optionsScreen});
-  }
 
   render(){
     let classes = this.props.classes;
@@ -163,7 +157,5 @@ class App extends React.Component {
     );
   }
 }
-//
-//<ToolBar />
 
 export default withStyles(styles)(App);

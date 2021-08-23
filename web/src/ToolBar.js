@@ -1,7 +1,7 @@
 import React from 'react';
 import Switch from '@material-ui/core/Switch';
 import { withStyles } from '@material-ui/styles';
-import { List, ListItem, ListItemText, Divider, ListItemSecondaryAction } from '@material-ui/core';
+import { List, ListItem, ListItemText, ListItemSecondaryAction } from '@material-ui/core';
 import LightList from './ListList';
 const styles = theme =>({
   
@@ -12,11 +12,6 @@ const styles = theme =>({
 });
 
 class ToolBar extends React.Component {
-
-  constructor(props){
-    super(props);
-  }
-
   render(){
     const { classes } = this.props;
 
