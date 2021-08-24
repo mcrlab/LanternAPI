@@ -116,7 +116,7 @@ function createLightRoutes(lightingController) {
 
     router.post('/:lightID/sleep', auth, async (req, res) => {
       try {
-        let light = await lightingController.sleepLight(req.params.lightID, req.params.seconds);
+        let light = await lightingController.sleepLight(req.params.lightID, req.body.seconds);
 
         return res.json(light);
 

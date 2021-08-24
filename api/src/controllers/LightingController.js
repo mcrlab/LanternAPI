@@ -108,12 +108,15 @@ export default class LightingController {
     return LightJSON(light);
   }
 
-  async sleepLight(id, time){
+  async sleepLight(id, seconds){
     let light = await Lights.find(id);
     if(!light){
       throw new LightNotFoundError();
     }
-    this.lightBroker.publish(`sleep/${id}`, JSON.stringify(time));
+    let data = {
+      seconds: seconds
+    };
+    this.lightBroker.publish(`sleep/${id}`, JSON.stringify(data));
     return LightJSON(light);
   }
 
