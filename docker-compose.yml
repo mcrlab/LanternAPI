@@ -5,6 +5,8 @@ services:
     build:
       context: web
       dockerfile: Dockerfile
+    networks:
+      - lantern-network
   api:
     build:
       context: api
@@ -19,6 +21,8 @@ services:
     command: "npm run production"
     ports:
       - "3001:3001"
+    networks:
+      - lantern-network
   revproxy:
     build:
       context: proxy
@@ -28,6 +32,8 @@ services:
       - web
     ports:
       - "80:80"
+    networks:
+      - lantern-network
   mqtt:
     hostname: mqtt
     build:
@@ -42,6 +48,8 @@ services:
       - ./mosquitto/config:/mosquitto/config:ro
     ports:
       - 1883:1883
+    networks:
+      - lantern-network
   lanterniot:
     image: lanterniot
     build:
@@ -49,12 +57,17 @@ services:
       dockerfile: Dockerfile
     environment:
       - NUMBER_OF_LAMPS=${NUMBER_OF_LAMPS}
+    networks:
+      - lantern-network
   postgres:
     image: postgres:10.4
-    ports:
-      - "35432:5432"
+    networks:
+      - lantern-network
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: db
   
+networks:
+  lantern-network:
+    driver: bridge # a user defined bridge is required; the default bridge network doesn't support name resolution
