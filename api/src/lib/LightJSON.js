@@ -7,7 +7,8 @@ const LightJSON = (light) => {
         position: {
             x: light.x || 0.5,
             y: light.y || 0.5
-        }
+        },
+        sleep: light.sleep
     };
     
     return data;
