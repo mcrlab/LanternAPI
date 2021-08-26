@@ -2,33 +2,21 @@ version: '3'
 
 services:
   web:
-    build:
-      context: web
-      dockerfile: Dockerfile
     image: jameslinnegar/lantern_web
     networks:
       - lantern-network
   api:
-    build:
-      context: api
-      dockerfile: Dockerfile
     image: jameslinnegar/lantern_api
     depends_on:
-        - postgres
-        - mqtt
-        - lanterniot
+      postgres:
+        condition: service_healthy
     environment:
       CLOUDMQTT_URL: ${CLOUDMQTT_URL}
       DATABASE_URL: "postgres://user:pass@postgres:5432/db"
     command: "npm run production"
-    ports:
-      - "3001:3001"
     networks:
       - lantern-network
   revproxy:
-    build:
-      context: proxy
-      dockerfile: Dockerfile
     image: jameslinnegar/lantern_proxy
     depends_on: 
       - api
@@ -38,32 +26,14 @@ services:
     networks:
       - lantern-network
   mqtt:
-    hostname: mqtt
-    build:
-      context: mosquitto
-      dockerfile: Dockerfile
-    image: jameslinnegar/lantern_mqtt
-    image: lanternapi_mqtt
-    environment:
-      - MOSQUITTO_USERNAME=${MOSQUITTO_USERNAME}
-      - MOSQUITTO_PASSWORD=${MOSQUITTO_PASSWORD}
     image: eclipse-mosquitto
-    restart: always
-    volumes:
-      - ./mosquitto/config:/mosquitto/config:ro
+    networks:
+      - lantern-network
     ports:
       - 1883:1883
-    networks:
-      - lantern-network
-  lanterniot:
-    image: lanterniot
-    build:
-      context: LanternIoT
-      dockerfile: Dockerfile
     environment:
-      - NUMBER_OF_LAMPS=${NUMBER_OF_LAMPS}
-    networks:
-      - lantern-network
+      MOSQUITTO_USERNAME: lantern
+      MOSQUITTO_PASSWORD: ilovelamp
   postgres:
     image: postgres:10.4
     networks:
@@ -72,6 +42,11 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
   
 networks:
   lantern-network:
