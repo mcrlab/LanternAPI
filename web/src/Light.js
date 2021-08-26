@@ -88,7 +88,8 @@ export default class Light {
         fetch(`/lights/${this.id}/position`,{
             method : "POST",
             headers: {
-              "content-type": "application/json"
+              "content-type": "application/json",
+              "Authorization":'Basic ' + Buffer.from("lantern:password").toString('base64')
             },
             body: JSON.stringify(update)
             })
@@ -97,51 +98,7 @@ export default class Light {
           });
     }
 
-    updateFirmware(){
-      fetch(`lights/${this.id}/update`,{
-        medhod: "POST",
-        headers: {
-          "content-type": "application/json"
-        }
-      })
-      .then(response=>{
-        response.json();
-      })
-      .then(json => {
-        console.log(json);
-      });
-    }
-
-    config(){
-      return;
-
-      let config = {
-
-      };
-
-      fetch(`lights/${this.id}/update`,{
-        medhod: "POST",
-        headers: {
-          "content-type": "application/json"
-        },
-        body: JSON.stringify(config)
-      })
-      .then(response=>{
-        response.json();
-      })
-      .then(json => {
-        console.log(json);
-      });      
-    }
-
-    sleep(){
-      return;
-    }
-
-    restart(){
-      return;
-    }
-
+    
     paint(ctx, showNames){
         const now = new Date().getTime();
 
