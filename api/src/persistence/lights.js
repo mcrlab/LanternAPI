@@ -34,7 +34,6 @@ module.exports = {
     const { rows } = await  db.query(sql`
       DELETE FROM lights
       WHERE id = ${id}
-      LIMIT 1
       RETURNING *
     `);
     return rows;

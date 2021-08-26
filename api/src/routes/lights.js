@@ -154,7 +154,7 @@ function createLightRoutes(lightingController) {
 
     router.post('/:lightID/delete', auth, async (req, res) => {
       try {
-        let light = await lightingController.delete(req.params.lightID)
+        let light = await lightingController.deleteLight(req.params.lightID)
         return res.json({"status": "success"});
 
       } catch(error){
