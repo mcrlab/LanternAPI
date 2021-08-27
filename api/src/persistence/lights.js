@@ -2,11 +2,11 @@ const sql = require('sql-template-strings');
 const db = require('./db');
 
 module.exports = {
-  async create(id, current_color, pixels, version) {
+  async create(id, current_color, pixels, version, last_updated) {
     try {
       const {rows} = await db.query(sql`
-      INSERT INTO lights (id, current_color, pixels, version, x, y, sleep)
-      VALUES (${id}, ${current_color}, ${pixels}, ${version}, 0.5, 0.5, 0)
+      INSERT INTO lights (id, current_color, pixels, version, x, y, sleep, last_updated)
+      VALUES (${id}, ${current_color}, ${pixels}, ${version}, 0.5, 0.5, 0, to_timestamp(${last_updated}))
       RETURNING *;
       `);
       const [light] = rows;
@@ -20,10 +20,10 @@ module.exports = {
     }
   },
   
-  async update(id, current_color, pixels, version, x, y, sleep) {
+  async update(id, current_color, pixels, version, x, y, sleep, last_updated) {
     const { rows } = await db.query(sql`
       UPDATE lights 
-      SET (id, current_color, pixels, version, x, y, sleep) = (${id}, ${current_color}, ${pixels}, ${version}, ${x}, ${y}, ${sleep})
+      SET (id, current_color, pixels, version, x, y, sleep, last_updated) = (${id}, ${current_color}, ${pixels}, ${version}, ${x}, ${y}, ${sleep}, to_timestamp(${last_updated}))
       WHERE id = ${id}
       RETURNING *;
     `);

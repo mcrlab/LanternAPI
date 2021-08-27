@@ -39,7 +39,7 @@ export default function TemporaryDrawer(props) {
             <IconButton onClick={toggleDrawer(true)} color="primary"><MenuIcon /></IconButton>
         </div>
         <Drawer anchor={'left'} open={state['open']} onClose={toggleDrawer(false)}>
-            <ToolBar dragMode={props.dragMode} setDragMode={props.setDragMode} showNames={props.showNames} setShowNames={props.setShowNames} handleOpen={props.handleSettings} lights={props.lights} />
+            <ToolBar dragMode={props.dragMode} setShowStatus={props.setShowStatus} setDragMode={props.setDragMode} showStatus={props.showStatus} showNames={props.showNames} setShowNames={props.setShowNames} handleOpen={props.handleSettings} lights={props.lights} />
         </Drawer>
     </div>
   );

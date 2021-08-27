@@ -98,8 +98,20 @@ export default class Light {
           });
     }
 
-    
-    paint(ctx, showNames){
+    drawStatus(ctx, location){
+      ctx.beginPath();
+      ctx.fillStyle = "rgba(0, 255, 0, 1)";
+      ctx.arc(location.x + 25, location.y +35, 8, Math.PI*2, false);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = "rgba(0, 0, 0, 1)";
+      ctx.arc(location.x + 25, location.y +35, 8, Math.PI*2, false);
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+
+    paint(ctx, showNames, showStatus){
         const now = new Date().getTime();
 
         const animationStartTime = this.lastUpdateTime + this.animationDelay;
@@ -133,13 +145,14 @@ export default class Light {
     
         if(!this.isTouching){
           ctx.beginPath();
-        
           ctx.fillStyle = "rgba("+object.r+", "+object.g+", "+object.b+", "+opacity+")";
           ctx.arc(location.x, location.y, radius, Math.PI*2, false);
           ctx.fill();
 
           ctx.drawImage(this.img, location.x - (LIGHT_WIDTH * 0.5), location.y-(LIGHT_HEIGHT * 0.35), LIGHT_WIDTH, LIGHT_HEIGHT);
-          
+          if(showStatus){
+            this.drawStatus(ctx, location);
+          }
           if(showNames){
             ctx.font = '15px serif';
             ctx.textBaseline = 'middle';

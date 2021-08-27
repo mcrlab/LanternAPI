@@ -27,6 +27,7 @@ class App extends React.Component {
         lights: [],
         dragMode: false,
         showNames: false,
+        showStatus: true,
         color: 'b80000',
         colors: ['#B80000', '#DB3E00', '#FCCB00', '#008B02', '#006B76', '#1273DE', '#004DCF', '#5300EB']
     };
@@ -34,6 +35,7 @@ class App extends React.Component {
     this.setColor = this.setColor.bind(this);
     this.setDragMode = this.setDragMode.bind(this);
     this.setShowNames = this.setShowNames.bind(this);
+    this.setShowStatus = this.setShowStatus.bind(this);
     this.connect = this.connect.bind(this);
     this.interval = null;
 
@@ -68,9 +70,9 @@ class App extends React.Component {
       switch(dataFromServer.instruction){
         case 'ALL_LIGHTS':
           let allLights = [];
-          dataFromServer.data.lights.forEach((light)=>{
-            let newLight = new Light(light.id, light.color, light.position);
-            allLights.push(newLight);
+          dataFromServer.data.lights.forEach((lightData)=>{
+            let light = new Light(lightData.id, lightData.color, lightData.position);
+            allLights.push(light);
           });
           this.setState({
             lights: allLights
@@ -137,6 +139,12 @@ class App extends React.Component {
       showNames: !this.state.showNames
     });
   }
+
+  setShowStatus(){
+    this.setState({
+      showStatus: !this.state.showStatus
+    });
+  }
   
   componentWillUnmount() {
     window.removeEventListener("resize", this.updateDimensions.bind(this));
@@ -150,8 +158,8 @@ class App extends React.Component {
     } 
     return (
       <div className="App">
-          <Graphic dragMode={this.state.dragMode} showNames={this.state.showNames} color={this.state.color} lights={this.state.lights} width={this.state.width} height={this.state.height} />
-          <TemporaryDrawer dragMode={this.state.dragMode} showNames={this.state.showNames} lights={this.state.lights} setShowNames={this.setShowNames} setDragMode={this.setDragMode} />
+          <Graphic dragMode={this.state.dragMode} showNames={this.state.showNames} showStatus={this.state.showStatus} color={this.state.color} lights={this.state.lights} width={this.state.width} height={this.state.height} />
+          <TemporaryDrawer dragMode={this.state.dragMode} showNames={this.state.showNames} showStatus={this.state.showStatus} lights={this.state.lights} setShowNames={this.setShowNames}  setShowStatus={this.setShowStatus}  setDragMode={this.setDragMode} />
           {picker}
         </div>
     );

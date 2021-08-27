@@ -39,6 +39,16 @@ class ToolBar extends React.Component {
             />
           </ListItemSecondaryAction>
          </ListItem>
+         <ListItem>
+         <ListItemText primary="Show Status" />
+         <ListItemSecondaryAction>
+            <Switch
+              checked={this.props.showStatus}
+              onChange={this.props.setShowStatus}
+              inputProps={{ 'aria-label': 'secondary checkbox' }}
+            />
+          </ListItemSecondaryAction>
+         </ListItem>
        </List>
        <LightList lights={this.props.lights}/>
       </div>

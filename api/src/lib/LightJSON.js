@@ -8,7 +8,8 @@ const LightJSON = (light) => {
             x: light.x || 0.5,
             y: light.y || 0.5
         },
-        sleep: light.sleep
+        sleep: light.sleep,
+        last_updated: light.last_updated
     };
     
     return data;

@@ -183,12 +183,12 @@ export default class Graphic extends React.Component {
       }
       this.props.lights.forEach((lightPoint)=>{
         if(lightPoint !== this.state.touchingLight){
-          lightPoint.paint(context, this.props.showNames);
+          lightPoint.paint(context, this.props.showNames, this.props.showStatus);
         }
       });
 
       if(this.state.touching){
-        new Light(this.state.touchingLight.id, "FF0000", {x: this.state.x, y: this.state.y}).paint(context, this.props.showNames)
+        new Light(this.state.touchingLight.id, "FF0000", {x: this.state.x, y: this.state.y}).paint(context, this.props.showNames, this.props.showStatus)
       }
 
       if(this.state.hover){
