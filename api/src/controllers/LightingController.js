@@ -63,7 +63,7 @@ export default class LightingController {
       let updatedLight = await Lights.update(id, color, light.pixels, light.version, light.x, light.y, light.sleep, timestamp)
       this.lightBroker.publish(`color/${id}`, LightMQTT(updatedLight, easing, time, delay, method));
       if(this.cb){
-        this.cb("UPDATE_LIGHT", updatedLight);// LightInstruction(updatedLight, time, delay))
+        this.cb("UPDATE_LIGHT", LightJSON(updatedLight));// LightInstruction(updatedLight, time, delay))
       }
       return LightJSON(updatedLight);
   }
