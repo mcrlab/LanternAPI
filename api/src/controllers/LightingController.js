@@ -38,7 +38,7 @@ export default class LightingController {
             let light = await Lights.create(id, "000000", messageData.pixels, messageData.version, timestamp);
             this.lightBroker.publish(`color/${id}`, LightMQTT(light, null, 500, 10));
             if(this.cb){
-              this.cb("ADD_LIGHT", light );
+              this.cb("ADD_LIGHT", LightJSON(light) );
             }
           }
 
@@ -83,7 +83,7 @@ export default class LightingController {
       this.lightBroker.publish(`color/${id}`, LightMQTT(updatedLight, null, 500, 500, null));
       
       if(this.cb){
-        this.cb("UPDATE_LIGHT", updatedLight);// LightInstruction(updatedLight))
+        this.cb("UPDATE_LIGHT", LightJSON(updatedLight));// LightInstruction(updatedLight))
       }
       return LightJSON(updatedLight);
   }
@@ -134,7 +134,7 @@ export default class LightingController {
     }
     
     if(this.cb){
-      this.cb("UPDATE_LIGHT", updatedLight);
+      this.cb("UPDATE_LIGHT", LightJSON(updatedLight));
     }
 
     return LightJSON(updatedLight);
@@ -146,7 +146,7 @@ export default class LightingController {
         throw new LightNotFoundError();
       }
       if(this.cb){
-        this.cb("REMOVE_LIGHT", light);
+        this.cb("REMOVE_LIGHT", LightJSON(light));
       }
       return LightJSON(light);
   }
