@@ -34,7 +34,7 @@ const createApplication = (lightController) => {
   app.use(cors());
   app.options('*', cors())
   app.use(bodyparser.json());
-  app.use('/lights/', lightRoutes(lightController));
+  app.use('https://projectlantern.herokuapp.com/lights', lightRoutes(lightController));
   app.get("/easings", (req, res)=> {
     return res.json(easings);
   });

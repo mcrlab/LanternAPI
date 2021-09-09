@@ -63,7 +63,7 @@ export default class LightingController {
       let updatedLight = await Lights.update(id, color, light.pixels, light.version, light.x, light.y, light.sleep, timestamp)
       this.lightBroker.publish(`color/${id}`, LightMQTT(updatedLight, easing, time, delay, method));
       if(this.cb){
-        this.cb("UPDATE_LIGHT", LightInstruction(updatedLight, time, delay))
+        this.cb("UPDATE_LIGHT", updatedLight);// LightInstruction(updatedLight, time, delay))
       }
       return LightJSON(updatedLight);
   }
@@ -83,7 +83,7 @@ export default class LightingController {
       this.lightBroker.publish(`color/${id}`, LightMQTT(updatedLight, null, 500, 500, null));
       
       if(this.cb){
-        this.cb("UPDATE_LIGHT", LightInstruction(updatedLight))
+        this.cb("UPDATE_LIGHT", updatedLight);// LightInstruction(updatedLight))
       }
       return LightJSON(updatedLight);
   }
@@ -117,17 +117,26 @@ export default class LightingController {
 
   async sleepLight(id, seconds){
     let light = await Lights.find(id);
+    
     if(!light){
       throw new LightNotFoundError();
     }
+    
     let data = {
       seconds: seconds
     };
+    
     let timestamp = new Date(light.last_updated).getTime() / 1000.0
     let updatedLight = await Lights.update(id, light.current_color, light.pixels, light.version, light.x, light.y, seconds, timestamp);
+    
     if(seconds > 0){
       this.lightBroker.publish(`sleep/${id}`, JSON.stringify(data));
     }
+    
+    if(this.cb){
+      this.cb("UPDATE_LIGHT", updatedLight);
+    }
+
     return LightJSON(updatedLight);
   }
 
@@ -135,6 +144,9 @@ export default class LightingController {
       let light = await Lights.delete(id);
       if(!light){
         throw new LightNotFoundError();
+      }
+      if(this.cb){
+        this.cb("REMOVE_LIGHT", light);
       }
       return LightJSON(light);
   }
