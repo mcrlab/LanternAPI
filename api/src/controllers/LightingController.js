@@ -1,7 +1,6 @@
 import LightNotFoundError from '../exceptions/LightNotFoundError';
 const Lights = require('../persistence/lights');
 import { RGBObjectToHex } from '../lib/color';
-import LightInstruction from '../lib/LightInstruction';
 import LightMQTT from '../lib/LightMQTT';
 import LightJSON from '../lib/LightJSON';
 
