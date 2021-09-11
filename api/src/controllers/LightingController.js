@@ -61,7 +61,7 @@ export default class LightingController {
       }
       let color = RGBObjectToHex(colorObject);
       let timestamp = new Date(light.last_updated).getTime() / 1000.0;
-      let updatedLight = await Lights.update(id, color, light.pixels, light.version, light.x, light.y, light.sleep, timestamp)
+      let updatedLight = await Lights.update(id, color, light.pixels, light.version, light.x, light.y, light.sleep, timestamp, light.config)
       this.lightBroker.publish(`color/${id}`, LightMQTT(updatedLight, easing, time, delay, method));
       if(this.cb){
         this.cb("UPDATE_LIGHT", LightJSON(updatedLight));// LightInstruction(updatedLight, time, delay))
@@ -79,7 +79,7 @@ export default class LightingController {
         color = light.current_color;
       }
       let timestamp = new Date(light.last_updated).getTime() / 1000.0;
-      let updatedLight = await Lights.update(id, color, light.pixels, light.version, x, y, light.sleep, timestamp);
+      let updatedLight = await Lights.update(id, color, light.pixels, light.version, x, y, light.sleep, timestamp,  light.config);
 
       this.lightBroker.publish(`color/${id}`, LightMQTT(updatedLight, null, 500, 500, null));
       
