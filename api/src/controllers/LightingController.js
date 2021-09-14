@@ -29,14 +29,14 @@ export default class LightingController {
           let timestamp = Date.now() / 1000.0;
           if(light){
 
-            let updatedLight = await Lights.update(id, RGBObjectToHex(messageData.current_color), messageData.pixels, messageData.version, light.x, light.y, light.sleep, timestamp, config );
+            let updatedLight = await Lights.update(id, RGBObjectToHex(messageData.current_color), messageData.version, light.x, light.y, light.sleep, timestamp, config );
             if(light.sleep > 0){
               console.log(`light should sleep for ${light.sleep} seconds`);
               await this.sleepLight(light.id, light.sleep);
 
             }
           } else {
-            let light = await Lights.create(id, "000000", messageData.pixels, messageData.version, timestamp, config);
+            let light = await Lights.create(id, "000000", messageData.version, timestamp, config);
             this.lightBroker.publish(`color/${id}`, LightMQTT(light, null, 500, 10));
             if(this.cb){
               this.cb("ADD_LIGHT", LightJSON(light) );
@@ -61,7 +61,7 @@ export default class LightingController {
       }
       let color = RGBObjectToHex(colorObject);
       let timestamp = new Date(light.last_updated).getTime() / 1000.0;
-      let updatedLight = await Lights.update(id, color, light.pixels, light.version, light.x, light.y, light.sleep, timestamp, light.config)
+      let updatedLight = await Lights.update(id, color, light.version, light.x, light.y, light.sleep, timestamp, light.config)
       this.lightBroker.publish(`color/${id}`, LightMQTT(updatedLight, easing, time, delay, method));
       if(this.cb){
         this.cb("UPDATE_LIGHT", LightJSON(updatedLight));// LightInstruction(updatedLight, time, delay))
@@ -79,7 +79,7 @@ export default class LightingController {
         color = light.current_color;
       }
       let timestamp = new Date(light.last_updated).getTime() / 1000.0;
-      let updatedLight = await Lights.update(id, color, light.pixels, light.version, x, y, light.sleep, timestamp,  light.config);
+      let updatedLight = await Lights.update(id, color, light.version, x, y, light.sleep, timestamp,  light.config);
 
       this.lightBroker.publish(`color/${id}`, LightMQTT(updatedLight, null, 500, 500, null));
       
@@ -128,7 +128,7 @@ export default class LightingController {
     };
     
     let timestamp = new Date(light.last_updated).getTime() / 1000.0
-    let updatedLight = await Lights.update(id, light.current_color, light.pixels, light.version, light.x, light.y, seconds, timestamp);
+    let updatedLight = await Lights.update(id, light.current_color, light.version, light.x, light.y, seconds, timestamp);
     
     if(seconds > 0){
       this.lightBroker.publish(`sleep/${id}`, JSON.stringify(data));

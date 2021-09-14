@@ -5,8 +5,8 @@ module.exports = {
   async create(id, current_color, pixels, version, last_updated, config) {
     try {
       const {rows} = await db.query(sql`
-      INSERT INTO lights (id, current_color, pixels, version, x, y, sleep, last_updated, config)
-      VALUES (${id}, ${current_color}, ${pixels}, ${version}, 0.5, 0.5, 0, to_timestamp(${last_updated}), ${config})
+      INSERT INTO lights (id, current_color, version, x, y, sleep, last_updated, config)
+      VALUES (${id}, ${current_color}, ${version}, 0.5, 0.5, 0, to_timestamp(${last_updated}), ${config})
       RETURNING *;
       `);
       const [light] = rows;
@@ -20,10 +20,10 @@ module.exports = {
     }
   },
   
-  async update(id, current_color, pixels, version, x, y, sleep, last_updated, config) {
+  async update(id, current_color, version, x, y, sleep, last_updated, config) {
     const { rows } = await db.query(sql`
       UPDATE lights 
-      SET (id, current_color, pixels, version, x, y, sleep, last_updated, config) = (${id}, ${current_color}, ${pixels}, ${version}, ${x}, ${y}, ${sleep}, to_timestamp(${last_updated}), ${config})
+      SET (id, current_color, version, x, y, sleep, last_updated, config) = (${id}, ${current_color}, ${version}, ${x}, ${y}, ${sleep}, to_timestamp(${last_updated}), ${config})
       WHERE id = ${id}
       RETURNING *;
     `);
