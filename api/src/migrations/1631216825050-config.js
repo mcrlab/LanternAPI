@@ -16,7 +16,7 @@ module.exports.down = async function (next) {
 
   await client.query(`
     ALTER TABLE lights
-    DROP COLUMN config,
+    DROP COLUMN config;
   `);
 
   await client.release(true);

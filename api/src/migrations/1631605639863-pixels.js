@@ -5,7 +5,7 @@ module.exports.up = async function (next) {
   const client = await db.connect();
   await client.query(`
     ALTER TABLE lights
-    DROP COLUMN pixels,
+    DROP COLUMN pixels;
   `);
  
   await client.release(true);
