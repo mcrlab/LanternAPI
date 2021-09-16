@@ -9,7 +9,7 @@ module.exports.up = async function (next) {
       wait INT,
       data JSON,
       complete BOOLEAN,
-      last_updated TIMESTAMP;
+      created TIMESTAMP
     );
   `);
   await client.release(true);
