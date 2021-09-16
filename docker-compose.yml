@@ -55,15 +55,6 @@ services:
       - 1883:1883
     networks:
       - lantern-network
-  lanterniot:
-    image: lanterniot
-    build:
-      context: LanternIoT
-      dockerfile: Dockerfile
-    environment:
-      - NUMBER_OF_LAMPS=${NUMBER_OF_LAMPS}
-    networks:
-      - lantern-network
   postgres:
     image: postgres:10.4
     networks:
