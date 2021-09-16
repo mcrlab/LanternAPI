@@ -2,5 +2,11 @@ build:
   docker:
     web: api/Dockerfile
 run:
-  web: "npm run production"
-  worker: "npm run queue"
+  web: 
+    command: 
+      - npm run production
+    image: web
+  worker: 
+    command:
+      - npm run queue
+    image: web
