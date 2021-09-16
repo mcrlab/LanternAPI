@@ -28,7 +28,6 @@ export default class LightingController {
           let light = await Lights.find(id);
           let timestamp = Date.now() / 1000.0;
           if(light){
-
             let updatedLight = await Lights.update(id, RGBObjectToHex(messageData.current_color), messageData.version, light.x, light.y, light.sleep, timestamp, config );
             if(light.sleep > 0){
               console.log(`light should sleep for ${light.sleep} seconds`);

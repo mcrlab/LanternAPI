@@ -44,7 +44,7 @@ function createLightRoutes(lightingController) {
             let distanceX = lightData[i].position.x - position.x;
             let distanceY = lightData[i].position.y - position.y;
             let distance = Math.sqrt((distanceX * distanceX) + (distanceY * distanceY));
-            calculatedDelay = delay * distance;
+            calculatedDelay = parseInt(delay * distance);
             if((calculatedDelay + time) > wait) {
               wait = calculatedDelay + time;
             }
@@ -88,7 +88,7 @@ function createLightRoutes(lightingController) {
         let delay =       delayValidator(req.body.delay);
         let easing =      req.body.easing || "LinearInterpolation";
         let method =      req.body.method || "fill"
-        let wait = delay + time;
+        let wait = parseInt(delay + time);
         let light = await lightingController.getLightDataById(req.params.lightID)
 
         let instructionSet = [];
