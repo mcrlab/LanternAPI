@@ -30,6 +30,16 @@ module.exports = {
     return rows[0];
   },
 
+  async updateColor(id, color) {
+    const { rows } = await db.query(sql`
+      UPDATE lights 
+      SET (id, current_color) = (${id}, ${color})
+      WHERE id = ${id}
+      RETURNING *;
+    `);
+    return rows[0];
+  },
+
   async delete(id){
     const { rows } = await  db.query(sql`
       DELETE FROM lights

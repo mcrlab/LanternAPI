@@ -32,6 +32,7 @@
     "start": "node dist/index.js",
     "test": "jest",
     "production": "npm run migrate up && node dist/index.js",
+    "queue": "node dist/queue.js",
     "migrate": "node ./bin/migrate.js",
     "migrate:create": "migrate create --migrations-dir='./src/migrations'"
   },

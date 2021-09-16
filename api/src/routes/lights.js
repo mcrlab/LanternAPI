@@ -1,6 +1,9 @@
 import express from 'express';
 import {colorValidator, timeValidator, delayValidator, positionValidator} from '../validators/validators';
 import {HexToRGBObject} from '../lib/color';
+const LightSequence = require('../persistence/sequence');
+import LightMQTT from '../lib/LightMQTT';
+
 
 const basicAuth = require('express-basic-auth')
 const username = process.env.username || "lantern";
@@ -23,7 +26,6 @@ function createLightRoutes(lightingController) {
     router.post('/', async (req, res) => {
       try {
         let color       = colorValidator(req.body.color);
-        let colorObject = HexToRGBObject(color);
         let time        = timeValidator(req.body.time);
         let delay       = delayValidator(req.body.delay);
         let easing      = req.body.easing || "LinearInterpolation";
@@ -31,6 +33,9 @@ function createLightRoutes(lightingController) {
         let position    = req.body.position;
 
         let lightData   = await lightingController.getAllLightsData();
+        let instructionSet = [];
+
+        let wait = 0;
 
         for(let i = 0; i < lightData.length; i++){
           let calculatedDelay = 0;
@@ -40,11 +45,23 @@ function createLightRoutes(lightingController) {
             let distanceY = lightData[i].position.y - position.y;
             let distance = Math.sqrt((distanceX * distanceX) + (distanceY * distanceY));
             calculatedDelay = delay * distance;
+            if((calculatedDelay + time) > wait) {
+              wait = calculatedDelay + time;
+            }
           } else {
             calculatedDelay = delay;
+            wait = time + delay;
           }
-          await lightingController.updateLightColor(lightData[i].id, colorObject, time, calculatedDelay, easing, method);
+          
+          let instruction = LightMQTT(color, easing, time, delay, method);
+
+          instructionSet.push({
+            "lightID": lightData[i].id,
+            "color":       color,
+            "instruction": instruction
+          })
         }
+        await LightSequence.insert(wait, JSON.stringify(instructionSet))
         
         lightData = await lightingController.getAllLightsData()  
         return res.json(lightData);
@@ -67,14 +84,23 @@ function createLightRoutes(lightingController) {
     router.post('/:lightID', async (req, res) => {
       try {
         let color =       colorValidator(req.body.color);
-        let colorObject = HexToRGBObject(color);
         let time =        timeValidator(req.body.time);
         let delay =       delayValidator(req.body.delay);
         let easing =      req.body.easing || "LinearInterpolation";
         let method =      req.body.method || "fill"
-        
-        let light = await lightingController.updateLightColor(req.params.lightID, colorObject, time, delay, easing, method)
+        let wait = delay + time;
+        let light = await lightingController.getLightDataById(req.params.lightID)
 
+        let instructionSet = [];
+
+        instructionSet.push({
+          "lightID": req.params.lightID,
+          "color":       color,
+          "instruction": LightMQTT(color, easing, time, delay, method)
+        });
+
+        await LightSequence.insert(wait, JSON.stringify(instructionSet))
+        
         return res.json(light);
 
       } catch(error){

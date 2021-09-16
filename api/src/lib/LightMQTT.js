@@ -1,9 +1,9 @@
 
 import { HexToRGBObject } from './color';
 
-const LightMQTT = (light, easing, time, delay, method) => {
+const LightMQTT = (color, easing, time, delay, method) => {
     let data = {
-        color: HexToRGBObject(light.current_color),
+        color: HexToRGBObject(color),
         easing: easing || "SineEaseInOut",
         time: time || 0,
         delay: delay || 0,
