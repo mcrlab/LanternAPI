@@ -9,7 +9,6 @@ services:
     depends_on:
         - postgres
         - mqtt
-        - lanterniot
     environment:
       CLOUDMQTT_URL: ${CLOUDMQTT_URL}
       DATABASE_URL: "postgres://user:pass@postgres:5432/db"
