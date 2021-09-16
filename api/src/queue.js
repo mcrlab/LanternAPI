@@ -26,7 +26,7 @@ async function getNextInstruction() {
 try {
     broker = new MQTTBroker();
     broker.init((topic, message) => {
-        handleMessage(topic, message);
+        console.log(topic, message);
     });
     getNextInstruction()
 } catch(e){

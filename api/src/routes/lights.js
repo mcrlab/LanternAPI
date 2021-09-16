@@ -46,11 +46,11 @@ function createLightRoutes(lightingController) {
             let distance = Math.sqrt((distanceX * distanceX) + (distanceY * distanceY));
             calculatedDelay = parseInt(delay * distance);
             if((calculatedDelay + time) > wait) {
-              wait = calculatedDelay + time;
+              wait = parseInt(calculatedDelay + time);
             }
           } else {
             calculatedDelay = delay;
-            wait = time + delay;
+            wait = parseInt(time + delay);
           }
           
           let instruction = LightMQTT(color, easing, time, delay, method);
