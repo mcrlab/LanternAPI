@@ -1,13 +1,6 @@
 version: '3'
 
 services:
-  web:
-    build:
-      context: web
-      dockerfile: Dockerfile
-    image: jameslinnegar/lantern_web
-    networks:
-      - lantern-network
   api:
     build:
       context: api
@@ -23,18 +16,6 @@ services:
     command: "npm run production"
     ports:
       - "3001:3001"
-    networks:
-      - lantern-network
-  revproxy:
-    build:
-      context: proxy
-      dockerfile: Dockerfile
-    image: jameslinnegar/lantern_proxy
-    depends_on: 
-      - api
-      - web
-    ports:
-      - "80:80"
     networks:
       - lantern-network
   mqtt:
