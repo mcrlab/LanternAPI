@@ -6,7 +6,7 @@ module.exports = {
     try {
       const timestamp = Date.now() / 1000.0;
       const {rows} = await db.query(sql`
-      INSERT INTO sequence ( wait, data, complete, created )
+      INSERT INTO queue ( wait, data, complete, created )
       VALUES ( ${wait}, ${data}, FALSE, to_timestamp(${timestamp}) )
       RETURNING *;
       `);
@@ -23,7 +23,7 @@ module.exports = {
   
   async complete(id) {
     const { rows } = await db.query(sql`
-      UPDATE sequence 
+      UPDATE queue 
       SET complete = TRUE
       WHERE id = ${id}
       RETURNING *;
@@ -41,7 +41,7 @@ module.exports = {
 
   async clear(){
     const { rows } = await  db.query(sql`
-      DELETE FROM sequence
+      DELETE FROM queue
       RETURNING *
     `);
     return rows;
@@ -50,7 +50,7 @@ module.exports = {
   async wait(){
     const { rows } = await  db.query(sql`
     SELECT SUM(wait) as total 
-    FROM sequence
+    FROM queue
     WHERE complete=FALSE;
   `);
   if(rows[0].total === null) return 0;
@@ -60,7 +60,7 @@ module.exports = {
   async count(){
     const { rows } = await  db.query(sql`
     SELECT COUNT(*) as total 
-    FROM sequence
+    FROM queue
     WHERE complete=FALSE;
   `);
   console.log(rows[0].total)
@@ -71,7 +71,7 @@ module.exports = {
   async total(){
     const { rows } = await  db.query(sql`
     SELECT COUNT(*) as total 
-    FROM sequence;
+    FROM queue;
   `);
   return rows[0].total;
   }

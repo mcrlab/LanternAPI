@@ -7,7 +7,7 @@ import LightJSON from '../lib/LightJSON';
 export default class LightingController {
   constructor(lightBroker) {
     this.lightBroker = lightBroker;
-
+    this.cb = (key, message) => {};
     this.lightBroker.init((topic, message) => {
       this.handleMessage(topic, message);
     });
@@ -35,9 +35,9 @@ export default class LightingController {
           } else {
             let light = await Lights.create(id, "000000", messageData.version, timestamp, config);
             this.lightBroker.publish(`color/${id}`, LightMQTT(light, null, 500, 10));
-            if(this.cb){
-              this.cb("ADD_LIGHT", LightJSON(light) );
-            }
+            
+            this.cb("ADD_LIGHT", LightJSON(light) );
+            
           }
           break;
         default:
@@ -94,9 +94,8 @@ export default class LightingController {
       this.lightBroker.publish(`sleep/${id}`, JSON.stringify(data));
     }
     
-    if(this.cb){
-      this.cb("UPDATE_LIGHT", LightJSON(updatedLight));
-    }
+    this.cb("UPDATE_LIGHT", LightJSON(updatedLight));
+    
 
     return LightJSON(updatedLight);
   }
@@ -106,9 +105,8 @@ export default class LightingController {
       if(!light){
         throw new LightNotFoundError();
       }
-      if(this.cb){
-        this.cb("REMOVE_LIGHT", LightJSON(light));
-      }
+      this.cb("REMOVE_LIGHT", LightJSON(light));
+      
       return LightJSON(light);
   }
 }

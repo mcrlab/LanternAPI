@@ -9,7 +9,7 @@ const helmet = require('helmet')
 import lightRoutes from '../routes/lights';
 import easings from './easings';
 import colors from './colors';
-var sequenceRoutes = require('../routes/sequence');
+var queueRoutes = require('../routes/queue');
 
 
 function logErrors (err, req, res, next) {
@@ -43,7 +43,7 @@ const createApplication = (lightController) => {
   app.get("/colors", (req, res)=> {
       return res.json(colors);
   });
-  app.use('/sequence', sequenceRoutes);
+  app.use('/queue', queueRoutes);
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   app.use(logErrors)
   app.use(clientErrorHandler)

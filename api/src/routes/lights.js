@@ -1,6 +1,6 @@
 import express from 'express';
 import {colorValidator, timeValidator, delayValidator, positionValidator} from '../validators/validators';
-const LightSequence = require('../persistence/sequence');
+const Queue = require('../persistence/queue');
 const Lights = require('../persistence/lights');
 import LightMQTT from '../lib/LightMQTT';
 import LightJSON from '../lib/LightJSON';
@@ -58,7 +58,7 @@ function createLightRoutes(lightingController) {
             "instruction": instruction
           })
         }
-        await LightSequence.insert(wait, JSON.stringify(instructionSet))
+        await Queue.insert(wait, JSON.stringify(instructionSet))
         
         lightData = await lightingController.getAllLightsData()  
         return res.json(lightData);
@@ -102,7 +102,7 @@ function createLightRoutes(lightingController) {
           "instruction": LightMQTT(color, easing, time, delay, method)
         });
 
-        await LightSequence.insert(wait, JSON.stringify(instructionSet))
+        await Queue.insert(wait, JSON.stringify(instructionSet))
         
         return res.json(light);
 
