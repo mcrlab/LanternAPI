@@ -4,14 +4,9 @@ const LightSequence = require('../persistence/sequence');
 const Lights = require('../persistence/lights');
 import LightMQTT from '../lib/LightMQTT';
 import LightJSON from '../lib/LightJSON';
+import LightNotFoundError from '../exceptions/LightNotFoundError';
+const auth = require("../lib/auth");
 
-const basicAuth = require('express-basic-auth')
-const username = process.env.username || "lantern";
-const password = process.env.password || "password";
-let user = {}
-user[username] = password
-
-const auth = basicAuth({users: user})
 
 function createLightRoutes(lightingController) {
     const router = express.Router();
@@ -83,6 +78,7 @@ function createLightRoutes(lightingController) {
           throw new LightNotFoundError()
         }
       } catch(error){
+        console.log(error);
           return res.status(error.status||400).json(error||"Generic error");
       };
     });

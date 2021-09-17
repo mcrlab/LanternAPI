@@ -1,6 +1,7 @@
 var express = require('express'),
     router = express.Router(),
     sequence = require("../persistence/sequence");
+const auth = require("../lib/auth");
 
 router.get('/', async (req, res) => {
     try {
@@ -18,12 +19,11 @@ router.get('/', async (req, res) => {
     };
 });
 
-router.post('/clear', async (req, res) => {
+router.post('/clear', auth, async (req, res) => {
     try {
         await sequence.clear();
         return res.json({});    
     } catch(error){
-        console.log(error);
         res.status(error.status|| 400).json(error);
     };
 });
