@@ -39,13 +39,42 @@ module.exports = {
   },
 
 
-  async clear(id){
+  async clear(){
     const { rows } = await  db.query(sql`
       DELETE FROM sequence
       RETURNING *
     `);
     return rows;
   },
+
+  async wait(){
+    const { rows } = await  db.query(sql`
+    SELECT SUM(wait) as total 
+    FROM sequence
+    WHERE complete=FALSE;
+  `);
+  if(rows[0].total === null) return 0;
+  return rows[0].total;
+  },
+
+  async count(){
+    const { rows } = await  db.query(sql`
+    SELECT COUNT(*) as total 
+    FROM sequence
+    WHERE complete=FALSE;
+  `);
+  console.log(rows[0].total)
+
+  return rows[0].total;
+  },
+
+  async total(){
+    const { rows } = await  db.query(sql`
+    SELECT COUNT(*) as total 
+    FROM sequence;
+  `);
+  return rows[0].total;
+  }
 
 
 };

@@ -9,6 +9,8 @@ const helmet = require('helmet')
 import lightRoutes from '../routes/lights';
 import easings from './easings';
 import colors from './colors';
+var sequenceRoutes = require('../routes/sequence');
+
 
 function logErrors (err, req, res, next) {
     console.error(err.stack)
@@ -41,6 +43,7 @@ const createApplication = (lightController) => {
   app.get("/colors", (req, res)=> {
       return res.json(colors);
   });
+  app.use('/sequence', sequenceRoutes);
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   app.use(logErrors)
   app.use(clientErrorHandler)

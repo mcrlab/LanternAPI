@@ -1,6 +1,5 @@
 import express from 'express';
 import {colorValidator, timeValidator, delayValidator, positionValidator} from '../validators/validators';
-import {HexToRGBObject} from '../lib/color';
 const LightSequence = require('../persistence/sequence');
 import LightMQTT from '../lib/LightMQTT';
 
@@ -19,7 +18,6 @@ function createLightRoutes(lightingController) {
     router.get('/', async (req, res) => {
         let lightData = await lightingController.getAllLightsData()        
         return res.json(lightData);    
-       
     });
 
 
@@ -83,11 +81,11 @@ function createLightRoutes(lightingController) {
 
     router.post('/:lightID', async (req, res) => {
       try {
-        let color =       colorValidator(req.body.color);
-        let time =        timeValidator(req.body.time);
-        let delay =       delayValidator(req.body.delay);
-        let easing =      req.body.easing || "LinearInterpolation";
-        let method =      req.body.method || "fill"
+        let color =  colorValidator(req.body.color);
+        let time =   timeValidator(req.body.time);
+        let delay =  delayValidator(req.body.delay);
+        let easing = req.body.easing || "LinearInterpolation";
+        let method = req.body.method || "fill"
         let wait = parseInt(delay + time);
         let light = await lightingController.getLightDataById(req.params.lightID)
 
