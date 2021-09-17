@@ -30,6 +30,16 @@ module.exports = {
     return rows[0];
   },
 
+  async updatePosition(id, x, y){
+    const { rows } = await db.query(sql`
+    UPDATE lights 
+    SET (id, x, y) = (${id}, ${x}, ${y})
+    WHERE id = ${id}
+    RETURNING *;
+  `);
+  return rows[0]; 
+  },
+
   async updateColor(id, color) {
     const { rows } = await db.query(sql`
       UPDATE lights 

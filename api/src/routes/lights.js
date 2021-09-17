@@ -1,8 +1,9 @@
 import express from 'express';
 import {colorValidator, timeValidator, delayValidator, positionValidator} from '../validators/validators';
 const LightSequence = require('../persistence/sequence');
+const Lights = require('../persistence/lights');
 import LightMQTT from '../lib/LightMQTT';
-
+import LightJSON from '../lib/LightJSON';
 
 const basicAuth = require('express-basic-auth')
 const username = process.env.username || "lantern";
@@ -16,8 +17,11 @@ function createLightRoutes(lightingController) {
     const router = express.Router();
 
     router.get('/', async (req, res) => {
-        let lightData = await lightingController.getAllLightsData()        
-        return res.json(lightData);    
+      const lights = await Lights.all();
+      let data = lights.map((light)=>{
+        return LightJSON(light);
+      })
+      return res.json(data);;
     });
 
 
@@ -72,10 +76,14 @@ function createLightRoutes(lightingController) {
 
     router.get('/:lightID', async (req, res) => {
       try {
-        let light = await lightingController.getLightDataById(req.params.lightID)
-        return res.json(light);
+        const light = await Lights.find(req.params.lightID);
+        if(light){
+          return res.json(LightJSON(light));
+        } else {
+          throw new LightNotFoundError()
+        }
       } catch(error){
-          res.status(error.status||400).json(error||"Generic error");
+          return res.status(error.status||400).json(error||"Generic error");
       };
     });
 
@@ -112,11 +120,8 @@ function createLightRoutes(lightingController) {
       try {
         let x = positionValidator(req.body.x);
         let y = positionValidator(req.body.y);
-        let color;
-        if(req.body.color){
-          color = colorValidator(req.body.color);     
-        }
-        let light = await lightingController.updateLightPosition(req.params.lightID, x, y, color);
+
+        let light = await Lights.updatePosition(req.params.lightID, x, y);
 
         return res.json(light);
 

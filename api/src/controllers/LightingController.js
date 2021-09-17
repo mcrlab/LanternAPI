@@ -52,24 +52,6 @@ export default class LightingController {
     }
   }
 
-  async updateLightPosition(id, x, y, color){
-    let light = await Lights.find(id)
-      if(!light){
-        throw new LightNotFoundError();
-      }
-
-      if(!color){
-        color = light.current_color;
-      }
-      let timestamp = new Date(light.last_updated).getTime() / 1000.0;
-      let updatedLight = await Lights.update(id, color, light.version, x, y, light.sleep, timestamp,  light.config);
-      
-      if(this.cb){
-        this.cb("UPDATE_LIGHT", LightJSON(updatedLight));
-      }
-      return LightJSON(updatedLight);
-  }
-
   async updateLightFirmware(id) {
     let light = await Lights.find(id);
     if(!light){
@@ -131,23 +113,5 @@ export default class LightingController {
         this.cb("REMOVE_LIGHT", LightJSON(light));
       }
       return LightJSON(light);
-  }
-
-  async getAllLightsData() {
-    const lights = await Lights.all();
-
-    let data = lights.map((light)=>{
-      return LightJSON(light);
-    })
-    return data;
-  }
-
-  async getLightDataById(id) {
-    const light = await Lights.find(id);
-    if(light){
-      return LightJSON(light);
-    } else {
-      throw new LightNotFoundError()
-    }
   }
 }
