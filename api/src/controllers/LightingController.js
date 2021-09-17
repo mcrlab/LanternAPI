@@ -22,17 +22,15 @@ export default class LightingController {
       switch(topic){
         case "connect":
           const messageData = JSON.parse(message);
-          console.log(messageData);
           const id = messageData.id;            
-          let config = JSON.stringify(messageData.config);
-          let light = await Lights.find(id);
-          let timestamp = Date.now() / 1000.0;
-          if(light){
-            let updatedLight = await Lights.update(id, RGBObjectToHex(messageData.current_color), messageData.version, light.x, light.y, light.sleep, timestamp, config );
-            if(light.sleep > 0){
-              console.log(`light should sleep for ${light.sleep} seconds`);
-              await this.sleepLight(light.id, light.sleep);
+          const config = JSON.stringify(messageData.config);
+          const light = await Lights.find(id);
+          const timestamp = Date.now() / 1000.0;
 
+          if(light){
+            await Lights.update(id, RGBObjectToHex(messageData.current_color), messageData.version, light.x, light.y, light.sleep, timestamp, config );
+            if(light.sleep > 0){
+              await this.sleepLight(light.id, light.sleep);
             }
           } else {
             let light = await Lights.create(id, "000000", messageData.version, timestamp, config);
@@ -41,7 +39,6 @@ export default class LightingController {
               this.cb("ADD_LIGHT", LightJSON(light) );
             }
           }
-
           break;
         default:
           return;

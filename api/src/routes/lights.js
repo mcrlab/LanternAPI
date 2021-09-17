@@ -94,6 +94,7 @@ function createLightRoutes(lightingController) {
         let delay =  delayValidator(req.body.delay);
         let easing = req.body.easing || "LinearInterpolation";
         let method = req.body.method || "fill"
+        
         let wait = parseInt(delay + time);
         let light = await lightingController.getLightDataById(req.params.lightID)
 
@@ -101,7 +102,7 @@ function createLightRoutes(lightingController) {
 
         instructionSet.push({
           "lightID": req.params.lightID,
-          "color":       color,
+          "color":   color,
           "instruction": LightMQTT(color, easing, time, delay, method)
         });
 
