@@ -1,4 +1,4 @@
-const LightSequence = require('./persistence/sequence');
+const Queue = require('./persistence/queue');
 const Light = require('./persistence/lights');
 
 import MQTTBroker from './lib/mqtt';
@@ -6,7 +6,7 @@ import MQTTBroker from './lib/mqtt';
 let broker;
 
 async function getNextInstruction() {
-    let sequence = await LightSequence.next();
+    let sequence = await Queue.next();
     let wait = 100;
     if(sequence){
         await sequence.data.map(async (message)=>{
@@ -18,7 +18,7 @@ async function getNextInstruction() {
         });
         wait = wait + sequence['wait'];
 
-        await LightSequence.complete(sequence['id'])
+        await Queue.complete(sequence['id'])
     } else {}
     setTimeout(getNextInstruction, wait);
 }
