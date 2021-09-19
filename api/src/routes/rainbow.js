@@ -29,7 +29,7 @@ function Wheel(WheelPos){
       return {
           "r":parseInt(255 - WheelPos * 3), 
           "g":0, 
-          "b":ParseInt(WheelPos * 3)
+          "b":parseInt(WheelPos * 3)
       };
     }
     if(WheelPos < 170) {
