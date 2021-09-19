@@ -2,7 +2,7 @@ const sql = require('sql-template-strings');
 const db = require('./db');
 
 module.exports = {
-  async create(id, current_color, pixels, version, last_updated, config) {
+  async create(id, current_color, version, last_updated, config) {
     try {
       const {rows} = await db.query(sql`
       INSERT INTO lights (id, current_color, version, x, y, sleep, last_updated, config)
@@ -15,6 +15,11 @@ module.exports = {
       if (error.constraint === 'id') {
         return null;
       }
+      console.log(`
+      INSERT INTO lights (id, current_color, version, x, y, sleep, last_updated, config)
+      VALUES (${id}, ${current_color}, ${version}, 0.5, 0.5, 0, to_timestamp(${last_updated}), ${config})
+      RETURNING *;
+      `);
 
       throw error;
     }

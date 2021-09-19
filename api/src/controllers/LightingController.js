@@ -34,7 +34,7 @@ export default class LightingController {
             }
           } else {
             let light = await Lights.create(id, "000000", messageData.version, timestamp, config);
-            this.lightBroker.publish(`color/${id}`, LightMQTT(light, null, 500, 10));
+            this.lightBroker.publish(`color/${id}`, LightMQTT(light.current_color, null, 500, 10));
             
             this.cb("ADD_LIGHT", LightJSON(light) );
             
