@@ -17,9 +17,9 @@ async function getNextInstruction() {
             await Light.updateColor(id, color);
         });
         wait = wait + sequence['wait'];
-
         await Queue.complete(sequence['id'])
     } else {}
+
     setTimeout(getNextInstruction, wait);
 }
 

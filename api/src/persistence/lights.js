@@ -48,7 +48,7 @@ module.exports = {
   async updateColor(id, color) {
     const { rows } = await db.query(sql`
       UPDATE lights 
-      SET (id, current_color) = (${id}, ${color})
+      SET current_color = ${color}
       WHERE id = ${id}
       RETURNING *;
     `);

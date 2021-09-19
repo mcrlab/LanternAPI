@@ -25,8 +25,7 @@ module.exports = {
     const { rows } = await db.query(sql`
       UPDATE queue 
       SET complete = TRUE
-      WHERE id = ${id}
-      RETURNING *;
+      WHERE id = ${id};
     `);
     return rows[0];
   },
