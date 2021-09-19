@@ -55,7 +55,6 @@ router.get('/', async (req, res) => {
             return a.x - b.x
         });
 
-
         let instructionSet = [];
         let wait = 0;
         lights.map((light)=>{
@@ -70,7 +69,7 @@ router.get('/', async (req, res) => {
             let method = "fill"
             wait = wait + time + delay;
             instructionSet.push({
-                "lightID": light.ud,
+                "lightID": light.id,
                 "color":   color,
                 "instruction": LightMQTT(color, easing, time, delay, method)
               });
