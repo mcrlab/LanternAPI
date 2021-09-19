@@ -33,7 +33,7 @@ module.exports = {
 
   async next() {
     const {rows} = await db.query(sql`
-    SELECT * FROM sequence WHERE complete=FALSE ORDER BY created LIMIT 1;
+    SELECT * FROM queue WHERE complete=FALSE ORDER BY created LIMIT 1;
     `);
     return rows[0];
   },
