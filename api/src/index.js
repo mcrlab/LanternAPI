@@ -3,6 +3,7 @@ import MQTTBroker from './lib/mqtt';
 import createApplication from './lib/application';
 import http from 'http'
 import WebSocket from 'ws';
+const Lights = require("./persistence/lights");
 
 function server(){
   const lightController = new LightingController(new MQTTBroker());
@@ -12,11 +13,16 @@ function server(){
   const wss = new WebSocket.Server({ server });
 
   wss.on('connection', async (ws) => {
-    const allLights = await lightController.getAllLightsData();
+
+    const lights = await Lights.all();
+    let data = lights.map((light)=>{
+      return LightJSON(light);
+    })
+
     ws.send(JSON.stringify(
       {
         "instruction": "ALL_LIGHTS",
-        "data": { "lights": allLights }
+        "data": { "lights": data }
       }
     ));
 
