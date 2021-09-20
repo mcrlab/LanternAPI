@@ -18,8 +18,9 @@ async function getNextInstruction() {
         });
         wait = wait + sequence['wait'] + (process.env.WAIT_TIME || 5000);
         await Queue.complete(sequence['id'])
-    } else {}
+        console.log("waiting for: ", wait);
 
+    } else {}
     setTimeout(getNextInstruction, wait);
 }
 
