@@ -16,7 +16,7 @@ async function getNextInstruction() {
             broker.publish(`color/${id}`, instruction );
             await Light.updateColor(id, color);
         });
-        wait = wait + sequence['wait'];
+        wait = wait + sequence['wait'] + (process.env.WAIT_TIME || 5000);
         await Queue.complete(sequence['id'])
     } else {}
 
