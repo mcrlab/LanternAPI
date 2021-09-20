@@ -1,4 +1,5 @@
 const lights = require('../persistence/lights');
+import {timeValidator, delayValidator } from '../validators/validators';
 
 var express = require('express'),
     router = express.Router(),
@@ -48,12 +49,17 @@ function Wheel(WheelPos){
     };
 }
 
-router.get('/', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
         const lights = await Lights.all();
         lights.sort((a,b)=>{
             return a.x - b.x
         });
+
+        let time =   timeValidator(req.body.time);
+        let delay =  delayValidator(req.body.delay);
+        let easing = req.body.easing || "LinearInterpolation";
+        let method = req.body.method || "fill"
 
         let instructionSet = [];
         let wait = 0;
@@ -63,10 +69,6 @@ router.get('/', async (req, res) => {
             let value = 255 * x;
             let color = RGBObjectToHex(Wheel(value));
 
-            let time =   1000;
-            let delay =  1000;
-            let easing = "LinearInterpolation";
-            let method = "fill"
             wait = wait + time + delay;
             instructionSet.push({
                 "lightID": light.id,
