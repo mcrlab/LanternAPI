@@ -29,7 +29,11 @@ function createLightRoutes(lightingController) {
         let method      = req.body.method || "fill"
         let position    = req.body.position;
 
-        let lightData   = await lightingController.getAllLightsData();
+        let lights = await Lights.all();
+        let lightData = lights.map((light)=>{
+          return LightJSON(light);
+        });
+
         let instructionSet = [];
 
         let wait = 0;
@@ -60,7 +64,11 @@ function createLightRoutes(lightingController) {
         }
         await Queue.insert(wait, JSON.stringify(instructionSet))
         
-        lightData = await lightingController.getAllLightsData()  
+
+        lights = await Lights.all();
+        lightData = lights.map((light)=>{
+          return LightJSON(light);
+        });
         return res.json(lightData);
 
       } catch(error){
@@ -92,7 +100,7 @@ function createLightRoutes(lightingController) {
         let method = req.body.method || "fill"
         
         let wait = parseInt(delay + time);
-        let light = await lightingController.getLightDataById(req.params.lightID)
+        const light = await Lights.find(req.params.lightID);
 
         let instructionSet = [];
 
@@ -104,7 +112,7 @@ function createLightRoutes(lightingController) {
 
         await Queue.insert(wait, JSON.stringify(instructionSet))
         
-        return res.json(light);
+        return res.json(LightJSON(light));
 
       } catch(error){
           console.log(error);
