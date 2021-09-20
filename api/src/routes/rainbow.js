@@ -28,24 +28,24 @@ function Wheel(WheelPos){
     WheelPos = 255 - WheelPos;
     if(WheelPos < 85) {
       return {
-          "b":parseInt(255 - WheelPos * 3), 
+          "r":parseInt(255 - WheelPos * 3), 
           "g":0, 
-          "r":parseInt(WheelPos * 3)
+          "b":parseInt(WheelPos * 3)
       };
     }
     if(WheelPos < 170) {
       WheelPos -= 85;
       return {
-          "b":0, 
+          "r":0, 
           "g":parseInt(WheelPos * 3), 
-          "r":parseInt(255 - WheelPos * 3)
+          "b":parseInt(255 - WheelPos * 3)
       };
     }
     WheelPos -= 170;
     return {
-        "b":parseInt(WheelPos * 3), 
+        "r":parseInt(WheelPos * 3), 
         "g":parseInt(255 - WheelPos * 3), 
-        "r":0
+        "b":0
     };
 }
 
