@@ -63,17 +63,17 @@ router.post('/', async (req, res) => {
 
         let instructionSet = [];
         let wait = 0;
-        lights.map((light)=>{
+        lights.map((light, index)=>{
 
             let x = light.x;
             let value = 255 * x;
             let color = RGBObjectToHex(Wheel(value));
 
-            wait = wait + time + delay;
+            wait = wait + (time + delay);
             instructionSet.push({
                 "lightID": light.id,
                 "color":   color,
-                "instruction": LightMQTT(color, easing, time, delay, method)
+                "instruction": LightMQTT(color, easing, time, delay * index, method)
               });
         });
         await Queue.insert(wait, JSON.stringify(instructionSet))
