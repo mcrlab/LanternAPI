@@ -1,6 +1,5 @@
 const sql = require('sql-template-strings');
 const db = require('./db');
-const { insert } = require('./queue');
 
 module.exports = {
   async all() {
