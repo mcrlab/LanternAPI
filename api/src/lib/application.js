@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyparser from 'body-parser';
 import cors from 'cors';
+const Colors = require("../persistence/colors");
 
 const swaggerUi = require('swagger-ui-express');
 let swaggerDocument = require('../../swagger.json');
@@ -8,7 +9,7 @@ let swaggerDocument = require('../../swagger.json');
 const helmet = require('helmet')
 import lightRoutes from '../routes/lights';
 import easings from './easings';
-import colors from './colors';
+
 var queueRoutes = require('../routes/queue');
 var rainbow= require("../routes/rainbow");
 
@@ -40,7 +41,8 @@ const createApplication = (lightController) => {
   app.get("/easings", (req, res)=> {
     return res.json(easings);
   });
-  app.get("/colors", (req, res)=> {
+  app.get("/colors", async (req, res)=> {
+      let colors = await Colors.all();
       return res.json(colors);
   });
   app.use('/queue', queueRoutes);
