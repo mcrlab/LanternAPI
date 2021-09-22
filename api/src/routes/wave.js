@@ -15,8 +15,8 @@ router.post('/', async (req, res) => {
             return a.x - b.x
         });
         let color  = colorValidator(req.body.color);
-        let time   = timeValidator(req.body.time);
-        let delay  = delayValidator(req.body.delay);
+        let time   = 500;
+        let delay  = 50;
         let easing = req.body.easing || "LinearInterpolation";
         let method = req.body.method || "fill"
         
@@ -30,7 +30,7 @@ router.post('/', async (req, res) => {
               "instruction": LightMQTT("000000", "LinearInterpolation", 1000, 50, "fill")
             })
         }
-        await Queue.insert(1050, JSON.stringify(instructionSet))
+        await Queue.insert(time + delay, JSON.stringify(instructionSet))
 
         for(let i = 0; i < lights.length; i++){
             console.log(i);
@@ -52,7 +52,7 @@ router.post('/', async (req, res) => {
               "instruction": LightMQTT(color, easing, time, delay, method)
             })
 
-            await Queue.insert(parseInt(delay + method), JSON.stringify(instructionSet))
+            await Queue.insert(parseInt(delay + time), JSON.stringify(instructionSet))
         }
 
         instructionSet = [];
@@ -62,7 +62,7 @@ router.post('/', async (req, res) => {
             "instruction": LightMQTT("000000", easing, time, delay, method)
           })
 
-          await Queue.insert(parseInt(delay + method), JSON.stringify(instructionSet))
+          await Queue.insert(parseInt(delay + time), JSON.stringify(instructionSet))
 
         res.json("success");
     } catch(error){
