@@ -12,6 +12,7 @@ import easings from './easings';
 
 var queueRoutes = require('../routes/queue');
 var rainbow= require("../routes/rainbow");
+var wave = require("../routes/wave");
 
 function logErrors (err, req, res, next) {
     console.error(err.stack)
@@ -47,6 +48,7 @@ const createApplication = (lightController) => {
   });
   app.use('/queue', queueRoutes);
   app.use('/rainbow', rainbow);
+  app.use("/wave", wave);
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   app.use(logErrors)
   app.use(clientErrorHandler)
