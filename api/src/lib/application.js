@@ -11,6 +11,8 @@ import lightRoutes from '../routes/lights';
 import easings from './easings';
 
 var queueRoutes = require('../routes/queue');
+var colorRoutes = require('../routes/colors');
+
 var rainbow= require("../routes/rainbow");
 var wave = require("../routes/wave");
 
@@ -42,10 +44,7 @@ const createApplication = (lightController) => {
   app.get("/easings", (req, res)=> {
     return res.json(easings);
   });
-  app.get("/colors", async (req, res)=> {
-      let colors = await Colors.all();
-      return res.json(colors);
-  });
+  app.use("/colors", colorRoutes);
   app.use('/queue', queueRoutes);
   app.use('/rainbow', rainbow);
   app.use("/wave", wave);
