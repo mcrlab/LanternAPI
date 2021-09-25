@@ -73,7 +73,7 @@ router.post('/', async (req, res) => {
             instructionSet.push({
                 "lightID": light.id,
                 "color":   color,
-                "instruction": LightMQTT(color, easing, time, delay * index, method)
+                "instruction": LightMQTT(color, easing, time, delay, method)
               });
         });
         await Queue.insert(wait, JSON.stringify(instructionSet))
