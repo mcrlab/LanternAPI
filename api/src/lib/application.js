@@ -3,9 +3,6 @@ import bodyparser from 'body-parser';
 import cors from 'cors';
 const Colors = require("../persistence/colors");
 
-const swaggerUi = require('swagger-ui-express');
-let swaggerDocument = require('../../swagger.json');
-
 const helmet = require('helmet')
 import lightRoutes from '../routes/lights';
 import easings from './easings';
@@ -47,7 +44,6 @@ const createApplication = (lightController) => {
   app.use("/colors", colorRoutes);
   app.use('/queue', queueRoutes);
   app.use('/rainbow', rainbow);
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   app.use(logErrors)
   app.use(clientErrorHandler)
   app.use(errorHandler)
