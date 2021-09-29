@@ -15,10 +15,11 @@ async function getNextInstruction() {
     let wait = 100;
     if(sequence){
         await sequence.data.map(async (message)=>{
-            const id = message['lightID'];
+            const id = message['lightId'];
+            const address = message['address'];
             const color = message['color'];
             const instruction = message['instruction'];
-            broker.publish(`color/${id}`, instruction );
+            broker.publish(`color/${address}`, instruction );
             await Lights.updateColor(id, color);
         });
         wait = wait + sequence['wait'] + (parseInt(process.env.WAIT_TIME) || 1000);

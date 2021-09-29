@@ -22,19 +22,19 @@ export default class LightingController {
       switch(topic){
         case "connect":
           const messageData = JSON.parse(message);
-          const id = messageData.id;            
+          const address = messageData.id;            
           const config = JSON.stringify(messageData.config);
-          const light = await Lights.find(id);
+          const light = await Lights.findByAddress(address);
           const timestamp = Date.now() / 1000.0;
 
           if(light){
-            await Lights.update(id, RGBObjectToHex(messageData.current_color), messageData.version, light.x, light.y, light.sleep, timestamp, config );
+            await Lights.update(address, RGBObjectToHex(messageData.current_color), messageData.version, timestamp, config );
             if(light.sleep > 0){
               await this.sleepLight(light.id, light.sleep);
             }
           } else {
-            let light = await Lights.create(id, "000000", messageData.version, timestamp, config);
-            this.lightBroker.publish(`color/${id}`, LightMQTT(light.current_color, null, 500, 10));
+            let light = await Lights.create(address, "000000", messageData.version, timestamp, config);
+            this.lightBroker.publish(`color/${address}`, LightMQTT(light.current_color, null, 500, 10));
             
             this.cb("ADD_LIGHT", LightJSON(light) );
             
@@ -54,7 +54,7 @@ export default class LightingController {
     if(!light){
       throw new LightNotFoundError();
     }
-    this.lightBroker.publish(`update/${id}`, JSON.stringify({}));
+    this.lightBroker.publish(`update/${light.address}`, JSON.stringify({}));
     return LightJSON(light);
   }
 
@@ -63,7 +63,7 @@ export default class LightingController {
     if(!light){
       throw new LightNotFoundError();
     }
-    this.lightBroker.publish(`config/${id}`, config);
+    this.lightBroker.publish(`config/${light.address}`, config);
     return LightJSON(light);
   }
   
@@ -72,7 +72,7 @@ export default class LightingController {
     if(!light){
       throw new LightNotFoundError();
     }
-    this.lightBroker.publish(`restart/${id}`, JSON.stringify({}))
+    this.lightBroker.publish(`restart/${light.address}`, JSON.stringify({}))
     return LightJSON(light);
   }
 
@@ -83,15 +83,15 @@ export default class LightingController {
       throw new LightNotFoundError();
     }
     
+    let updatedLight = await Lights.updateSleep(id, seconds);
+    
+        
     let data = {
       seconds: seconds
     };
     
-    let timestamp = new Date(light.last_updated).getTime() / 1000.0
-    let updatedLight = await Lights.update(id, light.current_color, light.version, light.x, light.y, seconds, timestamp);
-    
     if(seconds > 0){
-      this.lightBroker.publish(`sleep/${id}`, JSON.stringify(data));
+      this.lightBroker.publish(`sleep/${light.address}`, JSON.stringify(data));
     }
     
     this.cb("UPDATE_LIGHT", LightJSON(updatedLight));

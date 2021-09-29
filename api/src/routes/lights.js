@@ -30,20 +30,17 @@ function createLightRoutes(lightingController) {
         let position    = req.body.position;
 
         let lights = await Lights.all();
-        let lightData = lights.map((light)=>{
-          return LightJSON(light);
-        });
 
         let instructionSet = [];
 
         let wait = 0;
 
-        for(let i = 0; i < lightData.length; i++){
+        for(let i = 0; i < lights.length; i++){
           let calculatedDelay = 0;
           if(position){
 
-            let distanceX = lightData[i].position.x - position.x;
-            let distanceY = lightData[i].position.y - position.y;
+            let distanceX = lights[i].x - position.x;
+            let distanceY = lights[i].y - position.y;
             let distance = Math.sqrt((distanceX * distanceX) + (distanceY * distanceY));
             calculatedDelay = parseInt(delay * distance);
             if((calculatedDelay + time) > wait) {
@@ -57,16 +54,15 @@ function createLightRoutes(lightingController) {
           let instruction = LightMQTT(color, easing, time, delay, method);
 
           instructionSet.push({
-            "lightID": lightData[i].id,
-            "color":       color,
+            "lightID": lights[i].id,
+            "address": lights[i].address,
+            "color":    color,
             "instruction": instruction
           })
         }
         await Queue.insert(wait, JSON.stringify(instructionSet))
         
-
-        lights = await Lights.all();
-        lightData = lights.map((light)=>{
+        let lightData = lights.map((light)=>{
           return LightJSON(light);
         });
         return res.json(lightData);
@@ -106,6 +102,7 @@ function createLightRoutes(lightingController) {
 
         instructionSet.push({
           "lightID": req.params.lightID,
+          "address": light.address,
           "color":   color,
           "instruction": LightMQTT(color, easing, time, delay, method)
         });

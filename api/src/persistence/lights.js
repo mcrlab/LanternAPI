@@ -2,11 +2,11 @@ const sql = require('sql-template-strings');
 const db = require('./db');
 
 module.exports = {
-  async create(id, current_color, version, last_updated, config) {
+  async create(address, current_color, version, last_updated, config) {
     try {
       const {rows} = await db.query(sql`
-      INSERT INTO lights (id, current_color, version, x, y, sleep, last_updated, config)
-      VALUES (${id}, ${current_color}, ${version}, 0.5, 0.5, 0, to_timestamp(${last_updated}), ${config})
+      INSERT INTO lights (address, current_color, version, x, y, sleep, last_updated, config)
+      VALUES (${address}, ${current_color}, ${version}, 0.5, 0.5, 0, to_timestamp(${last_updated}), ${config})
       RETURNING *;
       `);
       const [light] = rows;
@@ -15,21 +15,16 @@ module.exports = {
       if (error.constraint === 'id') {
         return null;
       }
-      console.log(`
-      INSERT INTO lights (id, current_color, version, x, y, sleep, last_updated, config)
-      VALUES (${id}, ${current_color}, ${version}, 0.5, 0.5, 0, to_timestamp(${last_updated}), ${config})
-      RETURNING *;
-      `);
-
+    
       throw error;
     }
   },
   
-  async update(id, current_color, version, x, y, sleep, last_updated, config) {
+  async update(address, current_color, version, last_updated, config) {
     const { rows } = await db.query(sql`
       UPDATE lights 
-      SET (id, current_color, version, x, y, sleep, last_updated, config) = (${id}, ${current_color}, ${version}, ${x}, ${y}, ${sleep}, to_timestamp(${last_updated}), ${config})
-      WHERE id = ${id}
+      SET (current_color, version, last_updated, config) = (${current_color}, ${version},  to_timestamp(${last_updated}), ${config})
+      WHERE address = ${address}
       RETURNING *;
     `);
     return rows[0];
@@ -38,7 +33,17 @@ module.exports = {
   async updatePosition(id, x, y){
     const { rows } = await db.query(sql`
     UPDATE lights 
-    SET (id, x, y) = (${id}, ${x}, ${y})
+    SET (x, y) = (${x}, ${y})
+    WHERE id = ${id}
+    RETURNING *;
+  `);
+  return rows[0]; 
+  },
+
+  async updateSleep(id, sleep){
+    const { rows } = await db.query(sql`
+    UPDATE lights 
+    SET (sleep) = (${sleep})
     WHERE id = ${id}
     RETURNING *;
   `);
@@ -67,6 +72,13 @@ module.exports = {
   async find(id) {
     const {rows} = await db.query(sql`
     SELECT * FROM lights WHERE id=${id} LIMIT 1;
+    `);
+    return rows[0];
+  },
+
+  async findByAddress(address) {
+    const {rows} = await db.query(sql`
+    SELECT * FROM lights WHERE address=${address} LIMIT 1;
     `);
     return rows[0];
   },
