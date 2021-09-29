@@ -3,7 +3,7 @@ import { HexToRGBObject } from './color';
 
 const LightMQTT = (color, easing, time, delay, method) => {
     let data = {
-        color: HexToRGBObject(color),
+        color: color,
         easing: easing || "SineEaseInOut",
         time: time || 0,
         delay: delay || 0,

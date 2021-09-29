@@ -7,7 +7,7 @@ import lightRoutes from '../routes/lights';
 
 var queueRoutes = require('../routes/queue');
 var colorRoutes = require('../routes/colors');
-var easingRoutes = require('../routes/easing');
+var easingRoutes = require('../routes/easings');
 
 var rainbow= require("../routes/rainbow");
 
