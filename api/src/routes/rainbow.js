@@ -72,6 +72,7 @@ router.post('/', async (req, res) => {
             wait = wait + (time + delay);
             instructionSet.push({
                 "lightID": light.id,
+                "address": light.address,
                 "color":   color,
                 "instruction": LightMQTT(color, easing, time, delay, method)
               });
