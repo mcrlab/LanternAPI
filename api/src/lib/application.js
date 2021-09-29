@@ -1,14 +1,13 @@
 import express from 'express';
 import bodyparser from 'body-parser';
 import cors from 'cors';
-const Colors = require("../persistence/colors");
 
 const helmet = require('helmet')
 import lightRoutes from '../routes/lights';
-import easings from './easings';
 
 var queueRoutes = require('../routes/queue');
 var colorRoutes = require('../routes/colors');
+var easingRoutes = require('../routes/easing');
 
 var rainbow= require("../routes/rainbow");
 
@@ -38,9 +37,7 @@ const createApplication = (lightController) => {
   app.options('*', cors())
   app.use(bodyparser.json());
   app.use('/lights', lightRoutes(lightController));
-  app.get("/easings", (req, res)=> {
-    return res.json(easings);
-  });
+  app.get("/easings", easingRoutes);
   app.use("/colors", colorRoutes);
   app.use('/queue', queueRoutes);
   app.use('/rainbow', rainbow);
