@@ -5,6 +5,31 @@ import http from 'http'
 import WebSocket from 'ws';
 const Lights = require("./persistence/lights");
 import LightJSON from './lib/LightJSON';
+
+const Queue = require('./persistence/queue');
+
+let broker;
+
+async function getNextInstruction() {
+    let sequence = await Queue.next();
+    let wait = 100;
+    if(sequence){
+        await sequence.data.map(async (message)=>{
+            const id = message['lightID'];
+            const color = message['color'];
+            const instruction = message['instruction'];
+            broker.publish(`color/${id}`, instruction );
+            await Lights.updateColor(id, color);
+        });
+        wait = wait + sequence['wait'] + (parseInt(process.env.WAIT_TIME) || 1000);
+        await Queue.complete(sequence['id'])
+        console.log("waiting for: ", wait);
+
+    } else {}
+    setTimeout(getNextInstruction, wait);
+}
+
+
 function server(){
   const lightController = new LightingController(new MQTTBroker());
 
@@ -47,6 +72,14 @@ function server(){
 }
 function startApp(){
   server();
+}
+
+try {
+  broker = new MQTTBroker();
+  broker.init((topic, message) => {});
+  getNextInstruction();
+} catch(e){
+  console.log(e);
 }
 
 startApp();
