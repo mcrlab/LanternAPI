@@ -39,6 +39,18 @@ export default class LightingController {
             this.cb("ADD_LIGHT", LightJSON(light) );
             
           }
+        case "ping":
+            const messageData = JSON.parse(message);
+            const address = messageData.id;            
+            const light = await Lights.findByAddress(address);
+            const timestamp = Date.now() / 1000.0;
+  
+            if(light){
+              await Lights.update(address, messageData.current_color, light.version, timestamp, light.config );
+              if(light.sleep > 0){
+                await this.sleepLight(light.id, light.sleep);
+              }
+            }
         default:
           return;
       }
