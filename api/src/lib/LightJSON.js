@@ -1,7 +1,7 @@
 const LightJSON = (light) => {
     let data = {
         id: light.id,
-        color: light.current_color,
+        color: light.color,
         version: light.version,
         position: {
             x: light.x || 0.5,

@@ -23,7 +23,7 @@ module.exports = {
   async update(address, current_color, version, last_updated, config) {
     const { rows } = await db.query(sql`
       UPDATE lights 
-      SET (current_color, version, last_updated, config) = (${current_color}, ${version},  to_timestamp(${last_updated}), ${config})
+      SET (color, version, last_updated, config) = (${current_color}, ${version},  to_timestamp(${last_updated}), ${config})
       WHERE address = ${address}
       RETURNING *;
     `);
@@ -32,7 +32,7 @@ module.exports = {
   async ping(address, current_color, last_updated) {
     const { rows } = await db.query(sql`
       UPDATE lights 
-      SET (current_color, last_updated) = (${current_color}, to_timestamp(${last_updated}))
+      SET (color, last_updated) = (${current_color}, to_timestamp(${last_updated}))
       WHERE address = ${address}
       RETURNING *;
     `);
@@ -61,7 +61,7 @@ module.exports = {
   async updateColor(id, color) {
     const { rows } = await db.query(sql`
       UPDATE lights 
-      SET current_color = ${color}
+      SET color = ${color}
       WHERE id = ${id}
       RETURNING *;
     `);
