@@ -29,13 +29,13 @@ export default class LightingController {
           timestamp = Date.now() / 1000.0;
 
           if(light){
-            await Lights.update(address, messageData.current_color, messageData.version, timestamp, config );
+            await Lights.update(address, messageData.color, messageData.version, timestamp, config );
             if(light.sleep > 0){
               await this.sleepLight(light.id, light.sleep);
             }
           } else {
             let light = await Lights.create(address, "000000", messageData.version, timestamp, config);
-            this.lightBroker.publish(`color/${address}`, LightMQTT(light.current_color, null, 500, 10));
+            this.lightBroker.publish(`color/${address}`, LightMQTT(light.color, null, 500, 10));
             
             this.cb("ADD_LIGHT", LightJSON(light) );
             
@@ -47,7 +47,7 @@ export default class LightingController {
             timestamp = Date.now() / 1000.0;
   
             if(light){
-              let updatedLight = await Lights.ping(address, messageData.current_color, timestamp );
+              let updatedLight = await Lights.ping(address, messageData.color, timestamp );
               if(light.sleep > 0){
                 await this.sleepLight(light.id, light.sleep);
               }

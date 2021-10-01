@@ -1,6 +1,4 @@
 
-import { HexToRGBObject } from './color';
-
 const LightMQTT = (color, easing, time, delay, method) => {
     let data = {
         color: color,
