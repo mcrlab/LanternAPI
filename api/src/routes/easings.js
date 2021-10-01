@@ -1,7 +1,7 @@
 var express = require('express'),
     router = express.Router();
 
-import easings from './easings';
+import easings from '../lib/easings';
 
 
 router.get('/', async (req, res) => {

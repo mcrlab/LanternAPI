@@ -37,7 +37,7 @@ const createApplication = (lightController) => {
   app.options('*', cors())
   app.use(bodyparser.json());
   app.use('/lights', lightRoutes(lightController));
-  app.get("/easings", easingRoutes);
+  app.use("/easings", easingRoutes);
   app.use("/colors", colorRoutes);
   app.use('/queue', queueRoutes);
   app.use('/rainbow', rainbow);
