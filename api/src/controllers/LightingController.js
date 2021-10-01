@@ -18,14 +18,15 @@ export default class LightingController {
   }
   
   async handleMessage(topic, message) {
+    let messageData, address, config, light, timestamp;
     try {
       switch(topic){
         case "connect":
-          const messageData = JSON.parse(message);
-          const address = messageData.id;            
-          const config = JSON.stringify(messageData.config);
-          const light = await Lights.findByAddress(address);
-          const timestamp = Date.now() / 1000.0;
+          messageData = JSON.parse(message);
+          address = messageData.id;            
+          config = JSON.stringify(messageData.config);
+          light = await Lights.findByAddress(address);
+          timestamp = Date.now() / 1000.0;
 
           if(light){
             await Lights.update(address, messageData.current_color, messageData.version, timestamp, config );
@@ -40,16 +41,17 @@ export default class LightingController {
             
           }
         case "ping":
-            const messageData = JSON.parse(message);
-            const address = messageData.id;            
-            const light = await Lights.findByAddress(address);
-            const timestamp = Date.now() / 1000.0;
+            messageData = JSON.parse(message);
+            address = messageData.id;            
+            light = await Lights.findByAddress(address);
+            timestamp = Date.now() / 1000.0;
   
             if(light){
-              await Lights.update(address, messageData.current_color, light.version, timestamp, light.config );
+              let updatedLight = await Lights.ping(address, messageData.current_color, timestamp );
               if(light.sleep > 0){
                 await this.sleepLight(light.id, light.sleep);
               }
+              this.cb("UPDATE_LIGHT", LightJSON(updatedLight) );
             }
         default:
           return;

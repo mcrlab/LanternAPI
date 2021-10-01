@@ -29,7 +29,15 @@ module.exports = {
     `);
     return rows[0];
   },
-
+  async ping(address, current_color, last_updated) {
+    const { rows } = await db.query(sql`
+      UPDATE lights 
+      SET (current_color, last_updated) = (${current_color}, to_timestamp(${last_updated}))
+      WHERE address = ${address}
+      RETURNING *;
+    `);
+    return rows[0];
+  },
   async updatePosition(id, x, y){
     const { rows } = await db.query(sql`
     UPDATE lights 
