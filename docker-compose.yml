@@ -12,6 +12,7 @@ services:
         - redis
     environment:
       CLOUDMQTT_URL: ${CLOUDMQTT_URL}
+      REDIS_URL: ${REDIS_URL}
       DATABASE_URL: "postgres://user:pass@postgres:5432/db"
     command: "npm run production"
     ports:
