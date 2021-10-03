@@ -5,6 +5,7 @@ const Lights = require('../persistence/lights');
 import LightMQTT from '../lib/LightMQTT';
 import LightJSON from '../lib/LightJSON';
 import LightNotFoundError from '../exceptions/LightNotFoundError';
+import queue from '../lib/redis';
 const auth = require("../lib/auth");
 
 
@@ -60,6 +61,7 @@ function createLightRoutes(lightingController) {
             "instruction": instruction
           })
         }
+        queue.add(wait, instructionSet);
         await Queue.insert(wait, JSON.stringify(instructionSet))
         
         let lightData = lights.map((light)=>{
@@ -106,6 +108,8 @@ function createLightRoutes(lightingController) {
           "color":   color,
           "instruction": LightMQTT(color, easing, time, delay, method)
         });
+
+        queue.add(wait, instructionSet);
 
         await Queue.insert(wait, JSON.stringify(instructionSet))
         

@@ -9,6 +9,7 @@ services:
     depends_on:
         - postgres
         - mqtt
+        - redis
     environment:
       CLOUDMQTT_URL: ${CLOUDMQTT_URL}
       DATABASE_URL: "postgres://user:pass@postgres:5432/db"
@@ -45,7 +46,12 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: db
-  
+  redis:
+    image: redis
+    networks:
+      - lantern-network    
+    ports:
+      - 6379:6379  
 networks:
   lantern-network:
     driver: bridge # a user defined bridge is required; the default bridge network doesn't support name resolution
