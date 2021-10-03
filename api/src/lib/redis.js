@@ -23,6 +23,7 @@ redisClient.on("ready", (err) => {
 
 const pushAsync = promisify(redisClient.rpush).bind(redisClient);
 const popAsync = promisify(redisClient.lpop).bind(redisClient);
+const lengthAsync = promisify(redisClient.llen).bind(redisClient);
 
 let add = async (wait, instructionSet)=>{
     if(redisReady){
@@ -43,8 +44,14 @@ let pop = async ()=> {
     }
     return null;
 }
+let len = async ()=> {
+     let len = await lengthAsync(['light-queue']);
+     console.log(len);
+     return len;
+ }
 
 export default {
     add,
-    pop
+    pop,
+    len
 }
