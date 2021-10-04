@@ -18,7 +18,7 @@ export default class LightingController {
   }
   
   async handleMessage(topic, message) {
-    let messageData, address, config, light, timestamp;
+    let messageData, address, config, light, timestamp, voltage;
     try {
       switch(topic){
         case "connect":
