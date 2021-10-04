@@ -42,12 +42,13 @@ export default class LightingController {
           }
         case "ping":
             messageData = JSON.parse(message);
-            address = messageData.id;            
+            address = messageData.id;       
+            voltage = messageData.voltage || -1;     
             light = await Lights.findByAddress(address);
             timestamp = Date.now() / 1000.0;
   
             if(light){
-              let updatedLight = await Lights.ping(address, messageData.color, timestamp );
+              let updatedLight = await Lights.ping(address, messageData.color, voltage, timestamp );
               if(light.sleep > 0){
                 await this.sleepLight(light.id, light.sleep);
               }

@@ -29,10 +29,10 @@ module.exports = {
     `);
     return rows[0];
   },
-  async ping(address, color, last_updated) {
+  async ping(address, color, voltage, last_updated) {
     const { rows } = await db.query(sql`
       UPDATE lights 
-      SET (color, last_updated) = (${color}, to_timestamp(${last_updated}))
+      SET (color, voltage, last_updated) = (${color}, ${voltage}, to_timestamp(${last_updated}))
       WHERE address = ${address}
       RETURNING *;
     `);

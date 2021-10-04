@@ -7,6 +7,7 @@ const LightJSON = (light) => {
             x: light.x || 0.5,
             y: light.y || 0.5
         },
+        voltage: light.voltage || -1,
         sleep: light.sleep,
         last_updated: light.last_updated,
         config: light.config
