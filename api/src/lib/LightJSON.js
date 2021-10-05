@@ -3,6 +3,7 @@ const LightJSON = (light) => {
         id: light.id,
         color: light.color,
         version: light.version,
+        platform: light.platform || "unknown",
         position: {
             x: light.x || 0.5,
             y: light.y || 0.5

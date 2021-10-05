@@ -2,11 +2,11 @@ const sql = require('sql-template-strings');
 const db = require('./db');
 
 module.exports = {
-  async create(address, color, version, last_updated, config) {
+  async create(address, color, version, platform="unknown", last_updated, config) {
     try {
       const {rows} = await db.query(sql`
-      INSERT INTO lights (address, color, version, x, y, sleep, last_updated, config)
-      VALUES (${address}, ${color}, ${version}, 0.5, 0.5, 0, to_timestamp(${last_updated}), ${config})
+      INSERT INTO lights (address, color, version, platform, x, y, sleep, last_updated, config)
+      VALUES (${address}, ${color}, ${version}, ${platform}, 0.5, 0.5, 0, to_timestamp(${last_updated}), ${config})
       RETURNING *;
       `);
       const [light] = rows;
@@ -20,10 +20,10 @@ module.exports = {
     }
   },
   
-  async update(address, color, version, last_updated, config) {
+  async update(address, color, version, platform, last_updated, config) {
     const { rows } = await db.query(sql`
       UPDATE lights 
-      SET (color, version, last_updated, config) = (${color}, ${version},  to_timestamp(${last_updated}), ${config})
+      SET (color, version, platform, last_updated, config) = (${color}, ${version}, ${platform}, to_timestamp(${last_updated}), ${config})
       WHERE address = ${address}
       RETURNING *;
     `);
