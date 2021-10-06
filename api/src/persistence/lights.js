@@ -2,11 +2,11 @@ const sql = require('sql-template-strings');
 const db = require('./db');
 
 module.exports = {
-  async create(address, color, version, platform="unknown", last_updated, config) {
+  async create(address, color, version, platform="unknown", memory=-1, last_updated, config) {
     try {
       const {rows} = await db.query(sql`
-      INSERT INTO lights (address, color, version, platform, x, y, sleep, last_updated, config)
-      VALUES (${address}, ${color}, ${version}, ${platform}, 0, 0, 0, to_timestamp(${last_updated}), ${config})
+      INSERT INTO lights (address, color, version, platform, memory, x, y, sleep, last_updated, config)
+      VALUES (${address}, ${color}, ${version}, ${platform}, ${memory}, 0, 0, 0, to_timestamp(${last_updated}), ${config})
       RETURNING *;
       `);
       const [light] = rows;
@@ -20,19 +20,19 @@ module.exports = {
     }
   },
   
-  async update(address, color, version, platform, last_updated, config) {
+  async update(address, color, version, platform, memory, last_updated, config) {
     const { rows } = await db.query(sql`
       UPDATE lights 
-      SET (color, version, platform, last_updated, config) = (${color}, ${version}, ${platform}, to_timestamp(${last_updated}), ${config})
+      SET (color, version, platform, last_updated, config) = (${color}, ${version}, ${platform}, ${memory}, to_timestamp(${last_updated}), ${config})
       WHERE address = ${address}
       RETURNING *;
     `);
     return rows[0];
   },
-  async ping(address, color, voltage, last_updated) {
+  async ping(address, color, voltage, memory, last_updated) {
     const { rows } = await db.query(sql`
       UPDATE lights 
-      SET (color, voltage, last_updated) = (${color}, ${voltage}, to_timestamp(${last_updated}))
+      SET (color, voltage, memory, last_updated) = (${color}, ${voltage}, ${memory}, to_timestamp(${last_updated}))
       WHERE address = ${address}
       RETURNING *;
     `);

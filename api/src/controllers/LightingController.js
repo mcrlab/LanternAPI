@@ -18,7 +18,7 @@ export default class LightingController {
   }
   
   async handleMessage(topic, message) {
-    let messageData, address, config, light, timestamp, voltage;
+    let messageData, address, config, light, timestamp, voltage, memory;
     try {
       switch(topic){
         case "connect":
@@ -29,12 +29,12 @@ export default class LightingController {
           timestamp = Date.now() / 1000.0;
 
           if(light){
-            await Lights.update(address, messageData.color, messageData.version, messageData.platform, timestamp, config );
+            await Lights.update(address, messageData.color, messageData.version, messageData.platform, messageData.memory,timestamp, config );
             if(light.sleep > 0){
               await this.sleepLight(light.id, light.sleep);
             }
           } else {
-            let light = await Lights.create(address, "000000", messageData.version, messageData.platform, timestamp, config);
+            let light = await Lights.create(address, "000000", messageData.version, messageData.platform, messageData.memory, timestamp, config);
             this.lightBroker.publish(`color/${address}`, LightMQTT(light.color, null, 500, 10));
             
             this.cb("ADD_LIGHT", LightJSON(light) );
@@ -43,12 +43,13 @@ export default class LightingController {
         case "ping":
             messageData = JSON.parse(message);
             address = messageData.id;       
-            voltage = messageData.voltage || -1;     
+            voltage = messageData.voltage || -1;    
+            memory = messageData.memory || -1; 
             light = await Lights.findByAddress(address);
             timestamp = Date.now() / 1000.0;
   
             if(light){
-              let updatedLight = await Lights.ping(address, messageData.color, voltage, timestamp );
+              let updatedLight = await Lights.ping(address, messageData.color, voltage, memory, timestamp );
               if(light.sleep > 0){
                 await this.sleepLight(light.id, light.sleep);
               }

@@ -4,6 +4,7 @@ const LightJSON = (light) => {
         color: light.color,
         version: light.version,
         platform: light.platform || "unknown",
+        RAM: light.memory || -1,
         position: {
             x: light.x || 0,
             y: light.y || 0
