@@ -23,7 +23,7 @@ module.exports = {
   async update(address, color, version, platform, memory, last_updated, config) {
     const { rows } = await db.query(sql`
       UPDATE lights 
-      SET (color, version, platform, last_updated, config) = (${color}, ${version}, ${platform}, ${memory}, to_timestamp(${last_updated}), ${config})
+      SET (color, version, platform, memory, last_updated, config) = (${color}, ${version}, ${platform}, ${memory}, to_timestamp(${last_updated}), ${config})
       WHERE address = ${address}
       RETURNING *;
     `);
