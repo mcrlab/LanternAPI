@@ -5,8 +5,8 @@ const LightJSON = (light) => {
         version: light.version,
         platform: light.platform || "unknown",
         position: {
-            x: light.x || 0.5,
-            y: light.y || 0.5
+            x: light.x || 0,
+            y: light.y || 0
         },
         voltage: light.voltage || -1,
         sleep: light.sleep,

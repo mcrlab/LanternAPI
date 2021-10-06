@@ -6,7 +6,7 @@ module.exports = {
     try {
       const {rows} = await db.query(sql`
       INSERT INTO lights (address, color, version, platform, x, y, sleep, last_updated, config)
-      VALUES (${address}, ${color}, ${version}, ${platform}, 0.5, 0.5, 0, to_timestamp(${last_updated}), ${config})
+      VALUES (${address}, ${color}, ${version}, ${platform}, 0, 0, 0, to_timestamp(${last_updated}), ${config})
       RETURNING *;
       `);
       const [light] = rows;

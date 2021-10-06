@@ -1,11 +1,12 @@
 import LightDataError from '../exceptions/LightDataError';
 
 export function positionValidator(position){
-    if(position < 0 || position > 1){
-        throw new LightDataError(400, 'Position is not greater than 0 or less than 1');
+    if(position < 0){
+        throw new LightDataError(400, 'Position is not greater than 0');
     }
     return position;
 }
+
 export function colorValidator(color) {
     if(!color.match(/[0-9A-Fa-f]{6}/)){
         throw new LightDataError(400, 'Color is not in the correct format');
