@@ -8,7 +8,7 @@ import lightRoutes from '../routes/lights';
 var queueRoutes = require('../routes/queue');
 var colorRoutes = require('../routes/colors');
 var easingRoutes = require('../routes/easings');
-
+var bufferRoutes = require("../routes/buffer");
 var rainbow= require("../routes/rainbow");
 
 
@@ -40,6 +40,7 @@ const createApplication = (lightController) => {
   app.use("/easings", easingRoutes);
   app.use("/colors", colorRoutes);
   app.use('/queue', queueRoutes);
+  app.use('/buffer', bufferRoutes);
   app.use('/rainbow', rainbow);
   app.use(logErrors)
   app.use(clientErrorHandler)

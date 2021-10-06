@@ -92,7 +92,7 @@ module.exports = {
   },
 
   async all() {
-    const {rows} = await db.query(sql`SELECT * FROM lights`);
+    const {rows} = await db.query(sql`SELECT * FROM lights ORDER BY x`);
     return rows;
   }
 };
