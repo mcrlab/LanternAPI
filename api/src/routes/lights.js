@@ -27,7 +27,6 @@ function createLightRoutes(lightingController) {
         let time        = timeValidator(req.body.time);
         let delay       = delayValidator(req.body.delay);
         let easing      = req.body.easing || "LinearInterpolation";
-        let method      = req.body.method || "fill"
         let position    = req.body.position;
 
         let lights = await Lights.all();
@@ -52,7 +51,7 @@ function createLightRoutes(lightingController) {
             wait = parseInt(time + delay);
           }
           
-          let instruction = LightMQTT(color, easing, time, delay, method);
+          let instruction = LightMQTT(color, easing, time, delay);
 
           instructionSet.push({
             "lightID": lights[i].id,
@@ -95,7 +94,6 @@ function createLightRoutes(lightingController) {
         let time =   timeValidator(req.body.time);
         let delay =  delayValidator(req.body.delay);
         let easing = req.body.easing || "LinearInterpolation";
-        let method = req.body.method || "fill"
         
         let wait = parseInt(delay + time);
         const light = await Lights.find(req.params.lightID);
@@ -106,7 +104,7 @@ function createLightRoutes(lightingController) {
           "lightID": req.params.lightID,
           "address": light.address,
           "color":   color,
-          "instruction": LightMQTT(color, easing, time, delay, method)
+          "instruction": LightMQTT(color, easing, time, delay)
         });
 
         queue.add(wait, instructionSet);

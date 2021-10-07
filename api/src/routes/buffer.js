@@ -13,10 +13,50 @@ router.get('/', async (req, res) => {
 
     } catch(error){
         console.log(error);
-        res.status(error.status|| 400).json(error);
+        res.status(error.status|| 400).json(error || "Oops something went wrong");
     };
 });
 
+router.post('/all', async (req, res) => {
+    try {
+        const updates = req.body.lights;
+        const lights = await Lights.all();
+
+        let instructionSet = [];
+        let wait = 0;
+
+        updates.map((update, index)=> {
+            let light = lights.find((element)=> { return element.id == update.id});
+            if(!light){
+                return;
+            }
+            let color = update.color;
+            let easing = update.easing || "LinearInterpolation";
+            let time = update.time || 1000;
+            let delay = update.delay || 0;
+            
+            if(time + delay > wait){
+                wait = time + delay;
+            }
+            
+            let instruction = LightMQTT(color, easing, time, delay);
+
+            instructionSet.push({
+                "lightID": light.id,
+                "address": light.address,
+                "color":    color,
+                "instruction": instruction
+            });
+        });
+
+        queue.add(wait, instructionSet);
+        await Queue.insert(wait, JSON.stringify(instructionSet))
+
+    } catch(error){
+        console.log(error);
+        res.status(error.status|| 400).json(error || "Oops something went wrong");
+    };
+})
 
 router.post('/', async (req, res) => {
     try {
@@ -26,13 +66,13 @@ router.post('/', async (req, res) => {
         let time = 10;
         let delay = 10;
         let easing      = req.body.easing || "LinearInterpolation";
-        let method      = req.body.method || "fill"
+
         let wait = parseInt(time + delay);
         let instructionSet = [];
 
         colors.map((color, i)=> {
 
-            let instruction = LightMQTT(color, easing, time, delay, method);
+            let instruction = LightMQTT(color, easing, time, delay);
 
             instructionSet.push({
                 "lightID": lights[i].id,
@@ -40,8 +80,6 @@ router.post('/', async (req, res) => {
                 "color":    color,
                 "instruction": instruction
             });
-
-            console.log(color)
         });
         queue.add(wait, instructionSet);
         await Queue.insert(wait, JSON.stringify(instructionSet))

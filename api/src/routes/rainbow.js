@@ -63,10 +63,12 @@ router.post('/', async (req, res) => {
 
         let instructionSet = [];
         let wait = 0;
+        const numberOfLights = lights.length;
+
         lights.map((light, index)=>{
 
-            let x = light.x;
-            let value = 255 * x;
+
+            let value = 255 * (index/numberOfLights);
             let color = RGBObjectToHex(Wheel(value));
 
             wait = wait + (time + delay);
