@@ -52,6 +52,8 @@ router.post('/all', async (req, res) => {
         queue.add(wait, instructionSet);
         await Queue.insert(wait, JSON.stringify(instructionSet))
 
+        return res.json("Success");
+
     } catch(error){
         console.log(error);
         res.status(error.status|| 400).json(error || "Oops something went wrong");
@@ -84,7 +86,7 @@ router.post('/', async (req, res) => {
         queue.add(wait, instructionSet);
         await Queue.insert(wait, JSON.stringify(instructionSet))
 
-        return res.json("hello world");
+        return res.json("Success");
 
     } catch(error){
         console.log(error);
