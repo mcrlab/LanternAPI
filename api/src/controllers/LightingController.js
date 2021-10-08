@@ -124,4 +124,13 @@ export default class LightingController {
       
       return LightJSON(light);
   }
+
+  async poke(){
+    this.lightBroker.publish('poke', JSON.stringify({}))
+  }
+
 }
+
+
+
+

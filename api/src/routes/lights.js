@@ -74,6 +74,16 @@ function createLightRoutes(lightingController) {
       };
     });
 
+    router.post('/poke', async (req, res)=> {
+      try {
+        this.lightingController.poke();
+        res.json("success");
+      } catch(e){
+        res.status(error.status|| 400).json(error || "oops");
+      }
+    });
+
+  
     router.get('/:lightID', async (req, res) => {
       try {
         const light = await Lights.find(req.params.lightID);
