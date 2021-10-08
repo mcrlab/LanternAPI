@@ -60,7 +60,7 @@ function createLightRoutes(lightingController) {
             "instruction": instruction
           })
         }
-        queue.add(wait, instructionSet);
+        await queue.add(wait, instructionSet);
         await Queue.insert(wait, JSON.stringify(instructionSet))
         
         let lightData = lights.map((light)=>{
@@ -107,7 +107,7 @@ function createLightRoutes(lightingController) {
           "instruction": LightMQTT(color, easing, time, delay)
         });
 
-        queue.add(wait, instructionSet);
+        await queue.add(wait, instructionSet);
 
         await Queue.insert(wait, JSON.stringify(instructionSet))
         

@@ -7,6 +7,7 @@ var express = require('express'),
     Lights = require("../persistence/lights");
 
 import LightMQTT from "../lib/LightMQTT";
+import queue from '../lib/redis';
 
 function intToHex(color){
     let char = color.toString(16);
@@ -62,16 +63,14 @@ router.post('/', async (req, res) => {
         let method = req.body.method || "fill"
 
         let instructionSet = [];
-        let wait = 0;
+        let wait = (time + delay);
         const numberOfLights = lights.length;
 
         lights.map((light, index)=>{
 
-
             let value = 255 * (index/numberOfLights);
             let color = RGBObjectToHex(Wheel(value));
 
-            wait = wait + (time + delay);
             instructionSet.push({
                 "lightID": light.id,
                 "address": light.address,
@@ -79,6 +78,7 @@ router.post('/', async (req, res) => {
                 "instruction": LightMQTT(color, easing, time, delay, method)
               });
         });
+        await queue.add(wait, instructionSet);
         await Queue.insert(wait, JSON.stringify(instructionSet))
         res.json("success");
     } catch(error){

@@ -49,7 +49,7 @@ router.post('/all', async (req, res) => {
             });
         });
 
-        queue.add(wait, instructionSet);
+        await queue.add(wait, instructionSet);
         await Queue.insert(wait, JSON.stringify(instructionSet))
 
         return res.json("Success");
@@ -87,7 +87,7 @@ router.post('/', async (req, res) => {
             }
             
         });
-        queue.add(wait, instructionSet);
+        await queue.add(wait, instructionSet);
         await Queue.insert(wait, JSON.stringify(instructionSet))
 
         return res.json("Success");
