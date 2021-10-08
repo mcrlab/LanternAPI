@@ -4,7 +4,7 @@ services:
   api:
     build:
       context: api
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.api
     image: jameslinnegar/lantern_api
     depends_on:
         - postgres
@@ -17,9 +17,29 @@ services:
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: db
       DATABASE_URL: "postgres://user:pass@postgres:5432/db"
-    command: ["./bin/wait-for-postgres.sh", "postgres", "./bin/run.sh"]
+    command: ["./bin/wait-for-postgres.sh", "postgres", "./bin/server.sh"]
     ports:
       - "80:3001"
+    networks:
+      - lantern-network
+
+  queue:
+    build:
+      context: api
+      dockerfile: Dockerfile.queue
+    image: jameslinnegar/lantern_queue
+    depends_on:
+        - postgres
+        - mqtt
+        - redis
+    environment:
+      CLOUDMQTT_URL: ${CLOUDMQTT_URL}
+      REDIS_URL: ${REDIS_URL}
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: db
+      DATABASE_URL: "postgres://user:pass@postgres:5432/db"
+    command: ["./bin/wait-for-postgres.sh", "postgres", "./bin/queue.sh"]
     networks:
       - lantern-network
   mqtt:

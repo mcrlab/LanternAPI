@@ -1,35 +1,31 @@
-const Queue = require('./persistence/queue');
-const Light = require('./persistence/lights');
-
 import MQTTBroker from './lib/mqtt';
+const Lights = require("./persistence/lights");
+import queue from './lib/redis';
 
 let broker;
 
 async function getNextInstruction() {
-    let sequence = await Queue.next();
-    let wait = 100;
-    if(sequence){
-        await sequence.data.map(async (message)=>{
-            const id = message['lightID'];
-            const color = message['color'];
-            const instruction = message['instruction'];
-            broker.publish(`color/${id}`, instruction );
-            await Light.updateColor(id, color);
-        });
-        wait = wait + sequence['wait'] + (parseInt(process.env.WAIT_TIME) || 1000);
-        await Queue.complete(sequence['id'])
-        console.log("waiting for: ", wait);
-
-    } else {}
-    setTimeout(getNextInstruction, wait);
+  let sequence = await queue.pop();
+  let wait = 1;
+  if(sequence){
+      await sequence.instructionSet.map(async (message)=>{
+          const id = message['lightId'];
+          const address = message['address'];
+          const color = message['color'];
+          const instruction = message['instruction'];
+          broker.publish(`color/${address}`, instruction );
+          await Lights.updateColor(id, color);
+      });
+      wait = sequence['wait'] + (parseInt(process.env.WAIT_TIME) || 0);
+      console.log("waiting for: ", wait);
+  } 
+  setTimeout(getNextInstruction, wait);
 }
 
 try {
-    broker = new MQTTBroker();
-    broker.init((topic, message) => {
-        //console.log(topic, message);
-    });
-    getNextInstruction();
+  broker = new MQTTBroker();
+  broker.init((topic, message) => {});
+  getNextInstruction();
 } catch(e){
-    console.log(e);
+  console.log(e);
 }
