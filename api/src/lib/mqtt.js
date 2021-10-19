@@ -1,11 +1,15 @@
 var mqtt = require('mqtt');
 
 export default class MQTTBroker {
+  constructor(clientId){
+    this.clientId = clientId;
+
+  }
 
   init(callback) {
     var url = process.env.CLOUDMQTT_URL;
 
-    this.client  = mqtt.connect(url, {"clientId": "queue"});
+    this.client  = mqtt.connect(url, {"clientId": this.clientId});
   
     this.client.on('connect', () => {
       console.log("Connected to broker");

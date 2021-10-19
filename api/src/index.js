@@ -7,7 +7,7 @@ const Lights = require("./persistence/lights");
 import LightJSON from './lib/LightJSON';
 
 function server(){
-  const lightController = new LightingController(new MQTTBroker());
+  const lightController = new LightingController(new MQTTBroker("API"));
 
   const app    = createApplication(lightController);
   const server = http.createServer(app);

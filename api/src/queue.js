@@ -23,7 +23,7 @@ async function getNextInstruction() {
 }
 
 try {
-  broker = new MQTTBroker();
+  broker = new MQTTBroker("QUEUE");
   broker.init((topic, message) => {});
   getNextInstruction();
 } catch(e){
