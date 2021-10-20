@@ -6,6 +6,7 @@ import WebSocket from 'ws';
 const Lights = require("./persistence/lights");
 import LightJSON from './lib/LightJSON';
 
+
 function server(){
   const lightController = new LightingController(new MQTTBroker("API"));
 

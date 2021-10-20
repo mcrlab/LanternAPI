@@ -10,7 +10,7 @@ var colorRoutes = require('../routes/colors');
 var easingRoutes = require('../routes/easings');
 var bufferRoutes = require("../routes/buffer");
 var rainbow= require("../routes/rainbow");
-
+var morgan = require('morgan')
 
 function logErrors (err, req, res, next) {
     console.error(err.stack)
@@ -34,6 +34,7 @@ const createApplication = (lightController) => {
 
   app.use(helmet());
   app.use(cors());
+  app.use(morgan("combined"))
   app.options('*', cors())
   app.use(bodyparser.json());
   app.use('/lights', lightRoutes(lightController));
