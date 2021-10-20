@@ -50,8 +50,13 @@ let len = async ()=> {
      return len;
  }
 
+let clear = async ()=> {
+    return
+}
+
 export default {
     add,
     pop,
-    len
+    len,
+    clear
 }
