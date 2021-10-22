@@ -47,12 +47,10 @@ services:
     build:
       context: mosquitto
       dockerfile: Dockerfile
-    image: jameslinnegar/lantern_mqtt
-    image: lanternapi_mqtt
+    image: eclipse-mosquitto
     environment:
       - MOSQUITTO_USERNAME=${MOSQUITTO_USERNAME}
       - MOSQUITTO_PASSWORD=${MOSQUITTO_PASSWORD}
-    image: eclipse-mosquitto
     restart: always
     volumes:
       - ./mosquitto/config:/mosquitto/config:ro
