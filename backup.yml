@@ -1,0 +1,13 @@
+mqtt:
+  hostname: mqtt
+  image: iegomez/mosquitto-go-auth
+  depends_on:
+      - postgres
+  restart: always
+  volumes:
+    - ./mqtt/conf:/etc/mosquitto
+  ports:
+    - 1883:1883
+    - 1884:1884
+  networks:
+    - lantern-network

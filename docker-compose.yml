@@ -44,15 +44,18 @@ services:
       - lantern-network
   mqtt:
     hostname: mqtt
-    image: iegomez/mosquitto-go-auth
-    depends_on:
-       - postgres
+    build:
+      context: mosquitto
+      dockerfile: Dockerfile
+    image: eclipse-mosquitto
+    environment:
+      - MOSQUITTO_USERNAME=${MOSQUITTO_USERNAME}
+      - MOSQUITTO_PASSWORD=${MOSQUITTO_PASSWORD}
     restart: always
     volumes:
-      - ./mqtt/conf:/etc/mosquitto
+      - ./mosquitto/config:/mosquitto/config:ro
     ports:
       - 1883:1883
-      - 1884:1884
     networks:
       - lantern-network
   postgres:
