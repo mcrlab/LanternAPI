@@ -11,6 +11,7 @@
     "express-basic-auth": "1.2.0",
     "helmet": "3.23.3",
     "migrate": "^1.7.0",
+    "morgan": "1.10.0",
     "mqtt": "4.2.8",
     "pg": "^8.7.1",
     "redis": "3.1.2",
