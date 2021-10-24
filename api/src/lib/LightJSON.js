@@ -2,6 +2,7 @@ const LightJSON = (light) => {
     let data = {
         id: light.id,
         color: light.color,
+        address:light.address,
         version: light.version,
         platform: light.platform || "unknown",
         RAM: light.memory || -1,
