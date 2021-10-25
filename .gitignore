@@ -6,3 +6,4 @@ node_modules/
 mosquitto/data/
 mosquitto/log/
 .vscode
+pgdata/*

@@ -58,6 +58,8 @@ services:
     image: postgres:10.4
     networks:
       - lantern-network
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
     ports:
       - 5432:5432
     environment:
